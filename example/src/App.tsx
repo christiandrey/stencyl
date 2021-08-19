@@ -1,10 +1,10 @@
-import React from 'react'
+import React from 'react';
 
-import { ExampleComponent } from 'stencyl'
-import 'stencyl/dist/index.css'
+import {ExampleComponent} from 'stencyl';
+import 'stencyl/dist/index.css';
 
 const App = () => {
-  return <ExampleComponent text="Create React Library Example 😄" />
-}
+	return <ExampleComponent text='Create React Library Example 😄' />;
+};
 
-export default App
+export default App;
