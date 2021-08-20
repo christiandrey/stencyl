@@ -68,5 +68,8 @@
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": "eslint --cache --fix",
 		"*.{js,css,md}": "prettier --write"
+	},
+	"dependencies": {
+		"modern-normalize": "1.1.0"
 	}
 }
