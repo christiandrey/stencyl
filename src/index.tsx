@@ -1,12 +1,3 @@
-import './theme/application.scss';
+import 'tailwindcss/tailwind.css';
 
-import React from 'react';
-import styles from './styles.module.scss';
-
-interface Props {
-	text: string;
-}
-
-export const ExampleComponent = ({text}: Props) => {
-	return <div className={styles.test}>Example Component: {text}</div>;
-};
+export {Editor} from './modules/editor';

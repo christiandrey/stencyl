@@ -38,6 +38,7 @@
 		"@types/react-dom": "^16.9.7",
 		"@typescript-eslint/eslint-plugin": "^2.26.0",
 		"@typescript-eslint/parser": "^2.26.0",
+		"autoprefixer": "^9",
 		"babel-eslint": "^10.0.3",
 		"cross-env": "^7.0.2",
 		"eslint": "^6.8.0",
@@ -53,13 +54,14 @@
 		"gh-pages": "^2.2.0",
 		"husky": ">=6",
 		"lint-staged": ">=10",
-		"microbundle-crl": "^0.13.10",
-		"node-sass": "^6.0.1",
+		"microbundle-crl": "^0.13.11",
 		"npm-run-all": "^4.1.5",
+		"postcss": "^7",
 		"prettier": "^2.3.2",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"react-scripts": "^3.4.1",
+		"tailwindcss": "npm:@tailwindcss/postcss7-compat",
 		"typescript": "^4.3.5"
 	},
 	"files": [
@@ -70,6 +72,10 @@
 		"*.{js,css,md}": "prettier --write"
 	},
 	"dependencies": {
-		"modern-normalize": "1.1.0"
+		"classnames": "2.3.1",
+		"slate": "0.65.3",
+		"slate-history": "0.65.3",
+		"slate-hyperscript": "0.62.0",
+		"slate-react": "0.65.3"
 	}
 }

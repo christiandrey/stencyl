@@ -1,0 +1,4 @@
+.container {
+	@apply bg-white rounded-sm shadow-1;
+	padding: 35px 35px 65px;
+}
