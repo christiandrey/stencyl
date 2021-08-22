@@ -27,6 +27,13 @@ export type BulletedListElement = {
 	children: Descendant[];
 };
 
+export type CodeBlockElement = {
+	type: 'code-block';
+	alignment?: StencylAlignment;
+	indentation?: number;
+	children: Descendant[];
+};
+
 export type HeadingOneElement = {
 	type: 'heading-one';
 	alignment?: StencylAlignment;
@@ -72,6 +79,8 @@ export type HeadingSixElement = {
 export type ImageElement = {
 	type: 'image';
 	url: string;
+	width?: number;
+	height?: number;
 	children: EmptyText[];
 };
 
@@ -187,7 +196,7 @@ export type StencylText = {
 	italic?: boolean;
 	underline?: boolean;
 	strikethrough?: boolean;
-	color?: boolean;
+	color?: string;
 	/**
 	 * Allows to check if the text/element should be displayed.
 	 * When it's a single condition, the value of the node represented by
@@ -201,6 +210,7 @@ export type StencylText = {
 export type StencylElement =
 	| BlockQuoteElement
 	| BulletedListElement
+	| CodeBlockElement
 	| HeadingOneElement
 	| HeadingTwoElement
 	| HeadingThreeElement
@@ -232,6 +242,6 @@ declare module 'slate' {
 	interface CustomTypes {
 		Editor: StencylEditor;
 		Element: StencylElement;
-		Text: StencylText | EmptyText;
+		Text: StencylText & EmptyText;
 	}
 }
