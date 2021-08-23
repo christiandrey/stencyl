@@ -1,9 +1,17 @@
-import {DeserializeFn, cruftFilterFn} from './utils';
+import {
+	DeserializeFn,
+	cruftFilterFn,
+	deserializeToFragment,
+	deserializeToLeaf,
+	wrapInlineTopLevelNodesInParagraph,
+} from './utils';
 import {deserializeBody, deserializeLineBreak, deserializeMarks} from './rules';
 
+import {Descendant} from 'slate';
 import {StencylEditor} from '../../types';
 import {deserializeBlockquote} from '../blockquote/deserialize';
 import {deserializeParagraph} from '../paragraph/deserialize';
+import {notNil} from '../../utils';
 
 export const withHTMLDeserializer = (editor: StencylEditor) => {
 	const {insertData} = editor;
@@ -12,10 +20,8 @@ export const withHTMLDeserializer = (editor: StencylEditor) => {
 		const html = data.getData('text/html');
 
 		if (html) {
-			// const parsed = new DOMParser().parseFromString(html, 'text/html');
-			// console.log(parsed.body);
-			const parsed = deserializeHTML(html);
-			console.log('PARSED', parsed);
+			const parsed = deserializeHTML(html, editor);
+			console.log(parsed);
 			return;
 		}
 
@@ -33,22 +39,39 @@ const rules: Array<DeserializeFn> = [
 	deserializeMarks,
 ];
 
-function deserializeHTML(html: string) {
+function deserializeHTML(html: string, editor: StencylEditor) {
 	const parsed = new DOMParser().parseFromString(html, 'text/html');
-	const childNodes = Array.from(parsed.body.childNodes);
-	return deserializeHTMLElements(childNodes);
+	const children = deserializeHTMLElements(Array.from(parsed.body.childNodes));
+	return deserializeToFragment(wrapInlineTopLevelNodesInParagraph(editor, children));
 }
 
-function deserializeHTMLElements(elements: Array<ChildNode>) {
-	return elements.filter(cruftFilterFn).map((o) => deserializeHTMLElement(o));
+function deserializeHTMLElements(elements: Array<Node>) {
+	let nodes: Descendant[] = [];
+
+	elements.filter(cruftFilterFn).forEach((o) => {
+		const result = deserializeHTMLElement(o);
+
+		if (Array.isArray(result)) {
+			nodes = nodes.concat(result);
+		} else {
+			if (notNil(result)) {
+				nodes.push(result);
+			}
+		}
+	});
+
+	return nodes;
 }
 
-function deserializeHTMLElement(element: ChildNode) {
+function deserializeHTMLElement(element: Node) {
 	const children = deserializeHTMLElements(Array.from(element.childNodes));
-	console.log(element, children);
+
+	if (!children?.length) {
+		return deserializeToLeaf({text: element.textContent ?? ''});
+	}
 
 	for (const rule of rules) {
-		const result = rule(element as any, children as any);
+		const result = rule(element, children);
 
 		if (typeof result === 'undefined') {
 			continue;

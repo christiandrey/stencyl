@@ -5,7 +5,6 @@ import {
 	matchHTMLElementNode,
 } from './utils';
 
-import {StencylText} from '../../types';
 import htmlNodeNames from '../../constants/html-node-names';
 import htmlNodeTypes from '../../constants/html-node-types';
 
@@ -26,10 +25,6 @@ export const deserializeLineBreak: DeserializeFn = (element, children) => {
 };
 
 export const deserializeMarks: DeserializeFn = (element, children) => {
-	if (!children.length) {
-		return deserializeToLeaf({text: element.textContent ?? ''}, null);
-	}
-
 	if (
 		![
 			htmlNodeNames.SPAN,
@@ -46,45 +41,31 @@ export const deserializeMarks: DeserializeFn = (element, children) => {
 	}
 
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.SPAN})) {
-		return children.map((child) =>
-			deserializeToLeaf({text: (child as StencylText).text ?? ''}, child),
-		);
+		return children;
 	}
 
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.STRONG})) {
-		return children.map((child) =>
-			deserializeToLeaf({text: (child as StencylText).text ?? '', bold: true}, child),
-		);
+		return children.map((child) => ({...child, bold: true}));
 	}
 
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.B})) {
-		return children.map((child) =>
-			deserializeToLeaf({text: (child as StencylText).text ?? '', bold: true}, child),
-		);
+		return children.map((child) => ({...child, bold: true}));
 	}
 
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.I})) {
-		return children.map((child) =>
-			deserializeToLeaf({text: (child as StencylText).text ?? '', italic: true}, child),
-		);
+		return children.map((child) => ({...child, italic: true}));
 	}
 
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.U})) {
-		return children.map((child) =>
-			deserializeToLeaf({text: (child as StencylText).text ?? '', underline: true}, child),
-		);
+		return children.map((child) => ({...child, underline: true}));
 	}
 
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.S})) {
-		return children.map((child) =>
-			deserializeToLeaf({text: (child as StencylText).text ?? '', strikethrough: true}, child),
-		);
+		return children.map((child) => ({...child, strikethrough: true}));
 	}
 
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.CODE})) {
-		return children.map((child) =>
-			deserializeToLeaf({text: (child as StencylText).text ?? '', code: true}, child),
-		);
+		return children.map((child) => ({...child, code: true}));
 	}
 
 	return undefined;
