@@ -105,20 +105,7 @@ const timing = {
 };
 
 module.exports = {
-	future: {
-		removeDeprecatedGapUtilities: true,
-		purgeLayersByDefault: true,
-	},
-	purge: {
-		content: [
-			'./src/**/*.html',
-			'./src/**/*.js',
-			'./src/**/*.jsx',
-			'./src/**/*.ts',
-			'./src/**/*.tsx',
-			'./public/index.html',
-		],
-	},
+	purge: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx', './src/**/*.ts', './src/**/*.tsx'],
 	corePlugins: {
 		fontSize: false,
 		lineHeight: false,

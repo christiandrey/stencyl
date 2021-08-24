@@ -1,8 +1,6 @@
 import React, {FC} from 'react';
 
 import {RenderElementProps} from 'slate-react';
-import classNames from 'classnames';
-import css from './style.module.css';
 
 export const TableCell: FC<RenderElementProps> = ({element, attributes, children}) => {
 	if (element.type === 'table-cell') {
@@ -13,6 +11,10 @@ export const TableCell: FC<RenderElementProps> = ({element, attributes, children
 				height={element.height}
 				colSpan={element.colspan ?? 1}
 				rowSpan={element.rowspan ?? 1}
+				style={{
+					borderColor: element.borderColor,
+					borderWidth: element.borderWidth,
+				}}
 			>
 				{children}
 			</td>
@@ -33,12 +35,7 @@ export const TableRow: FC<RenderElementProps> = ({element, attributes, children}
 export const Table: FC<RenderElementProps> = ({element, attributes, children}) => {
 	if (element.type === 'table') {
 		return (
-			<table
-				{...attributes}
-				className={classNames({
-					[css.borderless]: element.borderless,
-				})}
-			>
+			<table {...attributes} className='border-collapse'>
 				{children}
 			</table>
 		);

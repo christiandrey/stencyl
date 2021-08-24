@@ -1,6 +1,7 @@
 import {Descendant, Text} from 'slate';
-import {StencylEditor, StencylElement, StencylText} from '../../types';
+import {StencylAlignment, StencylEditor, StencylElement, StencylText} from '../../types';
 
+import constants from '../../constants';
 import htmlNodeTypes from '../../constants/html-node-types';
 import {jsx} from 'slate-hyperscript';
 
@@ -9,7 +10,11 @@ export type DeserializedChildren = Descendant | Descendant[] | undefined | null;
 export type DeserializeFn = (element: Node, children: Descendant[]) => DeserializedChildren;
 
 export function cruftFilterFn(element: HTMLElement) {
-	return !(element.nodeName === '#text' && element.nodeValue === '\n');
+	return !(element.nodeName === '#text' && /^[\n]{1,}$/.test(element.nodeValue ?? ''));
+}
+
+export function invalidNodesFilterFn(element: HTMLElement) {
+	return [htmlNodeTypes.ELEMENT_NODE, htmlNodeTypes.TEXT_NODE].includes(element.nodeType);
 }
 
 export function deserializeToFragment(children: any) {
@@ -49,4 +54,71 @@ export function wrapInlineTopLevelNodesInParagraph(editor: StencylEditor, nodes:
 	return nodes.map((o) =>
 		Text.isText(o) || editor.isInline(o) ? deserializeToElement({type: 'paragraph'}, [o]) : o,
 	);
+}
+
+export function getNodeStyle<T extends keyof CSSStyleDeclaration>(
+	node: Node,
+	key: T,
+): CSSStyleDeclaration[T] | undefined {
+	if (node instanceof HTMLElement) {
+		return node.style[key];
+	}
+
+	return undefined;
+}
+
+export function getNodeAttribute(node: Node, key: string): string | undefined {
+	if (node instanceof HTMLElement) {
+		return node.getAttribute[key] ?? undefined;
+	}
+
+	return undefined;
+}
+
+export function getStencylAlignmentAttribute(
+	alignment: string | undefined,
+): StencylAlignment | undefined {
+	if (!alignment) {
+		return undefined;
+	}
+
+	if (['start', 'left'].includes(alignment)) {
+		return 'left';
+	}
+
+	if (['end', 'right'].includes(alignment)) {
+		return 'right';
+	}
+
+	if (['center'].includes(alignment)) {
+		return 'center';
+	}
+
+	if (['justify'].includes(alignment)) {
+		return 'justify';
+	}
+
+	return undefined;
+}
+
+export function getNodeIndentation(node: Node): number | undefined {
+	if (node instanceof HTMLElement) {
+		const marginLeft = getNodeStyle(node, 'marginLeft');
+
+		if (marginLeft?.length) {
+			const parsed = parseFloat(marginLeft);
+
+			if (parsed) {
+				return Math.round((parsed * 100) / constants.paperSizes.a4.width);
+			}
+		}
+	}
+
+	return undefined;
+}
+
+export function getNodeTextContent(node: Node): string {
+	const text = node.textContent ?? '';
+
+	return text === '\n' ? text : text.replace(/[\n]/gi, ' ');
 }

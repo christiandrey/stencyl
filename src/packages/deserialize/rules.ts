@@ -34,6 +34,7 @@ export const deserializeMarks: DeserializeFn = (element, children) => {
 			htmlNodeNames.U,
 			htmlNodeNames.S,
 			htmlNodeNames.CODE,
+			htmlNodeNames.FONT,
 		].includes(element.nodeName) &&
 		element.nodeType !== htmlNodeTypes.TEXT_NODE
 	) {
@@ -41,6 +42,10 @@ export const deserializeMarks: DeserializeFn = (element, children) => {
 	}
 
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.SPAN})) {
+		return children;
+	}
+
+	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.FONT})) {
 		return children;
 	}
 

@@ -7,9 +7,8 @@ import classNames from 'classnames';
 import css from './style.module.css';
 import {withHTMLDeserializer} from '../../packages/deserialize';
 import {withHistory} from 'slate-history';
-
-// import {withImage} from '../../packages/image/plugin';
-// import {withLink} from '../../packages/link/plugin';
+import {withImage} from '../../packages/image/plugin';
+import {withLink} from '../../packages/link/plugin';
 
 type EditorProps = {};
 
@@ -20,7 +19,10 @@ export const Editor: FC<EditorProps> = () => {
 			children: [{text: 'A line of text in a paragraph.'}],
 		},
 	]);
-	const editor = useMemo(() => withHTMLDeserializer(withReact(withHistory(createEditor()))), []);
+	const editor = useMemo(
+		() => withHTMLDeserializer(withImage(withLink(withReact(withHistory(createEditor()))))),
+		[],
+	);
 	const [editorState, setEditorState] = useState<Descendant[]>(initialData.current);
 
 	return (

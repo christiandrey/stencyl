@@ -109,7 +109,6 @@ export type ParagraphElement = {
 
 export type TableElement = {
 	type: 'table';
-	borderless?: boolean;
 	children: TableRowElement[];
 };
 
@@ -119,6 +118,8 @@ export type TableCellElement = {
 	height: number;
 	colspan?: number;
 	rowspan?: number;
+	borderColor?: string;
+	borderWidth?: number;
 	children: StencylText[];
 };
 

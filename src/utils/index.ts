@@ -28,3 +28,11 @@ export function formatDate(
 		return undefined;
 	}
 }
+
+export function runIfDefined<T, R>(value?: T | null, fn?: (o: T) => R): R | undefined {
+	if (notNil(value)) {
+		return fn?.(value) ?? undefined;
+	}
+
+	return undefined;
+}

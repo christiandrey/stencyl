@@ -1,8 +1,11 @@
 import {StencylEditor, StencylElement} from '../../types';
 
 export const withLink = (editor: StencylEditor) => {
-	editor.isInline = (element: StencylElement) =>
-		element.type === 'link' ? true : editor.isInline(element);
+	const {isInline} = editor;
+
+	editor.isInline = (element: StencylElement) => {
+		return element.type === 'link' ? true : isInline(element);
+	};
 
 	return editor;
 };
