@@ -1,6 +1,7 @@
-import {Element, NodeEntry, Transforms} from 'slate';
-import {StencylAlignment, StencylEditor, StencylElementTypes} from '../../types';
+import {Editor, Element, Transforms} from 'slate';
+import {ParagraphElement, StencylAlignment, StencylEditor, StencylElementTypes} from '../../types';
 
+import {clamp} from '../../utils';
 import {getCurrentBlock} from './utils';
 
 export const WRAPPED_BLOCKS: Array<StencylElementTypes> = [
@@ -20,6 +21,14 @@ export const BLOCKS_WITH_ALIGNMENT: Array<StencylElementTypes> = [
 	'heading-six',
 	'paragraph',
 ];
+
+export const BLOCKS_WITH_INDENTATION: Array<StencylElementTypes> = [
+	...BLOCKS_WITH_ALIGNMENT,
+	'bulleted-list',
+	'numbered-list',
+];
+
+export const INDENTATION_FACTOR = 3;
 
 export function preBlockOps(editor: StencylEditor) {
 	const currentBlock = getCurrentBlock(editor);
@@ -54,30 +63,58 @@ export function deactivateBlock(editor: StencylEditor) {
 	});
 }
 
-export function setBlockAlignment(
-	editor: StencylEditor,
-	alignment?: StencylAlignment,
-	block?: NodeEntry | null,
-) {
-	block = block ?? getCurrentBlock(editor);
+export function setBlockAlignment(editor: StencylEditor, alignment?: StencylAlignment) {
+	const matches = Editor.nodes(editor, {
+		match: (node) =>
+			Element.isElement(node) &&
+			!editor.isInline(node) &&
+			BLOCKS_WITH_ALIGNMENT.includes(node.type),
+	});
 
-	if (!block) {
-		return;
+	for (const match of matches) {
+		const [node, path] = match;
+
+		if (!Element.isElement(node) || !BLOCKS_WITH_ALIGNMENT.includes(node.type)) {
+			return;
+		}
+
+		Transforms.setNodes(
+			editor,
+			{
+				alignment: alignment === 'left' ? undefined : alignment,
+			},
+			{
+				at: path,
+			},
+		);
 	}
+}
 
-	const [node, path] = block;
+export function changeBlockIndentation(editor: StencylEditor, mode: 'increment' | 'decrement') {
+	const matches = Editor.nodes(editor, {
+		match: (node) =>
+			Element.isElement(node) &&
+			!editor.isInline(node) &&
+			BLOCKS_WITH_INDENTATION.includes(node.type),
+	});
 
-	if (!Element.isElement(node) || !BLOCKS_WITH_ALIGNMENT.includes(node.type)) {
-		return;
+	for (const match of matches) {
+		const [node, path] = match;
+		const indentation = (node as ParagraphElement).indentation ?? 0;
+		const eventualIndentation = clamp(
+			mode === 'increment' ? indentation + INDENTATION_FACTOR : indentation - INDENTATION_FACTOR,
+			0,
+			99,
+		);
+
+		Transforms.setNodes(
+			editor,
+			{
+				indentation: eventualIndentation || undefined,
+			},
+			{
+				at: path,
+			},
+		);
 	}
-
-	Transforms.setNodes(
-		editor,
-		{
-			alignment: alignment === 'left' ? undefined : alignment,
-		},
-		{
-			at: path,
-		},
-	);
 }

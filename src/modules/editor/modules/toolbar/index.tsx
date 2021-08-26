@@ -8,7 +8,7 @@ const BaseToolbar = () => {
 
 	const handleTestMousedown = (e: MouseEvent) => {
 		e.preventDefault();
-		setBlockAlignment(editor, 'center');
+		setBlockAlignment(editor, 'right');
 	};
 
 	console.log('RENDER');

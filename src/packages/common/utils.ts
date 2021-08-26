@@ -31,14 +31,23 @@ export function getLastNode(
 	return [getLastChild(lastNode, level - 1), lastPath.slice(0, level + 1)];
 }
 
-export function getCurrentBlock(editor: StencylEditor) {
+export function getCurrentBlock(editor: StencylEditor, mode: 'highest' | 'lowest' = 'highest') {
 	const {selection} = editor;
 
 	if (!selection) {
 		return null;
 	}
 
-	return Editor.node(editor, selection, {depth: 1});
+	if (mode === 'highest') {
+		return Editor.node(editor, selection, {depth: 1});
+	}
+
+	const [match] = Editor.nodes(editor, {
+		match: (node) => Element.isElement(node) && !editor.isInline(node),
+		mode: 'lowest',
+	});
+
+	return match;
 }
 
 export function isBlockActive(editor: StencylEditor, type: StencylElementTypes) {

@@ -15,7 +15,7 @@ export const Headings: FC<RenderElementProps> = ({element, children, attributes}
 			element.type === 'heading-six'
 		) {
 			if (element.indentation) {
-				properties.paddingLeft = `${element.indentation}%`;
+				properties.marginLeft = `${element.indentation}%`;
 			}
 
 			if (element.alignment) {

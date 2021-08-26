@@ -8,7 +8,7 @@ export const Paragraph: FC<RenderElementProps> = ({element, children, attributes
 
 		if (element.type === 'paragraph') {
 			if (element.indentation) {
-				properties.paddingLeft = `${element.indentation}%`;
+				properties.marginLeft = `${element.indentation}%`;
 			}
 
 			if (element.alignment) {

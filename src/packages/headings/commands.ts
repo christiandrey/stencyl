@@ -1,8 +1,7 @@
-import {StencylAlignment, StencylEditor} from '../../types';
 import {activateBlock, deactivateBlock} from '../common/commands';
-import {isBlockActive, setBlockAlignment} from '../common/utils';
 
-import {NodeEntry} from 'slate';
+import {StencylEditor} from '../../types';
+import {isBlockActive} from '../common/utils';
 
 export function toggleHeadingOne(editor: StencylEditor) {
 	isBlockActive(editor, 'heading-one')
@@ -38,12 +37,4 @@ export function toggleHeadingSix(editor: StencylEditor) {
 	isBlockActive(editor, 'heading-six')
 		? deactivateBlock(editor)
 		: activateBlock(editor, 'heading-six');
-}
-
-export function setHeadingsAlignment(
-	editor: StencylEditor,
-	alignment?: StencylAlignment,
-	block?: NodeEntry,
-) {
-	setBlockAlignment(editor, alignment, block);
 }

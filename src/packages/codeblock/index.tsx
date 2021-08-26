@@ -8,7 +8,7 @@ export const Codeblock: FC<RenderElementProps> = ({element, children, attributes
 
 		if (element.type === 'code-block') {
 			if (element.indentation) {
-				properties.paddingLeft = `${element.indentation}%`;
+				properties.marginLeft = `${element.indentation}%`;
 			}
 
 			if (element.alignment) {

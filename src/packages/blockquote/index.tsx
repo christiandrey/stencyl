@@ -8,7 +8,7 @@ export const Blockquote: FC<RenderElementProps> = ({element, children, attribute
 
 		if (element.type === 'block-quote') {
 			if (element.indentation) {
-				properties.paddingLeft = `${element.indentation}%`;
+				properties.marginLeft = `${element.indentation}%`;
 			}
 
 			if (element.alignment) {

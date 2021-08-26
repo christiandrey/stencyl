@@ -24,6 +24,7 @@ export type BlockQuoteElement = {
 
 export type BulletedListElement = {
 	type: 'bulleted-list';
+	indentation?: number;
 	children: Descendant[];
 };
 
@@ -97,6 +98,7 @@ export type ListItemElement = {
 
 export type NumberedListElement = {
 	type: 'numbered-list';
+	indentation?: number;
 	children: Descendant[];
 };
 
