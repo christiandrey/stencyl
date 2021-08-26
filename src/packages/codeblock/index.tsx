@@ -20,7 +20,7 @@ export const Codeblock: FC<RenderElementProps> = ({element, children, attributes
 	}, [element]);
 
 	return (
-		<pre style={style}>
+		<pre style={style} className='bg-gray-100 rounded-default p-12'>
 			<code {...attributes}>{children}</code>
 		</pre>
 	);

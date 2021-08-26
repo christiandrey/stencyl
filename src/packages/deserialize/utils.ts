@@ -51,9 +51,37 @@ export function matchHTMLTextNode(
 }
 
 export function wrapInlineTopLevelNodesInParagraph(editor: StencylEditor, nodes: Descendant[]) {
-	return nodes.map((o) =>
-		Text.isText(o) || editor.isInline(o) ? deserializeToElement({type: 'paragraph'}, [o]) : o,
-	);
+	const wrappedNodes: Array<Descendant> = [];
+	const pendingNodes: Array<Descendant> = [];
+
+	const flushPendingNodes = () => {
+		if (pendingNodes.length) {
+			wrappedNodes.push(
+				deserializeToElement(
+					{
+						type: 'paragraph',
+					},
+					pendingNodes,
+				),
+			);
+			pendingNodes.length = 0;
+		}
+	};
+
+	for (const node of nodes) {
+		const isInline = Text.isText(node) || editor.isInline(node);
+
+		if (isInline) {
+			pendingNodes.push(node);
+		} else {
+			flushPendingNodes();
+			wrappedNodes.push(node);
+		}
+	}
+
+	flushPendingNodes();
+
+	return wrappedNodes;
 }
 
 export function getNodeStyle<T extends keyof CSSStyleDeclaration>(
@@ -69,7 +97,7 @@ export function getNodeStyle<T extends keyof CSSStyleDeclaration>(
 
 export function getNodeAttribute(node: Node, key: string): string | undefined {
 	if (node instanceof HTMLElement) {
-		return node.getAttribute[key] ?? undefined;
+		return node.getAttribute(key) ?? undefined;
 	}
 
 	return undefined;

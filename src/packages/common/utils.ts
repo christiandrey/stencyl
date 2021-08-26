@@ -1,6 +1,7 @@
 import {Descendant, Editor, Element, NodeEntry} from 'slate';
+import {StencylEditor, StencylElementTypes} from '../../types';
 
-import {StencylEditor} from '../../types';
+export const EMPTY_TEXT_NODE = [{text: ''}];
 
 function getLastChild(node: Descendant, level: number): Descendant {
 	if (!(level + 1) || !(Editor.isEditor(node) || Element.isElement(node))) {
@@ -29,3 +30,27 @@ export function getLastNode(
 
 	return [getLastChild(lastNode, level - 1), lastPath.slice(0, level + 1)];
 }
+
+export function getCurrentBlock(editor: StencylEditor) {
+	const {selection} = editor;
+
+	if (!selection) {
+		return null;
+	}
+
+	return Editor.node(editor, selection, {depth: 1});
+}
+
+export function isBlockActive(editor: StencylEditor, type: StencylElementTypes) {
+	const currentBlock = getCurrentBlock(editor);
+
+	if (!currentBlock) {
+		return false;
+	}
+
+	const [node] = currentBlock;
+
+	return Editor.isBlock(editor, node) && node.type === type;
+}
+
+export function isMarkActive() {}

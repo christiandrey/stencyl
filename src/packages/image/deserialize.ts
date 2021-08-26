@@ -2,6 +2,7 @@ import {
 	DeserializeFn,
 	deserializeToElement,
 	getNodeAttribute,
+	getNodeStyle,
 	matchHTMLElementNode,
 } from '../deserialize/utils';
 
@@ -14,8 +15,14 @@ export const deserializeImage: DeserializeFn = (element, children) => {
 			{
 				type: 'image',
 				url: getNodeAttribute(element, 'src'),
-				width: runIfDefined(getNodeAttribute(element, 'width'), (o) => parseFloat(o)),
-				height: runIfDefined(getNodeAttribute(element, 'height'), (o) => parseFloat(o)),
+				width: runIfDefined(
+					getNodeAttribute(element, 'width') ?? getNodeStyle(element, 'width'),
+					(o) => parseFloat(o),
+				),
+				height: runIfDefined(
+					getNodeAttribute(element, 'height') ?? getNodeStyle(element, 'height'),
+					(o) => parseFloat(o),
+				),
 			},
 			children,
 		);

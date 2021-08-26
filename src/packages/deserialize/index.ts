@@ -10,6 +10,7 @@ import {
 import {deserializeBody, deserializeLineBreak, deserializeMarks} from './rules';
 
 import {Descendant} from 'slate';
+import {EMPTY_TEXT_NODE} from '../common/utils';
 import {StencylEditor} from '../../types';
 import {deserializeBlockquote} from '../blockquote/deserialize';
 import {deserializeCodeblock} from '../codeblock/deserialize';
@@ -19,6 +20,7 @@ import {deserializeLink} from '../link/deserialize';
 import {deserializeLists} from '../lists/deserialize';
 import {deserializeParagraph} from '../paragraph/deserialize';
 import {deserializeTable} from '../table/deserialize';
+import htmlNodeNames from '../../constants/html-node-names';
 import {notNil} from '../../utils';
 
 export const withHTMLDeserializer = (editor: StencylEditor) => {
@@ -28,6 +30,7 @@ export const withHTMLDeserializer = (editor: StencylEditor) => {
 		const html = data.getData('text/html');
 
 		if (html) {
+			// console.log(html);
 			const fragment = deserializeHTML(html, editor);
 			// editor.insertFragment(fragment);
 			console.log('FRAGMENT', fragment);
@@ -39,6 +42,8 @@ export const withHTMLDeserializer = (editor: StencylEditor) => {
 
 	return editor;
 };
+
+const VOID_NODES = [htmlNodeNames.IMG];
 
 const rules: Array<DeserializeFn> = [
 	deserializeBody,
@@ -83,11 +88,13 @@ function deserializeHTMLElements(elements: Array<Node>) {
 }
 
 function deserializeHTMLElement(element: Node) {
-	const children = deserializeHTMLElements(Array.from(element.childNodes));
+	let children = deserializeHTMLElements(Array.from(element.childNodes));
 
-	if (!children?.length) {
+	if (!children?.length && !VOID_NODES.includes(element.nodeName)) {
 		return deserializeToLeaf({text: getNodeTextContent(element)});
 	}
+
+	children = children.length ? children : EMPTY_TEXT_NODE;
 
 	for (const rule of rules) {
 		const result = rule(element, children);

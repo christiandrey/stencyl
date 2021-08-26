@@ -232,6 +232,8 @@ export type EmptyText = {
 	text: string;
 };
 
+export type StencylElementTypes = StencylElement['type'];
+
 export type StencylEditor = BaseEditor & ReactEditor & HistoryEditor;
 
 export type StencylData = {
