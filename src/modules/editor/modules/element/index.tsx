@@ -1,6 +1,6 @@
 import {List, ListItem} from '../../../../packages/lists';
 import React, {FC} from 'react';
-import {TableCell, TableRow} from '../../../../packages/table';
+import {Table, TableCell, TableRow} from '../../../../packages/table';
 
 import {Blockquote} from '../../../../packages/blockquote';
 import {Codeblock} from '../../../../packages/codeblock';
@@ -35,7 +35,7 @@ export const EditorElement: FC<RenderElementProps> = (props) => {
 		case 'paragraph':
 			return <Paragraph {...props} />;
 		case 'table':
-			return <Paragraph {...props} />;
+			return <Table {...props} />;
 		case 'table-cell':
 			return <TableCell {...props} />;
 		case 'table-row':

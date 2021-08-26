@@ -20,7 +20,7 @@ export const Blockquote: FC<RenderElementProps> = ({element, children, attribute
 	}, [element]);
 
 	return (
-		<blockquote className='text-subhead' style={style} {...attributes}>
+		<blockquote style={style} {...attributes}>
 			{children}
 		</blockquote>
 	);

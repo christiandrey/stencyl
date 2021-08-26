@@ -21,5 +21,16 @@ export const deserializeParagraph: DeserializeFn = (element, children) => {
 		);
 	}
 
+	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.DIV})) {
+		return deserializeToElement(
+			{
+				type: 'paragraph',
+				alignment: getStencylAlignmentAttribute(getNodeStyle(element, 'textAlign')),
+				indentation: getNodeIndentation(element),
+			},
+			children,
+		);
+	}
+
 	return undefined;
 };

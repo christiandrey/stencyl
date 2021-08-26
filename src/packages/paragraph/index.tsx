@@ -20,7 +20,7 @@ export const Paragraph: FC<RenderElementProps> = ({element, children, attributes
 	}, [element]);
 
 	return (
-		<p className='text-subhead' style={style} {...attributes}>
+		<p style={style} {...attributes}>
 			{children}
 		</p>
 	);

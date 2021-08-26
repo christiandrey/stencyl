@@ -9,6 +9,7 @@ import {withHTMLDeserializer} from '../../packages/deserialize';
 import {withHistory} from 'slate-history';
 import {withImage} from '../../packages/image/plugin';
 import {withLink} from '../../packages/link/plugin';
+import {withTrailingBlock} from '../../packages/common/plugin';
 
 type EditorProps = {};
 
@@ -20,7 +21,10 @@ export const Editor: FC<EditorProps> = () => {
 		},
 	]);
 	const editor = useMemo(
-		() => withHTMLDeserializer(withImage(withLink(withReact(withHistory(createEditor()))))),
+		() =>
+			withHTMLDeserializer(
+				withTrailingBlock(withImage(withLink(withReact(withHistory(createEditor()))))),
+			),
 		[],
 	);
 	const [editorState, setEditorState] = useState<Descendant[]>(initialData.current);

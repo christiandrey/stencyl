@@ -1,5 +1,5 @@
 .container {
-	@apply bg-white rounded-sm shadow-1;
+	@apply bg-white rounded-sm shadow-1 text-subhead;
 	padding: 35px 35px 65px;
 
 	& ol {

@@ -5,6 +5,7 @@ const htmlNodeNames = {
 	BODY: 'BODY',
 	BR: 'BR',
 	CODE: 'CODE',
+	DIV: 'DIV',
 	FONT: 'FONT',
 	H1: 'H1',
 	H2: 'H2',

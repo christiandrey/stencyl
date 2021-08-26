@@ -20,7 +20,7 @@ export const Codeblock: FC<RenderElementProps> = ({element, children, attributes
 	}, [element]);
 
 	return (
-		<pre className='text-subhead' style={style}>
+		<pre style={style}>
 			<code {...attributes}>{children}</code>
 		</pre>
 	);

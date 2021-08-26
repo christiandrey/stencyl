@@ -30,7 +30,7 @@ export const withHTMLDeserializer = (editor: StencylEditor) => {
 		if (html) {
 			const fragment = deserializeHTML(html, editor);
 			// editor.insertFragment(fragment);
-			console.log(fragment);
+			console.log('FRAGMENT', fragment);
 			return;
 		}
 
@@ -56,7 +56,7 @@ const rules: Array<DeserializeFn> = [
 
 function deserializeHTML(html: string, editor: StencylEditor) {
 	const parsed = new DOMParser().parseFromString(html, 'text/html');
-	console.log(parsed.body);
+	// console.log(parsed.body);
 	const children = deserializeHTMLElements(Array.from(parsed.body.childNodes));
 	return deserializeToFragment(wrapInlineTopLevelNodesInParagraph(editor, children));
 }
