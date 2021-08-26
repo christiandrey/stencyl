@@ -1,4 +1,4 @@
-import {Descendant, Editor, Element, NodeEntry} from 'slate';
+import {Descendant, Editor, Element, Node, NodeEntry, NodeMatch} from 'slate';
 import {StencylEditor, StencylElementTypes} from '../../types';
 
 export const EMPTY_TEXT_NODE = [{text: ''}];
@@ -63,3 +63,21 @@ export function isBlockActive(editor: StencylEditor, type: StencylElementTypes) 
 }
 
 export function isMarkActive() {}
+
+export function getMatchingNodes<T extends Node>(editor: StencylEditor, query: NodeMatch<T>) {
+	return Editor.nodes(editor, {
+		match: query,
+	});
+}
+
+export function forEachMatchingNode<T extends Node>(
+	editor: StencylEditor,
+	query: NodeMatch<T>,
+	callback: (match: NodeEntry<T>) => void,
+) {
+	const matches = getMatchingNodes(editor, query);
+
+	for (const match of matches) {
+		callback(match);
+	}
+}

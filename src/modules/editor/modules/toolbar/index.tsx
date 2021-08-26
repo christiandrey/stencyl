@@ -1,6 +1,6 @@
 import React, {MouseEvent, memo} from 'react';
 
-import {setBlockAlignment} from '../../../../packages/common/commands';
+import {toggleHeadingOne} from '../../../../packages/headings/commands';
 import {useSlateStatic} from 'slate-react';
 
 const BaseToolbar = () => {
@@ -8,7 +8,8 @@ const BaseToolbar = () => {
 
 	const handleTestMousedown = (e: MouseEvent) => {
 		e.preventDefault();
-		setBlockAlignment(editor, 'right');
+		// toggleHe(editor, 'right');
+		toggleHeadingOne(editor);
 	};
 
 	console.log('RENDER');

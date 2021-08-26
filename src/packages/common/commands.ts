@@ -1,8 +1,8 @@
-import {Editor, Element, Transforms} from 'slate';
+import {Element, Transforms} from 'slate';
 import {ParagraphElement, StencylAlignment, StencylEditor, StencylElementTypes} from '../../types';
 
 import {clamp} from '../../utils';
-import {getCurrentBlock} from './utils';
+import {forEachMatchingNode} from './utils';
 
 export const WRAPPED_BLOCKS: Array<StencylElementTypes> = [
 	'numbered-list',
@@ -31,20 +31,10 @@ export const BLOCKS_WITH_INDENTATION: Array<StencylElementTypes> = [
 export const INDENTATION_FACTOR = 3;
 
 export function preBlockOps(editor: StencylEditor) {
-	const currentBlock = getCurrentBlock(editor);
-
-	if (!currentBlock) {
-		return;
-	}
-
-	const [node, path] = currentBlock;
-
-	if (Element.isElement(node) && WRAPPED_BLOCKS.includes(node.type)) {
-		Transforms.unwrapNodes(editor, {
-			at: path,
-			split: true,
-		});
-	}
+	Transforms.unwrapNodes(editor, {
+		match: (node) => Element.isElement(node) && WRAPPED_BLOCKS.includes(node.type),
+		split: true,
+	});
 }
 
 export function activateBlock(editor: StencylEditor, type: StencylElementTypes) {
@@ -64,57 +54,57 @@ export function deactivateBlock(editor: StencylEditor) {
 }
 
 export function setBlockAlignment(editor: StencylEditor, alignment?: StencylAlignment) {
-	const matches = Editor.nodes(editor, {
-		match: (node) =>
+	forEachMatchingNode(
+		editor,
+		(node) =>
 			Element.isElement(node) &&
 			!editor.isInline(node) &&
 			BLOCKS_WITH_ALIGNMENT.includes(node.type),
-	});
+		(match) => {
+			const [node, path] = match;
 
-	for (const match of matches) {
-		const [node, path] = match;
+			if (!Element.isElement(node) || !BLOCKS_WITH_ALIGNMENT.includes(node.type)) {
+				return;
+			}
 
-		if (!Element.isElement(node) || !BLOCKS_WITH_ALIGNMENT.includes(node.type)) {
-			return;
-		}
-
-		Transforms.setNodes(
-			editor,
-			{
-				alignment: alignment === 'left' ? undefined : alignment,
-			},
-			{
-				at: path,
-			},
-		);
-	}
+			Transforms.setNodes(
+				editor,
+				{
+					alignment: alignment === 'left' ? undefined : alignment,
+				},
+				{
+					at: path,
+				},
+			);
+		},
+	);
 }
 
 export function changeBlockIndentation(editor: StencylEditor, mode: 'increment' | 'decrement') {
-	const matches = Editor.nodes(editor, {
-		match: (node) =>
+	forEachMatchingNode(
+		editor,
+		(node) =>
 			Element.isElement(node) &&
 			!editor.isInline(node) &&
 			BLOCKS_WITH_INDENTATION.includes(node.type),
-	});
+		(match) => {
+			const [node, path] = match;
+			const indentation = (node as ParagraphElement).indentation ?? 0;
+			const eventualIndentation = clamp(
+				mode === 'increment' ? indentation + INDENTATION_FACTOR : indentation - INDENTATION_FACTOR,
+				0,
+				99,
+			);
 
-	for (const match of matches) {
-		const [node, path] = match;
-		const indentation = (node as ParagraphElement).indentation ?? 0;
-		const eventualIndentation = clamp(
-			mode === 'increment' ? indentation + INDENTATION_FACTOR : indentation - INDENTATION_FACTOR,
-			0,
-			99,
-		);
-
-		Transforms.setNodes(
-			editor,
-			{
-				indentation: eventualIndentation || undefined,
-			},
-			{
-				at: path,
-			},
-		);
-	}
+			Transforms.setNodes(
+				editor,
+				{
+					indentation: eventualIndentation || undefined,
+				},
+				{
+					at: path,
+				},
+			);
+		},
+	);
 }
