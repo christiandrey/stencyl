@@ -1,4 +1,5 @@
 import format from 'date-fns/format';
+import isUrl from 'is-url';
 
 export function notNil<T>(value?: T | null): value is T {
 	return typeof value !== 'undefined' && value !== null;
@@ -35,4 +36,12 @@ export function runIfDefined<T, R>(value?: T | null, fn?: (o: T) => R): R | unde
 	}
 
 	return undefined;
+}
+
+export function isValidUrl(text?: string | null) {
+	if (!text?.length) {
+		return false;
+	}
+
+	return isUrl(text);
 }

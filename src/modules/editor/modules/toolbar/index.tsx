@@ -1,6 +1,6 @@
 import React, {MouseEvent, memo} from 'react';
 
-import {toggleHeadingOne} from '../../../../packages/headings/commands';
+import {removeInlineLink} from '../../../../packages/link/commands';
 import {useSlateStatic} from 'slate-react';
 
 const BaseToolbar = () => {
@@ -9,7 +9,7 @@ const BaseToolbar = () => {
 	const handleTestMousedown = (e: MouseEvent) => {
 		e.preventDefault();
 		// toggleHe(editor, 'right');
-		toggleHeadingOne(editor);
+		removeInlineLink(editor);
 	};
 
 	console.log('RENDER');
