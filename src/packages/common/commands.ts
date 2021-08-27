@@ -1,8 +1,14 @@
-import {Element, Transforms} from 'slate';
-import {ParagraphElement, StencylAlignment, StencylEditor, StencylElementTypes} from '../../types';
+import {Editor, Element, Transforms} from 'slate';
+import {
+	ParagraphElement,
+	StencylAlignment,
+	StencylEditor,
+	StencylElementTypes,
+	StencylMarks,
+} from '../../types';
+import {forEachMatchingNode, matchEditableNode} from './utils';
 
 import {clamp} from '../../utils';
-import {forEachMatchingNode} from './utils';
 
 export const WRAPPED_BLOCKS: Array<StencylElementTypes> = [
 	'numbered-list',
@@ -51,6 +57,37 @@ export function deactivateBlock(editor: StencylEditor) {
 	Transforms.setNodes(editor, {
 		type: 'paragraph',
 	});
+}
+
+export function activateMark<K extends keyof StencylMarks>(
+	editor: StencylEditor,
+	mark: K,
+	value: StencylMarks[K] = true as any,
+) {
+	Editor.addMark(editor, mark, value);
+
+	if (mark === 'condition') {
+		Transforms.setNodes(
+			editor,
+			{
+				condition: value as StencylMarks['condition'],
+			},
+			{
+				match: matchEditableNode(editor),
+				hanging: true,
+			},
+		);
+	}
+}
+
+export function deactivateMark(editor: StencylEditor, mark: keyof StencylMarks) {
+	Editor.removeMark(editor, mark);
+
+	if (mark === 'condition') {
+		Transforms.unsetNodes(editor, mark, {
+			match: matchEditableNode(editor),
+		});
+	}
 }
 
 export function setBlockAlignment(editor: StencylEditor, alignment?: StencylAlignment) {

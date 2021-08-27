@@ -1,5 +1,5 @@
-import {Descendant, Editor, Element, Node, NodeEntry, NodeMatch} from 'slate';
-import {StencylEditor, StencylElementTypes} from '../../types';
+import {Descendant, Editor, Element, Node, NodeEntry, NodeMatch, Text} from 'slate';
+import {EditableElement, StencylEditor, StencylElementTypes, StencylMarks} from '../../types';
 
 export const EMPTY_TEXT_NODE = [{text: ''}];
 
@@ -50,19 +50,52 @@ export function getCurrentBlock(editor: StencylEditor, mode: 'highest' | 'lowest
 	return match;
 }
 
-export function isBlockActive(editor: StencylEditor, type: StencylElementTypes) {
-	const currentBlock = getCurrentBlock(editor);
+export function getSelectionBlocks(editor: StencylEditor) {
+	const matches = getMatchingNodes(
+		editor,
+		(node) => Element.isElement(node) && !editor.isInline(node),
+	);
 
-	if (!currentBlock) {
-		return false;
-	}
-
-	const [node] = currentBlock;
-
-	return Editor.isBlock(editor, node) && node.type === type;
+	return Array.from(matches);
 }
 
-export function isMarkActive() {}
+export function getSelectionMarks(editor: StencylEditor) {
+	const marks = Editor.marks(editor) ?? {};
+
+	if (marks.condition) {
+		return marks;
+	}
+
+	const [match] = Editor.nodes<EditableElement>(editor, {
+		match: (node) =>
+			Element.isElement(node) &&
+			editor.isVoid(node) &&
+			node.type === 'editable' &&
+			!!node.condition,
+	});
+
+	marks.condition = match?.[0].condition;
+
+	return marks;
+}
+
+export function isBlockActive(editor: StencylEditor, type: StencylElementTypes) {
+	const matches = getMatchingNodes(
+		editor,
+		(node) => Element.isElement(node) && !editor.isInline(node) && node.type === type,
+	);
+
+	return !!Array.from(matches).length;
+}
+
+export function isMarkActive(
+	editor: StencylEditor,
+	mark: keyof Omit<Text, 'text'>,
+	marks?: StencylMarks,
+) {
+	marks = marks ?? getSelectionMarks(editor);
+	return !!marks[mark];
+}
 
 export function getMatchingNodes<T extends Node>(editor: StencylEditor, query: NodeMatch<T>) {
 	return Editor.nodes(editor, {
@@ -80,4 +113,8 @@ export function forEachMatchingNode<T extends Node>(
 	for (const match of matches) {
 		callback(match);
 	}
+}
+
+export function matchEditableNode(editor: StencylEditor) {
+	return (node: Node) => Element.isElement(node) && editor.isVoid(node) && node.type === 'editable';
 }

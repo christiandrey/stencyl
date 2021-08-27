@@ -1,4 +1,4 @@
-import {BaseEditor, Descendant} from 'slate';
+import {BaseEditor, Descendant, Text} from 'slate';
 
 import {HistoryEditor} from 'slate-history';
 import {ReactEditor} from 'slate-react';
@@ -250,3 +250,5 @@ declare module 'slate' {
 		Text: StencylText & EmptyText;
 	}
 }
+
+export type StencylMarks = Omit<Text, 'text'>;

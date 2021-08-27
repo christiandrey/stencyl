@@ -1,6 +1,6 @@
 import React, {MouseEvent, memo} from 'react';
 
-import {removeInlineLink} from '../../../../packages/link/commands';
+import {toggleBoldMark} from '../../../../packages/leaf/commands';
 import {useSlateStatic} from 'slate-react';
 
 const BaseToolbar = () => {
@@ -8,8 +8,7 @@ const BaseToolbar = () => {
 
 	const handleTestMousedown = (e: MouseEvent) => {
 		e.preventDefault();
-		// toggleHe(editor, 'right');
-		removeInlineLink(editor);
+		toggleBoldMark(editor);
 	};
 
 	console.log('RENDER');
