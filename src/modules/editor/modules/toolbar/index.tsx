@@ -1,6 +1,6 @@
 import React, {MouseEvent, memo} from 'react';
 
-import {toggleBoldMark} from '../../../../packages/leaf/commands';
+import {insertNumberedListBlock} from '../../../../packages/lists/commands';
 import {useSlateStatic} from 'slate-react';
 
 const BaseToolbar = () => {
@@ -8,7 +8,7 @@ const BaseToolbar = () => {
 
 	const handleTestMousedown = (e: MouseEvent) => {
 		e.preventDefault();
-		toggleBoldMark(editor);
+		insertNumberedListBlock(editor);
 	};
 
 	console.log('RENDER');

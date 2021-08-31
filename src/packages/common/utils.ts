@@ -1,4 +1,16 @@
-import {Descendant, Editor, Element, Node, NodeEntry, NodeMatch, Text} from 'slate';
+import {
+	Descendant,
+	Editor,
+	Element,
+	Location,
+	Node,
+	NodeEntry,
+	NodeMatch,
+	Path,
+	Range,
+	Text,
+	Transforms,
+} from 'slate';
 import {EditableElement, StencylEditor, StencylElementTypes, StencylMarks} from '../../types';
 
 export const EMPTY_TEXT_NODE = [{text: ''}];
@@ -29,6 +41,22 @@ export function getLastNode(
 	const [, lastPath] = Editor.last(editor, []);
 
 	return [getLastChild(lastNode, level - 1), lastPath.slice(0, level + 1)];
+}
+
+export function getParentNode(editor: StencylEditor, nodeEntry: NodeEntry) {
+	const [node, path] = nodeEntry;
+
+	if (Editor.isEditor(node) || !path?.length) {
+		return null;
+	}
+
+	return Editor.node(editor, path.slice(0, path.length - 1));
+
+	/**
+	 * Other Alternative methods
+	 * 1. Editor.above(editor, {at: path});
+	 * 2. Editor.parent(editor, path, {depth: path.length})
+	 */
 }
 
 export function getCurrentBlock(editor: StencylEditor, mode: 'highest' | 'lowest' = 'highest') {
@@ -79,6 +107,14 @@ export function getSelectionMarks(editor: StencylEditor) {
 	return marks;
 }
 
+export function getSelectionLeaf(editor: StencylEditor) {
+	if (!editor.selection) {
+		return null;
+	}
+
+	return Editor.leaf(editor, editor.selection);
+}
+
 export function isBlockActive(editor: StencylEditor, type: StencylElementTypes) {
 	const matches = getMatchingNodes(
 		editor,
@@ -117,4 +153,215 @@ export function forEachMatchingNode<T extends Node>(
 
 export function matchEditableNode(editor: StencylEditor) {
 	return (node: Node) => Element.isElement(node) && editor.isVoid(node) && node.type === 'editable';
+}
+
+export function insertFragment(
+	editor: StencylEditor,
+	fragment: Node[],
+	options: {
+		at?: Location;
+		hanging?: boolean;
+		voids?: boolean;
+	} = {},
+) {
+	Editor.withoutNormalizing(editor, () => {
+		const {hanging = false, voids = false} = options;
+		let {at = editor.selection} = options;
+
+		if (!fragment.length) {
+			return;
+		}
+
+		if (!at) {
+			return;
+		} else if (Range.isRange(at)) {
+			if (!hanging) {
+				at = Editor.unhangRange(editor, at);
+			}
+
+			if (Range.isCollapsed(at)) {
+				at = at.anchor;
+			} else {
+				const [, end] = Range.edges(at);
+
+				if (!voids && Editor.void(editor, {at: end})) {
+					return;
+				}
+
+				const pointRef = Editor.pointRef(editor, end);
+				Transforms.delete(editor, {at});
+				at = pointRef.unref()!;
+			}
+		} else if (Path.isPath(at)) {
+			at = Editor.start(editor, at);
+		}
+
+		if (!voids && Editor.void(editor, {at})) {
+			return;
+		}
+
+		// If the insert point is at the edge of an inline node, move it outside
+		// instead since it will need to be split otherwise.
+		const inlineElementMatch = Editor.above(editor, {
+			at,
+			match: (n) => Editor.isInline(editor, n),
+			mode: 'highest',
+			voids,
+		});
+
+		if (inlineElementMatch) {
+			const [, inlinePath] = inlineElementMatch;
+
+			if (Editor.isEnd(editor, at, inlinePath)) {
+				const after = Editor.after(editor, inlinePath)!;
+				at = after;
+			} else if (Editor.isStart(editor, at, inlinePath)) {
+				const before = Editor.before(editor, inlinePath)!;
+				at = before;
+			}
+		}
+
+		const blockMatch = Editor.above(editor, {
+			match: (n) => Editor.isBlock(editor, n),
+			at,
+			voids,
+		})!;
+		const [, blockPath] = blockMatch;
+		const isBlockStart = Editor.isStart(editor, at, blockPath);
+		const isBlockEnd = Editor.isEnd(editor, at, blockPath);
+		const mergeStart = !isBlockStart || (isBlockStart && isBlockEnd);
+		const mergeEnd = !isBlockEnd;
+		const [, firstPath] = Node.first({children: fragment} as any, []);
+		const [, lastPath] = Node.last({children: fragment} as any, []);
+
+		const matches: NodeEntry[] = [];
+		const matcher = ([n, p]: NodeEntry) => {
+			if (
+				mergeStart &&
+				Path.isAncestor(p, firstPath) &&
+				Element.isElement(n) &&
+				!editor.isVoid(n) &&
+				!editor.isInline(n)
+			) {
+				return false;
+			}
+
+			if (
+				mergeEnd &&
+				Path.isAncestor(p, lastPath) &&
+				Element.isElement(n) &&
+				!editor.isVoid(n) &&
+				!editor.isInline(n)
+			) {
+				return false;
+			}
+
+			return true;
+		};
+
+		for (const entry of Node.nodes({children: fragment} as any, {pass: matcher})) {
+			if (entry[1].length > 0 && matcher(entry)) {
+				matches.push(entry);
+			}
+		}
+
+		const starts: Array<Node> = [];
+		const middles: Array<Node> = [];
+		const ends: Array<Node> = [];
+		let starting = true;
+		let hasBlocks = false;
+
+		for (const [node] of matches) {
+			if (Element.isElement(node) && !editor.isInline(node)) {
+				starting = false;
+				hasBlocks = true;
+				middles.push(node);
+			} else if (starting) {
+				starts.push(node);
+			} else {
+				ends.push(node);
+			}
+		}
+
+		const [inlineMatch] = Editor.nodes(editor, {
+			at,
+			match: (n) => Text.isText(n) || Editor.isInline(editor, n),
+			mode: 'highest',
+			voids,
+		})!;
+
+		const [, inlinePath] = inlineMatch;
+		const isInlineStart = Editor.isStart(editor, at, inlinePath);
+		const isInlineEnd = Editor.isEnd(editor, at, inlinePath);
+
+		const middleRef = Editor.pathRef(editor, isBlockEnd ? Path.next(blockPath) : blockPath);
+
+		const endRef = Editor.pathRef(editor, isInlineEnd ? Path.next(inlinePath) : inlinePath);
+
+		Transforms.splitNodes(editor, {
+			at,
+			match: (n) =>
+				hasBlocks ? Editor.isBlock(editor, n) : Text.isText(n) || Editor.isInline(editor, n),
+			mode: hasBlocks ? 'lowest' : 'highest',
+			voids,
+		});
+
+		const startRef = Editor.pathRef(
+			editor,
+			!isInlineStart || (isInlineStart && isInlineEnd) ? Path.next(inlinePath) : inlinePath,
+		);
+
+		Transforms.insertNodes(editor, starts, {
+			at: startRef.current!,
+			match: (n) => Text.isText(n) || Editor.isInline(editor, n),
+			mode: 'highest',
+			voids,
+		});
+
+		Transforms.insertNodes(editor, middles, {
+			at: middleRef.current!,
+			match: (n) => Editor.isBlock(editor, n),
+			mode: 'lowest',
+			voids,
+		});
+
+		Transforms.insertNodes(editor, ends, {
+			at: endRef.current!,
+			match: (n) => Text.isText(n) || Editor.isInline(editor, n),
+			mode: 'highest',
+			voids,
+		});
+
+		if (!options.at) {
+			let path: Path;
+
+			if (ends.length > 0) {
+				path = Path.previous(endRef.current!);
+			} else if (middles.length > 0) {
+				path = Path.previous(middleRef.current!);
+			} else {
+				path = Path.previous(startRef.current!);
+			}
+
+			const end = Editor.end(editor, path);
+			Transforms.select(editor, end);
+		}
+
+		startRef.unref();
+		middleRef.unref();
+		endRef.unref();
+	});
+}
+
+export function moveCaretTo(editor: StencylEditor, path: Path, offset: number = 0) {
+	Transforms.setSelection(editor, {
+		anchor: {
+			path,
+			offset,
+		},
+		focus: {
+			path,
+			offset,
+		},
+	});
 }

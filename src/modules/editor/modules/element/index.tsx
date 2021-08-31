@@ -1,4 +1,4 @@
-import {List, ListItem} from '../../../../packages/lists';
+import {List, ListItem, ListItemContainer} from '../../../../packages/lists';
 import React, {FC} from 'react';
 import {Table, TableCell, TableRow} from '../../../../packages/table';
 
@@ -32,6 +32,8 @@ export const EditorElement: FC<RenderElementProps> = (props) => {
 			return <Link {...props} />;
 		case 'list-item':
 			return <ListItem {...props} />;
+		case 'list-item-container':
+			return <ListItemContainer {...props} />;
 		case 'paragraph':
 			return <Paragraph {...props} />;
 		case 'table':

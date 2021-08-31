@@ -5,6 +5,7 @@ import {
 	deserializeToLeaf,
 	getNodeTextContent,
 	invalidNodesFilterFn,
+	normalizeFirstNode,
 	wrapInlineTopLevelNodesInParagraph,
 } from './utils';
 import {deserializeBody, deserializeLineBreak, deserializeMarks} from './rules';
@@ -32,8 +33,9 @@ export const withHTMLDeserializer = (editor: StencylEditor) => {
 		if (html) {
 			// console.log(html);
 			const fragment = deserializeHTML(html, editor);
-			// editor.insertFragment(fragment);
 			console.log('FRAGMENT', fragment);
+			editor.insertFragment(fragment);
+			console.log('AFTER', editor.children);
 			return;
 		}
 
@@ -63,7 +65,9 @@ function deserializeHTML(html: string, editor: StencylEditor) {
 	const parsed = new DOMParser().parseFromString(html, 'text/html');
 	// console.log(parsed.body);
 	const children = deserializeHTMLElements(Array.from(parsed.body.childNodes));
-	return deserializeToFragment(wrapInlineTopLevelNodesInParagraph(editor, children));
+	return deserializeToFragment(
+		normalizeFirstNode(wrapInlineTopLevelNodesInParagraph(editor, children)),
+	);
 }
 
 function deserializeHTMLElements(elements: Array<Node>) {

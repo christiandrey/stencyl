@@ -41,3 +41,11 @@ export const ListItem: FC<RenderElementProps> = ({element, attributes, children}
 
 	return null;
 };
+
+export const ListItemContainer: FC<RenderElementProps> = ({element, attributes, children}) => {
+	if (element.type === 'list-item-container') {
+		return <div {...attributes}>{children}</div>;
+	}
+
+	return null;
+};

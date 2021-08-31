@@ -45,3 +45,7 @@ export function isValidUrl(text?: string | null) {
 
 	return isUrl(text);
 }
+
+export function lastItem<T>(list: Array<T>): T {
+	return list[list.length - 1];
+}

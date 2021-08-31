@@ -1,6 +1,7 @@
-import {Descendant, Text} from 'slate';
+import {Descendant, Element, Text} from 'slate';
 import {StencylAlignment, StencylEditor, StencylElement, StencylText} from '../../types';
 
+import {EMPTY_TEXT_NODE} from '../common/utils';
 import constants from '../../constants';
 import htmlNodeTypes from '../../constants/html-node-types';
 import {jsx} from 'slate-hyperscript';
@@ -82,6 +83,20 @@ export function wrapInlineTopLevelNodesInParagraph(editor: StencylEditor, nodes:
 	flushPendingNodes();
 
 	return wrappedNodes;
+}
+
+export function normalizeFirstNode(nodes: Descendant[]) {
+	if (!nodes.length) {
+		return nodes;
+	}
+
+	const firstNode = nodes[0];
+
+	if (Element.isElement(firstNode) && firstNode.type !== 'paragraph') {
+		nodes = [{type: 'paragraph', children: EMPTY_TEXT_NODE}, ...nodes];
+	}
+
+	return nodes;
 }
 
 export function getNodeStyle<T extends keyof CSSStyleDeclaration>(

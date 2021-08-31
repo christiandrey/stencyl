@@ -10,6 +10,7 @@ import {withHTMLDeserializer} from '../../packages/deserialize';
 import {withHistory} from 'slate-history';
 import {withImage} from '../../packages/image/plugin';
 import {withLink} from '../../packages/link/plugin';
+import {withLists} from '../../packages/lists/plugin';
 import {withTrailingBlock} from '../../packages/common/plugin';
 
 type EditorProps = {};
@@ -29,11 +30,47 @@ export const Editor: FC<EditorProps> = () => {
 				// },
 			],
 		},
+		// {
+		// 	type: 'bulleted-list',
+		// 	children: [
+		// 		{
+		// 			type: 'list-item',
+		// 			children: [
+		// 				{
+		// 					type: 'list-item-container',
+		// 					children: [
+		// 						{
+		// 							text: 'A line of text in a paragraph',
+		// 						},
+		// 					],
+		// 				},
+		// 				{
+		// 					type: 'numbered-list',
+		// 					children: [
+		// 						{
+		// 							type: 'list-item',
+		// 							children: [
+		// 								{
+		// 									type: 'list-item-container',
+		// 									children: [{text: 'A line of text is nested'}],
+		// 								},
+		// 							],
+		// 						},
+		// 					],
+		// 				},
+		// 			],
+		// 		},
+		// 	],
+		// },
+		// {
+		// 	type: 'paragraph',
+		// 	children: EMPTY_TEXT_NODE,
+		// },
 	]);
 	const editor = useMemo(
 		() =>
 			withHTMLDeserializer(
-				withTrailingBlock(withImage(withLink(withReact(withHistory(createEditor()))))),
+				withTrailingBlock(withLists(withImage(withLink(withReact(withHistory(createEditor())))))),
 			),
 		[],
 	);

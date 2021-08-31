@@ -96,6 +96,11 @@ export type ListItemElement = {
 	children: Descendant[];
 };
 
+export type ListItemContainerElement = {
+	type: 'list-item-container';
+	children: Descendant[];
+};
+
 export type NumberedListElement = {
 	type: 'numbered-list';
 	indentation?: number;
@@ -223,6 +228,7 @@ export type StencylElement =
 	| ImageElement
 	| LinkElement
 	| ListItemElement
+	| ListItemContainerElement
 	| NumberedListElement
 	| ParagraphElement
 	| TableElement
