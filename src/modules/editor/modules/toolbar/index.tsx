@@ -1,6 +1,6 @@
 import React, {MouseEvent, memo} from 'react';
 
-import {insertNumberedListBlock} from '../../../../packages/lists/commands';
+import {decreaseListNesting} from '../../../../packages/lists/commands';
 import {useSlateStatic} from 'slate-react';
 
 const BaseToolbar = () => {
@@ -8,7 +8,7 @@ const BaseToolbar = () => {
 
 	const handleTestMousedown = (e: MouseEvent) => {
 		e.preventDefault();
-		insertNumberedListBlock(editor);
+		decreaseListNesting(editor);
 	};
 
 	console.log('RENDER');

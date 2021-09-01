@@ -15,7 +15,7 @@ import {EditableElement, StencylEditor, StencylElementTypes, StencylMarks} from 
 
 export const EMPTY_TEXT_NODE = [{text: ''}];
 
-function getLastChild(node: Descendant, level: number): Descendant {
+export function getLastChild(node: Descendant, level: number = 1): Descendant {
 	if (!(level + 1) || !(Editor.isEditor(node) || Element.isElement(node))) {
 		return node;
 	}
@@ -25,6 +25,19 @@ function getLastChild(node: Descendant, level: number): Descendant {
 	const lastNode = children[children.length - 1];
 
 	return getLastChild(lastNode, level - 1);
+}
+
+export function getLastChildEntry(entry: NodeEntry): NodeEntry<Node> | null {
+	const [node, path] = entry;
+
+	if (Text.isText(node) || !node.children.length) {
+		return null;
+	}
+
+	const {children} = node;
+	const lastNode = children[children.length - 1];
+
+	return [lastNode, [...path, node.children.length - 1]];
 }
 
 export function getLastNode(
@@ -351,6 +364,39 @@ export function insertFragment(
 		middleRef.unref();
 		endRef.unref();
 	});
+}
+
+export function getNextPath(path: Path, steps = 1): Path {
+	return [...path.slice(0, -1), path.slice(-1)[0] + steps];
+}
+
+export function getPreviousPath(path: Path, steps = 1): Path {
+	return getNextPath(path, Math.abs(steps) * -1);
+}
+
+export function getNodeAt(
+	editor: StencylEditor,
+	at: Location,
+	options: {
+		match?: NodeMatch<Node>;
+		mode?: 'highest' | 'lowest' | 'all';
+	} = {},
+): NodeEntry<Node> | null {
+	const {match, mode} = options;
+	try {
+		if (match) {
+			const [matched] = Editor.nodes(editor, {
+				at,
+				match,
+				mode,
+			});
+			return matched;
+		} else {
+			return Editor.node(editor, at);
+		}
+	} catch (error) {
+		return null;
+	}
 }
 
 export function moveCaretTo(editor: StencylEditor, path: Path, offset: number = 0) {

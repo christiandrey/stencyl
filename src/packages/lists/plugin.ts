@@ -1,26 +1,25 @@
 import {
-	Descendant,
 	Editor,
 	Element,
 	Location,
 	Node,
 	NodeEntry,
 	NodeMatch,
-	Path,
 	Range,
 	Text,
 	Transforms,
 } from 'slate';
 import {
-	EMPTY_TEXT_NODE,
 	getCurrentBlock,
+	getNextPath,
+	getNodeAt,
 	getParentNode,
 	getSelectionLeaf,
-	moveCaretTo,
 } from '../common/utils';
-import {ListItemElement, StencylEditor} from '../../types';
 
-import {lastItem} from '../../utils';
+import {StencylEditor} from '../../types';
+import {decreaseListNesting} from './commands';
+import {getListEntries} from './utils';
 
 export const withLists = (editor: StencylEditor) => {
 	const {normalizeNode, insertBreak} = editor;
@@ -38,6 +37,26 @@ export const withLists = (editor: StencylEditor) => {
 			const fixedUnwrappedListItemChildren = fixUnwrappedListItemChildren(editor, entry);
 
 			if (fixedUnwrappedListItemChildren) {
+				return;
+			}
+		}
+
+		if (
+			Element.isElement(node) &&
+			(node.type === 'bulleted-list' || node.type === 'numbered-list')
+		) {
+			// const [firstListItem] = Editor.nodes(editor, {
+			// 	at: path,
+			// 	match: (o, p) =>
+			// 		Element.isElement(o) && o.type === 'list-item' && p.length - path.length === 1,
+			// });
+			// if (!firstListItem) {
+			// 	Transforms.removeNodes(editor, {at: path, hanging: true});
+			// 	return;
+			// }
+			const fixedEmptyList = fixEmptyList(editor, entry);
+
+			if (fixedEmptyList) {
 				return;
 			}
 		}
@@ -60,7 +79,7 @@ export const withLists = (editor: StencylEditor) => {
 					if (leafNode.text.length) {
 						insertNewListItem(editor);
 					} else {
-						breakOutOfList(editor);
+						decreaseListNesting(editor);
 					}
 
 					return;
@@ -136,6 +155,34 @@ function fixUnwrappedListItemChildren(editor: StencylEditor, entry: NodeEntry): 
 	return false;
 }
 
+function fixEmptyList(editor: StencylEditor, entry: NodeEntry): boolean {
+	const [node, path] = entry;
+
+	if (Element.isElement(node) && node.children.length === 1 && Text.isText(node.children[0])) {
+		Transforms.removeNodes(editor, {
+			at: path,
+			hanging: true,
+		});
+
+		return true;
+	}
+
+	if (path.length === 1 && path[0] === 0) {
+		const text = Editor.string(editor, path);
+
+		if (!text.length) {
+			Transforms.removeNodes(editor, {
+				at: path,
+				hanging: true,
+			});
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 function insertNewListItem(editor: StencylEditor) {
 	let at: Location;
 
@@ -153,213 +200,57 @@ function insertNewListItem(editor: StencylEditor) {
 		at = at.anchor;
 	} else {
 		const [, end] = Range.edges(at);
-		at = end;
+		const pointRef = Editor.pointRef(editor, end);
+		Transforms.delete(editor, {at});
+		at = pointRef.unref()!;
 	}
 
-	const [listItemEntry] = Editor.nodes(editor, {
-		match: (o) => Element.isElement(o) && o.type === 'list-item',
-		mode: 'lowest',
-	});
+	const {listItemEntry} = getListEntries(editor);
 
-	const [, path] = listItemEntry;
-	const isStart = Editor.isStart(editor, at, path);
-	const isEnd = Editor.isEnd(editor, at, path);
+	const leafEntry = getSelectionLeaf(editor);
 
-	if (isStart) {
-		Transforms.insertNodes(
-			editor,
-			{
-				type: 'list-item',
-				children: [
-					{
-						type: 'list-item-container',
-						children: EMPTY_TEXT_NODE,
-					},
-				],
-			},
-			{
-				at: path,
-			},
-		);
-		return;
-	}
+	if (leafEntry) {
+		const [, listItemPath] = listItemEntry;
 
-	if (isEnd) {
-		if (!Range.isCollapsed(editor.selection)) {
-			Transforms.delete(editor);
-		}
-
-		Transforms.insertNodes(
-			editor,
-			{
-				type: 'list-item',
-				children: [
-					{
-						type: 'list-item-container',
-						children: EMPTY_TEXT_NODE,
-					},
-				],
-			},
-			{
-				at: Path.next(path),
-				select: true,
-			},
-		);
-	}
-
-	if (!isStart && !isEnd) {
-		const leafEntry = getSelectionLeaf(editor);
-
-		if (leafEntry) {
-			Transforms.insertNodes(
-				editor,
-				{
-					type: 'list-item',
-					children: [
-						{
-							type: 'list-item-container',
-							children: [leafEntry[0] ?? {text: ''}],
-						},
-					],
-				},
-				{
-					at: path,
-				},
-			);
-
-			Transforms.delete(editor, {at: leafEntry[1] ?? at});
-
-			moveCaretTo(editor, leafEntry[1]);
-		}
-	}
-}
-
-function breakOutOfList(editor: StencylEditor) {
-	const [listItemEntry] = Editor.nodes(editor, {
-		match: (o) => Element.isElement(o) && o.type === 'list-item',
-		mode: 'lowest',
-	});
-	const listItemsAfter = getListItemsAfter(editor, listItemEntry);
-	const isNested = getIsInNestedList(editor);
-
-	const [listEntry] = Editor.nodes(editor, {
-		match: (o) =>
-			Element.isElement(o) && (o.type === 'bulleted-list' || o.type === 'numbered-list'),
-		mode: 'lowest',
-	});
-
-	const [listNode, listPath] = listEntry;
-
-	if (isNested) {
-		const [ancestorListItemEntry] = Editor.nodes(editor, {
-			at: listPath.slice(0, listPath.length - 1),
-			match: (o) => Element.isElement(o) && o.type === 'list-item',
+		Transforms.splitNodes(editor, {
+			at,
+			always: true,
 		});
-		const [, ancestorListItemPath] = ancestorListItemEntry;
-		const children: Array<Descendant> = [
-			{
-				type: 'list-item-container',
-				children: EMPTY_TEXT_NODE,
-			},
-		];
 
-		if (listItemsAfter.length) {
-			children.push({
-				type: Element.isElement(listNode) ? (listNode.type as any) : 'bulleted-list',
+		Editor.withoutNormalizing(editor, () => {
+			let focus = listItemPath;
+			let focusNext = listItemPath;
+
+			if (editor.selection) {
+				const currentPath = editor.selection.focus.path;
+				focus = currentPath.slice(0, -1);
+				focusNext = getNextPath(currentPath);
+			}
+			Transforms.wrapNodes(editor, {
+				type: 'list-item',
 				children: [],
 			});
-		}
 
-		Transforms.insertNodes(
-			editor,
-			{
-				type: 'list-item',
-				children,
-			},
-			{
-				at: Path.next(ancestorListItemPath),
-			},
-		);
+			const nextNodeEntry = getNodeAt(editor, getNextPath(focus));
 
-		if (listItemsAfter.length) {
+			if (nextNodeEntry?.length) {
+				const [nextNode, nextPath] = nextNodeEntry;
+
+				if (
+					Element.isElement(nextNode) &&
+					(nextNode.type === 'bulleted-list' || nextNode.type === 'numbered-list')
+				) {
+					Transforms.moveNodes(editor, {
+						at: nextPath,
+						to: focusNext,
+					});
+				}
+			}
+
 			Transforms.moveNodes(editor, {
-				to: [...Path.next(ancestorListItemPath), 1, 0],
-				at: listPath,
-				match: listItemsAfterMatcher(listItemEntry),
+				match: (node) => Element.isElement(node) && node.type === 'list-item',
+				to: getNextPath(listItemPath),
 			});
-		}
-
-		Transforms.removeNodes(editor, {
-			at: listItemEntry[1],
 		});
-
-		moveCaretTo(editor, [...Path.next(ancestorListItemPath), 0]);
-	} else {
-		if (listItemsAfter.length) {
-			Transforms.insertNodes(
-				editor,
-				{
-					type: Element.isElement(listNode) ? (listNode.type as any) : 'bulleted-list',
-					children: [],
-				},
-				{
-					at: Path.next(listPath),
-				},
-			);
-			Transforms.moveNodes(editor, {
-				to: [...Path.next(listPath), 0],
-				at: listPath,
-				match: listItemsAfterMatcher(listItemEntry),
-			});
-		}
-
-		Transforms.removeNodes(editor, {
-			at: listItemEntry[1],
-		});
-		Transforms.insertNodes(
-			editor,
-			{
-				type: 'paragraph',
-				children: EMPTY_TEXT_NODE,
-			},
-			{
-				at: Path.next(listPath),
-			},
-		);
-		moveCaretTo(editor, Path.next(listPath));
 	}
-}
-
-function getIsInNestedList(editor: StencylEditor) {
-	const matches = Editor.nodes(editor, {
-		match: (node) =>
-			Element.isElement(node) && (node.type === 'bulleted-list' || node.type === 'numbered-list'),
-	});
-
-	return Array.from(matches).length > 1;
-}
-
-const listItemsAfterMatcher: (entry: NodeEntry) => NodeMatch<ListItemElement> = (
-	entry: NodeEntry,
-) => {
-	return (node, path) =>
-		Element.isElement(node) &&
-		node.type === 'list-item' &&
-		path.length === entry[1].length &&
-		lastItem(path) > lastItem(entry[1]);
-};
-
-function getListItemsAfter(editor: StencylEditor, entry: NodeEntry) {
-	const parent = getParentNode(editor, entry);
-
-	if (!parent) {
-		return [];
-	}
-
-	const matches = Editor.nodes(editor, {
-		at: parent[1],
-		match: listItemsAfterMatcher(entry),
-	});
-
-	return Array.from(matches);
 }
