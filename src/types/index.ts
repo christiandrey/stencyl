@@ -173,12 +173,12 @@ export type EditableRadioElement = {
 };
 
 export type EditableTimeElement = {
-	dataType: 'radio';
+	dataType: 'time';
 	dateTimeFormat: string;
 };
 
 export type EditableDateElement = {
-	dataType: 'radio';
+	dataType: 'date';
 	dateTimeFormat: string;
 };
 

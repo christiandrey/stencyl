@@ -4,6 +4,7 @@ import {Table, TableCell, TableRow} from '../../../../packages/table';
 
 import {Blockquote} from '../../../../packages/blockquote';
 import {Codeblock} from '../../../../packages/codeblock';
+import {Editable} from '../../../../packages/editable';
 import {Headings} from '../../../../packages/headings';
 import {Image} from '../../../../packages/image';
 import {Link} from '../../../../packages/link';
@@ -42,6 +43,8 @@ export const EditorElement: FC<RenderElementProps> = (props) => {
 			return <TableCell {...props} />;
 		case 'table-row':
 			return <TableRow {...props} />;
+		case 'editable':
+			return <Editable {...props} />;
 		default:
 			return null;
 	}

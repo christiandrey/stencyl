@@ -1,5 +1,6 @@
 import format from 'date-fns/format';
 import isUrl from 'is-url';
+import {v4 as uuidv4} from 'uuid';
 
 export function notNil<T>(value?: T | null): value is T {
 	return typeof value !== 'undefined' && value !== null;
@@ -11,6 +12,10 @@ export function nil<T>(value?: T | null): value is undefined | null {
 
 export function getPlaceholderImage(width: number, height?: number) {
 	return `https://dummyimage.com/${width}x${height || width}/326FF3/FFFFFF`;
+}
+
+export function generateUUID() {
+	return uuidv4();
 }
 
 export function clamp(value: number, min: number, max: number) {

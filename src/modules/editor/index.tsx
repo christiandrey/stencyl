@@ -8,6 +8,7 @@ import {Toolbar} from './modules/toolbar';
 import classNames from 'classnames';
 import css from './style.module.css';
 import {pipeline} from '../../utils';
+import {withEditable} from '../../packages/editable/plugin';
 import {withHTMLDeserializer} from '../../packages/deserialize';
 import {withHistory} from 'slate-history';
 import {withImage} from '../../packages/image/plugin';
@@ -109,6 +110,7 @@ export const Editor: FC<EditorProps> = () => {
 				withReact,
 				withLink,
 				withImage,
+				withEditable,
 				withLists,
 				withTable,
 				withTrailingBlock,

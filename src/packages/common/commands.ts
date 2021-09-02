@@ -75,6 +75,7 @@ export function activateMark<K extends keyof StencylMarks>(
 			{
 				match: matchEditableNode(editor),
 				hanging: true,
+				voids: true,
 			},
 		);
 	}
@@ -86,6 +87,7 @@ export function deactivateMark(editor: StencylEditor, mark: keyof StencylMarks) 
 	if (mark === 'condition') {
 		Transforms.unsetNodes(editor, mark, {
 			match: matchEditableNode(editor),
+			voids: true,
 		});
 	}
 }

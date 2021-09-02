@@ -37,6 +37,7 @@
 		"@types/node": "^12.12.38",
 		"@types/react": "^16.9.27",
 		"@types/react-dom": "^16.9.7",
+		"@types/uuid": "^8.3.1",
 		"@typescript-eslint/eslint-plugin": "^2.26.0",
 		"@typescript-eslint/parser": "^2.26.0",
 		"autoprefixer": "^9",
@@ -80,6 +81,7 @@
 		"slate": "0.65.3",
 		"slate-history": "0.65.3",
 		"slate-hyperscript": "0.62.0",
-		"slate-react": "0.65.3"
+		"slate-react": "0.65.3",
+		"uuid": "8.3.2"
 	}
 }

@@ -1,15 +1,10 @@
 import {Editor, Element, Path, Range, Text, Transforms} from 'slate';
-import {StencylEditor, TableCellElement, TableElement, TableRowElement} from '../../types';
 import {array, lastItem} from '../../utils';
+import {createTable, createTableCell, createTableRow, getTableEntries} from './utils';
 import {getCurrentBlock, getNextPath, getSelectionLeaf} from '../common/utils';
 
+import {StencylEditor} from '../../types';
 import colors from '../../constants/colors';
-import {getTableEntries} from './utils';
-
-export const DEFAULT_TABLE_CELL_WIDTH = 48;
-export const DEFAULT_TABLE_CELL_HEIGHT = 48;
-export const DEFAULT_TABLE_ROWS = 2;
-export const DEFAULT_TABLE_COLS = 2;
 
 export function insertTableBlock(editor: StencylEditor) {
 	const {selection} = editor;
@@ -269,30 +264,4 @@ export function tabToPreviousCell(editor: StencylEditor) {
 		anchor: edges[0],
 		focus: edges[1],
 	});
-}
-
-function createTableCell(
-	width = DEFAULT_TABLE_CELL_WIDTH,
-	height = DEFAULT_TABLE_CELL_HEIGHT,
-): TableCellElement {
-	return {
-		type: 'table-cell',
-		children: [{type: 'paragraph', children: [{text: ''}]}],
-		width,
-		height,
-	};
-}
-
-function createTableRow(columns = DEFAULT_TABLE_COLS): TableRowElement {
-	return {
-		type: 'table-row',
-		children: array(columns).map(() => createTableCell()),
-	};
-}
-
-function createTable(rows = DEFAULT_TABLE_ROWS, columns = DEFAULT_TABLE_COLS): TableElement {
-	return {
-		type: 'table',
-		children: array(rows).map(() => createTableRow(columns)),
-	};
 }

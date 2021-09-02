@@ -1,19 +1,29 @@
 import React, {MouseEvent, memo} from 'react';
-import {insertTableBlock, tabToPreviousCell} from '../../../../packages/table/commands';
 
+import {createEditableElement} from '../../../../packages/editable/utils';
+import {insertInlineEditable} from '../../../../packages/editable/commands';
+import {toggleBoldMark} from '../../../../packages/leaf/commands';
 import {useSlateStatic} from 'slate-react';
+
+const editableText = createEditableElement({
+	dataType: 'text',
+	defaultValue: 'Some text',
+	label: 'What is your age?',
+	tip: 'Your age goes here',
+});
 
 const BaseToolbar = () => {
 	const editor = useSlateStatic();
 
 	const handleAction1Mousedown = (e: MouseEvent) => {
 		e.preventDefault();
-		insertTableBlock(editor);
+		insertInlineEditable(editor, editableText);
 	};
 
 	const handleAction2Mousedown = (e: MouseEvent) => {
 		e.preventDefault();
-		tabToPreviousCell(editor);
+		toggleBoldMark(editor);
+		console.log(editor.children);
 	};
 
 	console.log('RENDER');
