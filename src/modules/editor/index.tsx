@@ -7,6 +7,7 @@ import {EMPTY_TEXT_NODE} from '../../packages/common/utils';
 import {Toolbar} from './modules/toolbar';
 import classNames from 'classnames';
 import css from './style.module.css';
+import {pipeline} from '../../utils';
 import {withHTMLDeserializer} from '../../packages/deserialize';
 import {withHistory} from 'slate-history';
 import {withImage} from '../../packages/image/plugin';
@@ -102,11 +103,17 @@ export const Editor: FC<EditorProps> = () => {
 	]);
 	const editor = useMemo(
 		() =>
-			withHTMLDeserializer(
-				withTrailingBlock(
-					withTable(withLists(withImage(withLink(withReact(withHistory(createEditor())))))),
-				),
-			),
+			pipeline([
+				createEditor,
+				withHistory,
+				withReact,
+				withLink,
+				withImage,
+				withLists,
+				withTable,
+				withTrailingBlock,
+				withHTMLDeserializer,
+			])(),
 		[],
 	);
 	const [editorState, setEditorState] = useState<Descendant[]>(initialData.current);

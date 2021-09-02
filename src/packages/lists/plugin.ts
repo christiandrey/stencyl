@@ -1,14 +1,5 @@
-import {
-	Editor,
-	Element,
-	Location,
-	Node,
-	NodeEntry,
-	NodeMatch,
-	Range,
-	Text,
-	Transforms,
-} from 'slate';
+import {Editor, Element, Location, NodeEntry, Range, Text, Transforms} from 'slate';
+import {StencylEditor, StencylElementTypes} from '../../types';
 import {
 	getCurrentBlock,
 	getNextPath,
@@ -17,7 +8,6 @@ import {
 	getSelectionLeaf,
 } from '../common/utils';
 
-import {StencylEditor} from '../../types';
 import {decreaseListNesting} from './commands';
 import {getListEntries} from './utils';
 
@@ -29,14 +19,7 @@ export const withLists = (editor: StencylEditor) => {
 
 		if (Element.isElement(node) && node.type === 'list-item') {
 			const fixedOrphanedListItems = fixOrphanedListItems(editor, entry);
-
 			if (fixedOrphanedListItems) {
-				return;
-			}
-
-			const fixedUnwrappedListItemChildren = fixUnwrappedListItemChildren(editor, entry);
-
-			if (fixedUnwrappedListItemChildren) {
 				return;
 			}
 		}
@@ -54,6 +37,12 @@ export const withLists = (editor: StencylEditor) => {
 			// 	Transforms.removeNodes(editor, {at: path, hanging: true});
 			// 	return;
 			// }
+			const fixedUnwrappedListItemChildren = fixUnwrappedListItemChildren(editor, entry);
+
+			if (fixedUnwrappedListItemChildren) {
+				return;
+			}
+
 			const fixedEmptyList = fixEmptyList(editor, entry);
 
 			if (fixedEmptyList) {
@@ -154,36 +143,51 @@ function fixOrphanedListItems(editor: StencylEditor, entry: NodeEntry): boolean 
 }
 
 function fixUnwrappedListItemChildren(editor: StencylEditor, entry: NodeEntry): boolean {
-	const [, path] = entry;
-	const matcher: NodeMatch<Node> = (o, p) =>
-		p.length === path.length + 1 &&
-		(Text.isText(o) ||
-			(Element.isElement(o) &&
-				!['list-item-container', 'bulleted-list', 'numbered-list', 'table'].includes(o.type)));
+	const [node, path] = entry;
+	const validChildren: Array<StencylElementTypes> = [
+		'numbered-list',
+		'bulleted-list',
+		'list-item-container',
+		'table',
+	];
 
-	const matches = Editor.nodes(editor, {
-		at: path,
-		match: matcher,
-	});
-
-	const matchesLength = Array.from(matches).length;
-
-	if (matchesLength) {
-		Transforms.wrapNodes(
-			editor,
-			{
-				type: 'list-item-container',
-				children: [],
-			},
-			{
-				at: path,
-				match: matcher,
-			},
-		);
-		return true;
+	if (
+		!Element.isElement(node) ||
+		(node.type !== 'bulleted-list' && node.type !== 'numbered-list')
+	) {
+		return false;
 	}
 
-	return false;
+	let opsCount = 0;
+
+	Editor.withoutNormalizing(editor, () => {
+		for (let i = 0; i < node.children.length; i++) {
+			const listItem = node.children[i];
+
+			if (Element.isElement(listItem) && listItem.type === 'list-item') {
+				for (let j = 0; j < listItem.children.length; j++) {
+					const child = listItem.children[j];
+					if (
+						Text.isText(child) ||
+						(Element.isElement(child) && !validChildren.includes(child.type))
+					) {
+						Transforms.wrapNodes(
+							editor,
+							{
+								type: 'list-item-container',
+								children: [],
+							},
+							{at: [...path, i, j]},
+						);
+
+						opsCount++;
+					}
+				}
+			}
+		}
+	});
+
+	return !!opsCount;
 }
 
 function fixEmptyList(editor: StencylEditor, entry: NodeEntry): boolean {

@@ -16,6 +16,7 @@ const htmlNodeNames = {
 	I: 'I',
 	IMG: 'IMG',
 	LI: 'LI',
+	LIC: 'LIC',
 	OL: 'OL',
 	P: 'P',
 	PRE: 'PRE',

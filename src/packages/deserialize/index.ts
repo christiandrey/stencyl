@@ -5,6 +5,7 @@ import {
 	deserializeToLeaf,
 	getNodeTextContent,
 	invalidNodesFilterFn,
+	matchHTMLElementNode,
 	normalizeFirstNode,
 	wrapInlineTopLevelNodesInParagraph,
 } from './utils';
@@ -22,6 +23,7 @@ import {deserializeLists} from '../lists/deserialize';
 import {deserializeParagraph} from '../paragraph/deserialize';
 import {deserializeTable} from '../table/deserialize';
 import htmlNodeNames from '../../constants/html-node-names';
+import htmlNodeTypes from '../../constants/html-node-types';
 import {notNil} from '../../utils';
 
 export const withHTMLDeserializer = (editor: StencylEditor) => {
@@ -33,9 +35,11 @@ export const withHTMLDeserializer = (editor: StencylEditor) => {
 		if (html) {
 			// console.log(html);
 			const fragment = deserializeHTML(html, editor);
-			console.log('FRAGMENT', fragment);
+			// console.log('FRAGMENT', fragment);
+			console.time('PASTEOPERATION');
 			editor.insertFragment(fragment);
-			console.log('AFTER', editor.children);
+			// console.log('AFTER', editor.children);
+			console.timeEnd('PASTEOPERATION');
 			return;
 		}
 
@@ -92,7 +96,7 @@ function deserializeHTMLElements(elements: Array<Node>) {
 }
 
 function deserializeHTMLElement(element: Node) {
-	let children = deserializeHTMLElements(Array.from(element.childNodes));
+	let children = deserializeHTMLElements(normalizeChildNodes(element.childNodes, element));
 
 	if (!children?.length && !VOID_NODES.includes(element.nodeName)) {
 		return deserializeToLeaf({text: getNodeTextContent(element)});
@@ -115,4 +119,37 @@ function deserializeHTMLElement(element: Node) {
 	}
 
 	return null;
+}
+
+function normalizeChildNodes(childNodeList: NodeListOf<ChildNode>, parent: Node): Array<Node> {
+	const childNodes = Array.from(childNodeList);
+
+	if (!matchHTMLElementNode(parent, {nodeName: htmlNodeNames.LI})) {
+		return childNodes;
+	}
+
+	const validNodes: Array<Node> = [];
+	const pendingNodes: Array<Node> = [];
+	const validNodeNames = [
+		htmlNodeNames.TABLE,
+		htmlNodeNames.OL,
+		htmlNodeNames.UL,
+		htmlNodeNames.LIC,
+	];
+
+	for (const node of childNodes) {
+		if (node.nodeType === htmlNodeTypes.ELEMENT_NODE && validNodeNames.includes(node.nodeName)) {
+			validNodes.push(node);
+		} else {
+			pendingNodes.push(node);
+		}
+	}
+
+	if (pendingNodes.length) {
+		const container = document.createElement(htmlNodeNames.LIC);
+		pendingNodes.forEach((o) => container.appendChild(o));
+		return [container, ...validNodes];
+	}
+
+	return validNodes;
 }

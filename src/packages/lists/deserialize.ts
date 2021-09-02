@@ -12,6 +12,15 @@ export const deserializeLists: DeserializeFn = (element, children) => {
 		);
 	}
 
+	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.LIC})) {
+		return deserializeToElement(
+			{
+				type: 'list-item-container',
+			},
+			children,
+		);
+	}
+
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.UL})) {
 		return deserializeToElement(
 			{

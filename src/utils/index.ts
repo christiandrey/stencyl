@@ -53,3 +53,16 @@ export function lastItem<T>(list: Array<T>): T {
 export function array(size = 3): Array<number> {
 	return new Array(size).fill(null).map((_o, i) => i);
 }
+
+export function pipeline<T extends (...args: any[]) => any>(fns: Array<T>) {
+	return (...args: unknown[]) => {
+		let res: ReturnType<T> | undefined;
+
+		for (let i = 0; i < fns.length; i++) {
+			const fn = fns[i];
+			res = i ? fn(res) : fn(...args);
+		}
+
+		return res as ReturnType<T>;
+	};
+}
