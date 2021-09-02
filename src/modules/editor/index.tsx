@@ -12,6 +12,7 @@ import {withHistory} from 'slate-history';
 import {withImage} from '../../packages/image/plugin';
 import {withLink} from '../../packages/link/plugin';
 import {withLists} from '../../packages/lists/plugin';
+import {withTable} from '../../packages/table/plugin';
 import {withTrailingBlock} from '../../packages/common/plugin';
 
 type EditorProps = {};
@@ -102,7 +103,9 @@ export const Editor: FC<EditorProps> = () => {
 	const editor = useMemo(
 		() =>
 			withHTMLDeserializer(
-				withTrailingBlock(withLists(withImage(withLink(withReact(withHistory(createEditor())))))),
+				withTrailingBlock(
+					withTable(withLists(withImage(withLink(withReact(withHistory(createEditor())))))),
+				),
 			),
 		[],
 	);

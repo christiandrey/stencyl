@@ -7,13 +7,13 @@ export const TableCell: FC<RenderElementProps> = ({element, attributes, children
 		return (
 			<td
 				{...attributes}
-				width={element.width}
 				height={element.height}
 				colSpan={element.colspan ?? 1}
 				rowSpan={element.rowspan ?? 1}
 				style={{
-					borderColor: element.borderColor,
-					borderWidth: element.borderWidth,
+					borderColor: element.borderColor ?? 'black',
+					borderWidth: element.borderWidth ?? 1,
+					minWidth: element.width,
 				}}
 			>
 				{children}
@@ -35,8 +35,8 @@ export const TableRow: FC<RenderElementProps> = ({element, attributes, children}
 export const Table: FC<RenderElementProps> = ({element, attributes, children}) => {
 	if (element.type === 'table') {
 		return (
-			<table {...attributes} className='border-collapse'>
-				<tbody>{children}</tbody>
+			<table className='border-collapse'>
+				<tbody {...attributes}>{children}</tbody>
 			</table>
 		);
 	}

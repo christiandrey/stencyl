@@ -49,3 +49,7 @@ export function isValidUrl(text?: string | null) {
 export function lastItem<T>(list: Array<T>): T {
 	return list[list.length - 1];
 }
+
+export function array(size = 3): Array<number> {
+	return new Array(size).fill(null).map((_o, i) => i);
+}

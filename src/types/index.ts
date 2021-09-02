@@ -121,13 +121,13 @@ export type TableElement = {
 
 export type TableCellElement = {
 	type: 'table-cell';
-	width: number;
-	height: number;
+	width?: number;
+	height?: number;
 	colspan?: number;
 	rowspan?: number;
 	borderColor?: string;
 	borderWidth?: number;
-	children: StencylText[];
+	children: Descendant[];
 };
 
 export type TableRowElement = {

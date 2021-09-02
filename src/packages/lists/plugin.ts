@@ -22,7 +22,7 @@ import {decreaseListNesting} from './commands';
 import {getListEntries} from './utils';
 
 export const withLists = (editor: StencylEditor) => {
-	const {normalizeNode, insertBreak} = editor;
+	const {normalizeNode, insertBreak, deleteBackward} = editor;
 
 	editor.normalizeNode = (entry) => {
 		const [node] = entry;
@@ -90,6 +90,37 @@ export const withLists = (editor: StencylEditor) => {
 		insertBreak();
 	};
 
+	editor.deleteBackward = (unit) => {
+		const {selection} = editor;
+
+		if (selection && Range.isCollapsed(selection)) {
+			const [listEntry] = Editor.nodes(editor, {
+				match: (node, path) =>
+					!Editor.isEditor(node) &&
+					Element.isElement(node) &&
+					['numbered-list', 'bulleted-list'].includes(node.type) &&
+					path.length === 1 &&
+					path[0] === 0,
+			});
+
+			if (listEntry) {
+				const [, listPath] = listEntry;
+				const text = Editor.string(editor, listPath);
+
+				if (!text.length) {
+					Transforms.removeNodes(editor, {
+						at: listPath,
+						hanging: true,
+					});
+
+					return;
+				}
+			}
+		}
+
+		deleteBackward(unit);
+	};
+
 	return editor;
 };
 
@@ -128,7 +159,7 @@ function fixUnwrappedListItemChildren(editor: StencylEditor, entry: NodeEntry): 
 		p.length === path.length + 1 &&
 		(Text.isText(o) ||
 			(Element.isElement(o) &&
-				!['list-item-container', 'bulleted-list', 'numbered-list'].includes(o.type)));
+				!['list-item-container', 'bulleted-list', 'numbered-list', 'table'].includes(o.type)));
 
 	const matches = Editor.nodes(editor, {
 		at: path,
@@ -165,19 +196,6 @@ function fixEmptyList(editor: StencylEditor, entry: NodeEntry): boolean {
 		});
 
 		return true;
-	}
-
-	if (path.length === 1 && path[0] === 0) {
-		const text = Editor.string(editor, path);
-
-		if (!text.length) {
-			Transforms.removeNodes(editor, {
-				at: path,
-				hanging: true,
-			});
-
-			return true;
-		}
 	}
 
 	return false;
