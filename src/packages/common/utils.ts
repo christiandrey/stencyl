@@ -101,23 +101,53 @@ export function getSelectionBlocks(editor: StencylEditor) {
 }
 
 export function getSelectionMarks(editor: StencylEditor) {
-	const marks = Editor.marks(editor) ?? {};
+	const editorMarks = Editor.marks(editor) ?? {};
+	const record: Partial<Record<keyof StencylMarks, Array<StencylMarks[keyof StencylMarks]>>> = {};
 
-	if (marks.condition) {
-		return marks;
+	for (const mark in editorMarks) {
+		if (Object.prototype.hasOwnProperty.call(editorMarks, mark)) {
+			const value = editorMarks[mark];
+			record[mark] = [value];
+		}
 	}
 
-	const [match] = Editor.nodes<EditableElement>(editor, {
-		match: (node) =>
-			Element.isElement(node) &&
-			editor.isVoid(node) &&
-			node.type === 'editable' &&
-			!!node.condition,
+	const matches = Editor.nodes<EditableElement>(editor, {
+		match: (node) => isEditableElement(editor, node),
+		voids: true,
 	});
 
-	marks.condition = match?.[0].condition;
+	for (const [node] of matches) {
+		const marks = node.marks;
 
-	return marks;
+		for (const mark in marks) {
+			if (Object.prototype.hasOwnProperty.call(marks, mark)) {
+				const value = marks[mark];
+
+				if (record[mark]) {
+					record[mark].push(value);
+				}
+			}
+		}
+	}
+
+	const mergedMarks: StencylMarks = {};
+
+	for (const key in record) {
+		if (Object.prototype.hasOwnProperty.call(record, key)) {
+			const value = record[key];
+			const markActive = value.length && value.every((o: any) => !!o);
+
+			if (markActive) {
+				if (key === 'condition') {
+					mergedMarks.condition = value[0];
+				} else {
+					mergedMarks[key] = true;
+				}
+			}
+		}
+	}
+
+	return mergedMarks;
 }
 
 export function getSelectionLeaf(editor: StencylEditor) {
@@ -139,11 +169,18 @@ export function isBlockActive(editor: StencylEditor, type: StencylElementTypes) 
 
 export function isMarkActive(
 	editor: StencylEditor,
-	mark: keyof Omit<Text, 'text'>,
+	mark: keyof StencylMarks,
 	marks?: StencylMarks,
 ) {
-	marks = marks ?? getSelectionMarks(editor);
-	return !!marks[mark];
+	// marks = marks ?? getSelectionMarks(editor);
+	// return !!marks[mark];
+	const editorMarks = marks ?? Editor.marks(editor) ?? {};
+
+	const matches = Editor.nodes(editor, {
+		match: (node) => isEditableElement(editor, node) && !!node.marks[mark],
+	});
+
+	return editorMarks[mark] || !!Array.from(matches).length;
 }
 
 export function getMatchingNodes<T extends Node>(editor: StencylEditor, query: NodeMatch<T>) {
@@ -164,8 +201,8 @@ export function forEachMatchingNode<T extends Node>(
 	}
 }
 
-export function matchEditableNode(editor: StencylEditor) {
-	return (node: Node) => Element.isElement(node) && editor.isVoid(node) && node.type === 'editable';
+export function isEditableElement(editor: StencylEditor, value: any): value is EditableElement {
+	return editor.isVoid(value) && Element.isElement(value) && value.type === 'editable';
 }
 
 export function insertFragment(

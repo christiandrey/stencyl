@@ -1,14 +1,14 @@
-import {Editor, Element, Transforms} from 'slate';
 import {
+	EditableElement,
 	ParagraphElement,
 	StencylAlignment,
 	StencylEditor,
 	StencylElementTypes,
 	StencylMarks,
 } from '../../types';
-import {forEachMatchingNode, matchEditableNode} from './utils';
-
-import {clamp} from '../../utils';
+import {Editor, Element, Transforms} from 'slate';
+import {clamp, unsetProperty} from '../../utils';
+import {forEachMatchingNode, isEditableElement} from './utils';
 
 export const WRAPPED_BLOCKS: Array<StencylElementTypes> = [
 	'numbered-list',
@@ -66,14 +66,22 @@ export function activateMark<K extends keyof StencylMarks>(
 ) {
 	Editor.addMark(editor, mark, value);
 
-	if (mark === 'condition') {
+	const editables = Editor.nodes<EditableElement>(editor, {
+		match: (node) => isEditableElement(editor, node),
+		voids: true,
+	});
+
+	for (const [node, path] of editables) {
 		Transforms.setNodes(
 			editor,
 			{
-				condition: value as StencylMarks['condition'],
+				marks: {
+					...node.marks,
+					[mark]: value,
+				},
 			},
 			{
-				match: matchEditableNode(editor),
+				at: path,
 				hanging: true,
 				voids: true,
 			},
@@ -84,11 +92,23 @@ export function activateMark<K extends keyof StencylMarks>(
 export function deactivateMark(editor: StencylEditor, mark: keyof StencylMarks) {
 	Editor.removeMark(editor, mark);
 
-	if (mark === 'condition') {
-		Transforms.unsetNodes(editor, mark, {
-			match: matchEditableNode(editor),
-			voids: true,
-		});
+	const matches = Editor.nodes<EditableElement>(editor, {
+		match: (node) => isEditableElement(editor, node),
+		voids: true,
+	});
+
+	for (const [node, path] of matches) {
+		Transforms.setNodes(
+			editor,
+			{
+				marks: unsetProperty(node.marks, mark),
+			},
+			{
+				at: path,
+				hanging: true,
+				voids: true,
+			},
+		);
 	}
 }
 

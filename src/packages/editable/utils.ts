@@ -9,12 +9,15 @@ import {
 	EditableTimeElement,
 	StencylEditor,
 } from '../../types';
+import {EMPTY_TEXT_NODE, isEditableElement} from '../common/utils';
 import {Editor, Element, Node, NodeEntry} from 'slate';
 
-import {EMPTY_TEXT_NODE} from '../common/utils';
 import {generateUUID} from '../../utils';
 
-type EditableElementOptions = Omit<BaseEditableElement, 'type' | 'id' | 'children' | 'editable'> &
+type EditableElementOptions = Omit<
+	BaseEditableElement,
+	'type' | 'id' | 'children' | 'editable' | 'marks'
+> &
 	(
 		| EditableTextElement
 		| EditableOptionsElement
@@ -27,13 +30,14 @@ type EditableElementOptions = Omit<BaseEditableElement, 'type' | 'id' | 'childre
 let EDITABLE_ELEMENTS_CACHE: Array<NodeEntry<Node>> = [];
 let EDITABLE_ELEMENTS_CACHED: boolean = false;
 
-export function createEditableElement(attributes: EditableElementOptions) {
+export function createEditableElement(editor: StencylEditor, attributes: EditableElementOptions) {
 	return {
 		...attributes,
 		type: 'editable',
 		id: generateUUID(),
 		children: EMPTY_TEXT_NODE,
 		editable: true,
+		marks: Editor.marks(editor) ?? {},
 	} as EditableElement;
 }
 
@@ -68,10 +72,6 @@ export function getAllEditableElements(editor: StencylEditor) {
 	cacheEditableElements(editableElements);
 
 	return editableElements;
-}
-
-export function isEditableElement(editor: StencylEditor, value: any): value is EditableElement {
-	return Editor.isVoid(editor, value) && Element.isElement(value) && value.type === 'editable';
 }
 
 function cacheEditableElements(editableElements: Array<NodeEntry<Node>>) {

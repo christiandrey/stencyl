@@ -1,4 +1,4 @@
-import {BaseEditor, Descendant, Text} from 'slate';
+import {BaseEditor, Descendant} from 'slate';
 
 import {HistoryEditor} from 'slate-history';
 import {ReactEditor} from 'slate-react';
@@ -14,6 +14,22 @@ export type StencylOption = {
 };
 
 export type StencylAlignment = 'left' | 'center' | 'right' | 'justify';
+
+export type StencylMarks = {
+	bold?: boolean;
+	code?: boolean;
+	italic?: boolean;
+	underline?: boolean;
+	strikethrough?: boolean;
+	color?: string;
+	/**
+	 * Allows to check if the text/element should be displayed.
+	 * When it's a single condition, the value of the node represented by
+	 * condition.id must be equal to condition.value. When it's an array,
+	 * all conditions in the list must pass.
+	 */
+	condition?: StencylDisplayCondition | Array<StencylDisplayCondition>;
+};
 
 export type BlockQuoteElement = {
 	type: 'block-quote';
@@ -144,13 +160,7 @@ export type BaseEditableElement = {
 	isOrphan?: boolean;
 	tip?: string;
 	children: EmptyText[];
-	/**
-	 * Allows to check if the text/element should be displayed.
-	 * When it's a single condition, the value of the node represented by
-	 * condition.id must be equal to condition.value. When it's an array,
-	 * all conditions in the list must pass.
-	 */
-	condition?: StencylDisplayCondition | Array<StencylDisplayCondition>;
+	marks: StencylMarks;
 	/**
 	 * The id of a node to copy this one's values from.
 	 */
@@ -199,21 +209,8 @@ export type EditableElement = BaseEditableElement &
 	);
 
 export type StencylText = {
-	bold?: boolean;
-	code?: boolean;
-	italic?: boolean;
-	underline?: boolean;
-	strikethrough?: boolean;
-	color?: string;
-	/**
-	 * Allows to check if the text/element should be displayed.
-	 * When it's a single condition, the value of the node represented by
-	 * condition.id must be equal to condition.value. When it's an array,
-	 * all conditions in the list must pass.
-	 */
-	condition?: StencylDisplayCondition | Array<StencylDisplayCondition>;
 	text: string;
-};
+} & StencylMarks;
 
 export type StencylElement =
 	| BlockQuoteElement
@@ -256,5 +253,3 @@ declare module 'slate' {
 		Text: StencylText & EmptyText;
 	}
 }
-
-export type StencylMarks = Omit<Text, 'text'>;

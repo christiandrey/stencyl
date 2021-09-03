@@ -71,3 +71,9 @@ export function pipeline<T extends (...args: any[]) => any>(fns: Array<T>) {
 		return res as ReturnType<T>;
 	};
 }
+
+export function unsetProperty<T>(source: T, key: keyof T): T {
+	const clone = {...source};
+	delete clone[key];
+	return clone;
+}

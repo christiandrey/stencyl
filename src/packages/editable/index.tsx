@@ -31,12 +31,11 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 			<span
 				{...attributes}
 				contentEditable={false}
-				className={classNames(
-					'bg-blue-500 inline-block text-white font-medium px-4 rounded-default mx-1',
-					{
-						'shadow-outline': selected && focused,
-					},
-				)}
+				className={classNames('inline-block text-white font-medium px-4 rounded-default mx-1', {
+					'shadow-outline': selected && focused,
+					'bg-blue-500': !element.marks.condition,
+					'bg-green-500': element.marks.condition,
+				})}
 				style={{fontSize: '0.82em'}}
 			>
 				{element.defaultValue}
