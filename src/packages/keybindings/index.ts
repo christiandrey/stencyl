@@ -1,3 +1,4 @@
+import {IS_MAC} from '../../utils';
 import {KeyboardEvent} from 'react';
 import {StencylEditor} from '../../types';
 import {leafKeyBindings} from '../leaf/keybinding';
@@ -7,13 +8,6 @@ export type KeyBinding = (editor: StencylEditor, e: KeyboardEvent) => void;
 export type KeyBindings = Record<string, KeyBinding>;
 
 export type KeyBindingFn = () => KeyBindings;
-
-// ------------------------------------------------
-// Utility Functions
-// ------------------------------------------------
-
-export const IS_MAC =
-	typeof window !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
 
 export function mergeKeyBindings(generators: Array<KeyBindingFn>): KeyBindings {
 	let bindings: KeyBindings = {};

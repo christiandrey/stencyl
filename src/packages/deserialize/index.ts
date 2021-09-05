@@ -36,10 +36,10 @@ export const withHTMLDeserializer = (editor: StencylEditor) => {
 			// console.log(html);
 			const fragment = deserializeHTML(html, editor);
 			// console.log('FRAGMENT', fragment);
-			console.time('PASTEOPERATION');
+			// console.time('PASTEOPERATION');
 			editor.insertFragment(fragment);
 			// console.log('AFTER', editor.children);
-			console.timeEnd('PASTEOPERATION');
+			// console.timeEnd('PASTEOPERATION');
 			return;
 		}
 

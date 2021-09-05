@@ -5982,6 +5982,11 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
+hex-alpha@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/hex-alpha/-/hex-alpha-1.3.0.tgz#4659a4b6d3a12f9f839217b40ecf81c6108d1fa8"
+  integrity sha512-c4JlnuK9Y41iB4z8l6SsMGhcXAYBJGwGCxTLqR7llZbwPwXzxWXc+9UTydYDmma8ZQsVc6ZM57tcKeAYj99IIQ==
+
 hex-color-regex@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"

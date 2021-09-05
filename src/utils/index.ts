@@ -1,6 +1,14 @@
 import format from 'date-fns/format';
+import hexAlpha from 'hex-alpha';
 import isUrl from 'is-url';
 import {v4 as uuidv4} from 'uuid';
+
+export const IS_MAC =
+	typeof window !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
+
+export function sleep(timeInMs: number = 0) {
+	return new Promise((resolve) => setTimeout(resolve, timeInMs));
+}
 
 export function notNil<T>(value?: T | null): value is T {
 	return typeof value !== 'undefined' && value !== null;
@@ -12,6 +20,21 @@ export function nil<T>(value?: T | null): value is undefined | null {
 
 export function getPlaceholderImage(width: number, height?: number) {
 	return `https://dummyimage.com/${width}x${height || width}/326FF3/FFFFFF`;
+}
+
+export function toTitleCase(text: string) {
+	if (!text?.length) {
+		return text;
+	}
+	const firstValidCharPosition = text.search(/[a-zA-Z0-9]/);
+
+	if (!~firstValidCharPosition) {
+		return text;
+	}
+
+	return `${text.slice(0, firstValidCharPosition)}${text[
+		firstValidCharPosition
+	].toUpperCase()}${text.slice(firstValidCharPosition + 1)}`;
 }
 
 export function generateUUID() {
@@ -76,4 +99,16 @@ export function unsetProperty<T>(source: T, key: keyof T): T {
 	const clone = {...source};
 	delete clone[key];
 	return clone;
+}
+
+export function getRgbaColor(hex: string = '#000', alpha = 1) {
+	hex = hex.startsWith('#') ? hex : `#${hex}`;
+	return hexAlpha(hex, alpha);
+}
+
+export function getShortcutText(...keys: string[]) {
+	keys = keys.filter((o) => !!o).map((o) => toTitleCase(o).replace('Mod', IS_MAC ? '⌘' : 'Ctrl'));
+	return `(${keys.join(
+		!IS_MAC || keys.length > 2 || !(keys[0] === '⌘' && /[A-Z]/.test(keys[1])) ? '+' : '',
+	)})`;
 }

@@ -138,8 +138,8 @@ export function getSelectionMarks(editor: StencylEditor) {
 			const markActive = value.length && value.every((o: any) => !!o);
 
 			if (markActive) {
-				if (key === 'condition') {
-					mergedMarks.condition = value[0];
+				if (key === 'condition' || key === 'color') {
+					mergedMarks[key] = value[0];
 				} else {
 					mergedMarks[key] = true;
 				}

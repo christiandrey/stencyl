@@ -1,5 +1,5 @@
 import {Descendant, createEditor} from 'slate';
-import React, {FC, useMemo, useRef, useState} from 'react';
+import React, {FC, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import {Slate, withReact} from 'slate-react';
 
 import {Canvas} from './modules/canvas';
@@ -102,6 +102,7 @@ export const Editor: FC<EditorProps> = () => {
 			children: EMPTY_TEXT_NODE,
 		},
 	]);
+	const bodyRef = useRef<HTMLDivElement>(null);
 	const editor = useMemo(
 		() =>
 			pipeline([
@@ -119,15 +120,35 @@ export const Editor: FC<EditorProps> = () => {
 		[],
 	);
 	const [editorState, setEditorState] = useState<Descendant[]>(initialData.current);
+	const [sidebarTop, setSidebarTop] = useState<string>();
+
+	useLayoutEffect(() => {
+		setSidebarTop(`calc(20px + ${bodyRef.current?.getBoundingClientRect().top ?? 0}px)`);
+	}, []);
 
 	return (
 		<div className='bg-gray-200 min-h-screen'>
 			<Slate editor={editor} value={editorState} onChange={setEditorState}>
-				<Toolbar />
-				<div className={classNames(css.body, 'flex justify-center')}>
+				<div className='sticky top-0 w-full z-1 shadow-1'>
+					<Toolbar />
+				</div>
+				<div ref={bodyRef} className={classNames(css.body, 'flex justify-center')}>
+					<div className='flex-1' />
 					<Canvas />
+					<div className='flex-1 px-20'>
+						<div
+							className={classNames(
+								css.sidebar,
+								'sticky shadow-1 rounded-lg h-180 w-full bg-white p-16',
+							)}
+							style={{top: sidebarTop}}
+						>
+							Hello world
+						</div>
+					</div>
 				</div>
 			</Slate>
+			<div id='stencyl-portal' />
 		</div>
 	);
 };
