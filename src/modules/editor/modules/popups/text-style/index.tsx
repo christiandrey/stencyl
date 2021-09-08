@@ -49,13 +49,13 @@ const BaseTextStylePopup: FC<TextStylePopupProps> = ({anchorRef, isVisible, onRe
 							<ChevronDown />
 						</Icon>
 					</div>
-					<div className='h-36 flex items-center space-x-6 transition-colors duration-250 hover:text-gray-900 cursor-pointer'>
+					<div className='h-36 flex items-center transition-colors duration-250 hover:text-gray-900 cursor-pointer'>
 						<div className='text-headline'>Heading 3</div>
 					</div>
-					<div className='h-36 flex items-center space-x-6 transition-colors duration-250 hover:text-gray-900 cursor-pointer'>
+					<div className='h-36 flex items-center transition-colors duration-250 hover:text-gray-900 cursor-pointer'>
 						<div className='text-heading-3'>Heading 2</div>
 					</div>
-					<div className='h-36 flex items-center space-x-6 transition-colors duration-250 hover:text-gray-900 cursor-pointer'>
+					<div className='h-36 flex items-center transition-colors duration-250 hover:text-gray-900 cursor-pointer'>
 						<div className='text-heading-2'>Heading 1</div>
 					</div>
 				</div>

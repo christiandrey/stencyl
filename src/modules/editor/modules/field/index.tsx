@@ -17,7 +17,7 @@ const Field: FC<FieldProps> = ({className, children, label}) => {
 				cloneElement(child, {
 					className: classNames(
 						child.props.className,
-						'w-full appearance-none border border-gray-200 rounded-default h-32 px-8 transition:colors transition:shadow duration-250 focus:border-blue-500 focus:shadow-outline',
+						'w-full appearance-none border border-gray-200 rounded-lg h-36 px-8 transition:colors transition:shadow duration-250 focus:border-blue-500 focus:shadow-outline',
 					),
 				}),
 			)}

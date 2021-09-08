@@ -4,6 +4,7 @@ import {Slate, withReact} from 'slate-react';
 
 import {Canvas} from './modules/canvas';
 import {EMPTY_TEXT_NODE} from '../../packages/common/utils';
+import {TableTools} from './modules/sidebar/table-tools';
 import {Toolbar} from './modules/toolbar';
 import classNames from 'classnames';
 import css from './style.module.css';
@@ -137,13 +138,10 @@ export const Editor: FC<EditorProps> = () => {
 					<Canvas />
 					<div className='flex-1 px-20'>
 						<div
-							className={classNames(
-								css.sidebar,
-								'sticky shadow-1 rounded-lg h-180 w-full bg-white p-16',
-							)}
+							className={classNames(css.sidebar, 'sticky shadow-1 rounded-lg w-full bg-white p-16')}
 							style={{top: sidebarTop}}
 						>
-							Hello world
+							<TableTools />
 						</div>
 					</div>
 				</div>
