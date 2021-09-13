@@ -9,8 +9,8 @@ import {
 	EditableTimeElement,
 	StencylEditor,
 } from '../../types';
-import {EMPTY_TEXT_NODE, isEditableElement} from '../common/utils';
 import {Editor, Element, Node, NodeEntry} from 'slate';
+import {getEmptyTextNode, isEditableElement} from '../common/utils';
 
 import {generateUUID} from '../../utils';
 
@@ -35,7 +35,7 @@ export function createEditableElement(editor: StencylEditor, attributes: Editabl
 		...attributes,
 		type: 'editable',
 		id: generateUUID(),
-		children: EMPTY_TEXT_NODE,
+		children: getEmptyTextNode(),
 		editable: true,
 		marks: Editor.marks(editor) ?? {},
 	} as EditableElement;

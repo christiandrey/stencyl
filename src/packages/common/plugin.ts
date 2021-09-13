@@ -1,5 +1,5 @@
-import {EMPTY_TEXT_NODE, getLastNode} from './utils';
 import {Element, Path, Transforms} from 'slate';
+import {getEmptyTextNode, getLastNode} from './utils';
 
 import {StencylEditor} from '../../types';
 
@@ -22,7 +22,7 @@ export const withTrailingBlock = (editor: StencylEditor) => {
 					editor,
 					{
 						type: 'paragraph',
-						children: EMPTY_TEXT_NODE,
+						children: getEmptyTextNode(),
 					},
 					{at},
 				);

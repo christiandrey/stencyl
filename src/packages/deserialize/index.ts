@@ -12,7 +12,6 @@ import {
 import {deserializeBody, deserializeLineBreak, deserializeMarks} from './rules';
 
 import {Descendant} from 'slate';
-import {EMPTY_TEXT_NODE} from '../common/utils';
 import {StencylEditor} from '../../types';
 import {deserializeBlockquote} from '../blockquote/deserialize';
 import {deserializeCodeblock} from '../codeblock/deserialize';
@@ -22,6 +21,7 @@ import {deserializeLink} from '../link/deserialize';
 import {deserializeLists} from '../lists/deserialize';
 import {deserializeParagraph} from '../paragraph/deserialize';
 import {deserializeTable} from '../table/deserialize';
+import {getEmptyTextNode} from '../common/utils';
 import htmlNodeNames from '../../constants/html-node-names';
 import htmlNodeTypes from '../../constants/html-node-types';
 import {notNil} from '../../utils';
@@ -102,7 +102,7 @@ function deserializeHTMLElement(element: Node) {
 		return deserializeToLeaf({text: getNodeTextContent(element)});
 	}
 
-	children = children.length ? children : EMPTY_TEXT_NODE;
+	children = children.length ? children : getEmptyTextNode();
 
 	for (const rule of rules) {
 		const result = rule(element, children);

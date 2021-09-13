@@ -15,6 +15,8 @@ import {EditableElement, StencylEditor, StencylElementTypes, StencylMarks} from 
 
 export const EMPTY_TEXT_NODE = [{text: ''}];
 
+export const getEmptyTextNode = () => [{text: ''}];
+
 export function getLastChild(node: Descendant, level: number = 1): Descendant {
 	if (!(level + 1) || !(Editor.isEditor(node) || Element.isElement(node))) {
 		return node;

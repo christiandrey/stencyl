@@ -1,6 +1,6 @@
 import {Editor, Element, Range, Transforms} from 'slate';
 
-import {EMPTY_TEXT_NODE} from '../common/utils';
+import {getEmptyTextNode} from '../common/utils';
 import {isValidUrl} from '../../utils';
 
 export function insertInlineLink(editor: Editor, url: string) {
@@ -26,7 +26,7 @@ export function insertInlineLink(editor: Editor, url: string) {
 		{
 			type: 'link',
 			url,
-			children: EMPTY_TEXT_NODE,
+			children: getEmptyTextNode(),
 		},
 		{split: true},
 	);

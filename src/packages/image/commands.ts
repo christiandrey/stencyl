@@ -1,7 +1,7 @@
 import {Editor, Element, Transforms} from 'slate';
 import {ImageElement, StencylEditor} from '../../types';
 
-import {EMPTY_TEXT_NODE} from '../common/utils';
+import {getEmptyTextNode} from '../common/utils';
 
 export type ImageInsertOptions = {
 	width?: number;
@@ -35,7 +35,7 @@ export function insertInlineImage(editor: StencylEditor, options: ImageInsertOpt
 		url: options.url,
 		width: options.width,
 		height: options.height,
-		children: EMPTY_TEXT_NODE,
+		children: getEmptyTextNode(),
 	});
 
 	Transforms.move(editor);

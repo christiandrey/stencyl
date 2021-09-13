@@ -1,8 +1,8 @@
 import {Descendant, Element, Text} from 'slate';
 import {StencylAlignment, StencylEditor, StencylElement, StencylText} from '../../types';
 
-import {EMPTY_TEXT_NODE} from '../common/utils';
 import constants from '../../constants';
+import {getEmptyTextNode} from '../common/utils';
 import htmlNodeTypes from '../../constants/html-node-types';
 import {jsx} from 'slate-hyperscript';
 
@@ -93,7 +93,7 @@ export function normalizeFirstNode(nodes: Descendant[]) {
 	const firstNode = nodes[0];
 
 	if (Element.isElement(firstNode) && firstNode.type !== 'paragraph') {
-		nodes = [{type: 'paragraph', children: EMPTY_TEXT_NODE}, ...nodes];
+		nodes = [{type: 'paragraph', children: getEmptyTextNode()}, ...nodes];
 	}
 
 	return nodes;

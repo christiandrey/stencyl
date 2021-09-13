@@ -27,6 +27,24 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 			);
 		}
 
+		if (element.isInvisible) {
+			return (
+				<div {...attributes}>
+					<div contentEditable={false}>
+						<span
+							className={classNames('inline-block font-medium px-4 rounded-default bg-gray-300', {
+								'shadow-outline': selected && focused,
+							})}
+							style={{fontSize: '0.82em'}}
+						>
+							{element.label}
+						</span>
+					</div>
+					{children}
+				</div>
+			);
+		}
+
 		return (
 			<span
 				{...attributes}

@@ -15,6 +15,11 @@ export function insertInlineEditable(editor: StencylEditor, element: EditableEle
 	invalidateEditableElementsCache();
 }
 
+export function insertInvisibleEditable(editor: StencylEditor, element: EditableElement) {
+	Transforms.insertNodes(editor, element);
+	invalidateEditableElementsCache();
+}
+
 export function updateInlineEditable(
 	editor: StencylEditor,
 	attributes: Partial<EditableElement> = {},

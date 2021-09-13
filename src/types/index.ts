@@ -157,7 +157,7 @@ export type BaseEditableElement = {
 	defaultValue: string;
 	label: string;
 	editable: boolean;
-	isOrphan?: boolean;
+	isInvisible?: boolean;
 	tip?: string;
 	children: EmptyText[];
 	marks: StencylMarks;
