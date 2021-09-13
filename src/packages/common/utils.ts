@@ -11,7 +11,16 @@ import {
 	Text,
 	Transforms,
 } from 'slate';
-import {EditableElement, StencylEditor, StencylElementTypes, StencylMarks} from '../../types';
+import {
+	EditableElement,
+	HeadingOneElement,
+	HeadingThreeElement,
+	HeadingTwoElement,
+	StencylDisplayTextSize,
+	StencylEditor,
+	StencylElementTypes,
+	StencylMarks,
+} from '../../types';
 
 export const EMPTY_TEXT_NODE = [{text: ''}];
 
@@ -160,6 +169,29 @@ export function getSelectionLeaf(editor: StencylEditor) {
 	return Editor.leaf(editor, editor.selection);
 }
 
+export function getCurrentDisplayTextSize(
+	editor: StencylEditor,
+): StencylDisplayTextSize | undefined {
+	const [match] = Editor.nodes<HeadingOneElement | HeadingTwoElement | HeadingThreeElement>(
+		editor,
+		{
+			match: (node) =>
+				!Editor.isEditor(node) &&
+				Element.isElement(node) &&
+				['heading-one', 'heading-two', 'heading-three'].includes(node.type),
+			mode: 'lowest',
+		},
+	);
+
+	if (!match) {
+		return undefined;
+	}
+
+	const [node] = match;
+
+	return node.type;
+}
+
 export function isBlockActive(editor: StencylEditor, type: StencylElementTypes) {
 	const matches = getMatchingNodes(
 		editor,
@@ -183,6 +215,19 @@ export function isMarkActive(
 	});
 
 	return editorMarks[mark] || !!Array.from(matches).length;
+}
+
+export function getMarkValue<T extends keyof StencylMarks>(
+	editor: StencylEditor,
+	mark: T,
+): StencylMarks[T] | undefined {
+	const editorMarks = Editor.marks(editor) ?? {};
+
+	const [match] = Editor.nodes<EditableElement>(editor, {
+		match: (node) => isEditableElement(editor, node) && !!node.marks[mark],
+	});
+
+	return editorMarks[mark] ?? match?.[0].marks[mark];
 }
 
 export function getMatchingNodes<T extends Node>(editor: StencylEditor, query: NodeMatch<T>) {

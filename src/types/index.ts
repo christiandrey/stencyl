@@ -241,6 +241,8 @@ export type StencylElementTypes = StencylElement['type'];
 
 export type StencylEditor = BaseEditor & ReactEditor & HistoryEditor;
 
+export type StencylDisplayTextSize = 'heading-one' | 'heading-two' | 'heading-three';
+
 export type StencylData = {
 	nodes: Descendant[];
 	orphans: Descendant[];

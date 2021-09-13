@@ -18,12 +18,14 @@ const BaseIcon: FC<IconProps> = ({children, className, onPress}) => {
 			})}
 		>
 			{Children.map(children, (child: ReactElement) =>
-				cloneElement(child, {
-					className: classNames(
-						child.props.className,
-						'h-full w-full object-contain  object-center m-auto pointer-events-none',
-					),
-				}),
+				child
+					? cloneElement(child, {
+							className: classNames(
+								child.props.className,
+								'h-full w-full object-contain  object-center m-auto pointer-events-none',
+							),
+					  })
+					: child,
 			)}
 		</figure>
 	);

@@ -112,3 +112,13 @@ export function getShortcutText(...keys: string[]) {
 		!IS_MAC || keys.length > 2 || !(keys[0] === '⌘' && /[A-Z]/.test(keys[1])) ? '+' : '',
 	)})`;
 }
+
+export function isEqualColor(left?: string, right?: string) {
+	if (!left || !right) {
+		return false;
+	}
+
+	left = left.startsWith('#') ? left : `#${left}`;
+	right = right.startsWith('#') ? right : `#${right}`;
+	return left.toLowerCase() === right.toLowerCase();
+}

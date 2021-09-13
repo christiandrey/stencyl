@@ -1,6 +1,6 @@
 const colors = {
 	transparent: 'transparent',
-	black: 'black',
+	black: '#000',
 };
 
 export const PRESET_COLORS = [
