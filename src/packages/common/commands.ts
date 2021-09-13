@@ -112,6 +112,39 @@ export function deactivateMark(editor: StencylEditor, mark: keyof StencylMarks) 
 	}
 }
 
+export function clearMarks(editor: StencylEditor) {
+	const marks: Array<keyof StencylMarks> = [
+		'bold',
+		'code',
+		'color',
+		'italic',
+		'underline',
+		'strikethrough',
+		'condition',
+	];
+
+	marks.forEach((o) => editor.removeMark(o));
+
+	const matches = Editor.nodes<EditableElement>(editor, {
+		match: (node) => isEditableElement(editor, node),
+		voids: true,
+	});
+
+	for (const [, path] of matches) {
+		Transforms.setNodes(
+			editor,
+			{
+				marks: {},
+			},
+			{
+				at: path,
+				hanging: true,
+				voids: true,
+			},
+		);
+	}
+}
+
 export function setBlockAlignment(editor: StencylEditor, alignment?: StencylAlignment) {
 	forEachMatchingNode(
 		editor,

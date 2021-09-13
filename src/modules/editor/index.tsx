@@ -35,81 +35,81 @@ export const Editor: FC<EditorProps> = () => {
 		// 		// },
 		// 	],
 		// },
-		{
-			type: 'bulleted-list',
-			children: [
-				// {
-				// 	type: 'list-item',
-				// 	children: [
-				// 		{
-				// 			type: 'list-item-container',
-				// 			children: [
-				// 				{
-				// 					text: 'A beginning line of text in a paragraph',
-				// 				},
-				// 			],
-				// 		},
-				// 	],
-				// },
-				{
-					type: 'list-item',
-					children: [
-						{
-							type: 'list-item-container',
-							children: [
-								{
-									text: 'A line of text in a paragraph',
-								},
-							],
-						},
-						{
-							type: 'numbered-list',
-							children: [
-								{
-									type: 'list-item',
-									children: [
-										{
-											type: 'list-item-container',
-											children: [{text: 'A line of text is nested'}],
-										},
-									],
-								},
-								// {
-								// 	type: 'list-item',
-								// 	children: [
-								// 		{
-								// 			type: 'list-item-container',
-								// 			children: [{text: 'Another line of text is nested'}],
-								// 		},
-								// 	],
-								// },
-								// {
-								// 	type: 'list-item',
-								// 	children: [
-								// 		{
-								// 			type: 'list-item-container',
-								// 			children: [{text: 'A third line of text is nested'}],
-								// 		},
-								// 	],
-								// },
-							],
-						},
-					],
-				},
-			],
-		},
-		{
-			type: 'editable',
-			id: '5df7aa1f-cf60-460a-b0fe-968bbd1bed75',
-			defaultValue: '',
-			label: 'What is your name?',
-			editable: true,
-			isInvisible: true,
-			children: getEmptyTextNode(),
-			marks: {},
-			dataType: 'options',
-			options: [],
-		},
+		// {
+		// 	type: 'bulleted-list',
+		// 	children: [
+		// 		// {
+		// 		// 	type: 'list-item',
+		// 		// 	children: [
+		// 		// 		{
+		// 		// 			type: 'list-item-container',
+		// 		// 			children: [
+		// 		// 				{
+		// 		// 					text: 'A beginning line of text in a paragraph',
+		// 		// 				},
+		// 		// 			],
+		// 		// 		},
+		// 		// 	],
+		// 		// },
+		// 		{
+		// 			type: 'list-item',
+		// 			children: [
+		// 				{
+		// 					type: 'list-item-container',
+		// 					children: [
+		// 						{
+		// 							text: 'A line of text in a paragraph',
+		// 						},
+		// 					],
+		// 				},
+		// 				{
+		// 					type: 'numbered-list',
+		// 					children: [
+		// 						{
+		// 							type: 'list-item',
+		// 							children: [
+		// 								{
+		// 									type: 'list-item-container',
+		// 									children: [{text: 'A line of text is nested'}],
+		// 								},
+		// 							],
+		// 						},
+		// 						// {
+		// 						// 	type: 'list-item',
+		// 						// 	children: [
+		// 						// 		{
+		// 						// 			type: 'list-item-container',
+		// 						// 			children: [{text: 'Another line of text is nested'}],
+		// 						// 		},
+		// 						// 	],
+		// 						// },
+		// 						// {
+		// 						// 	type: 'list-item',
+		// 						// 	children: [
+		// 						// 		{
+		// 						// 			type: 'list-item-container',
+		// 						// 			children: [{text: 'A third line of text is nested'}],
+		// 						// 		},
+		// 						// 	],
+		// 						// },
+		// 					],
+		// 				},
+		// 			],
+		// 		},
+		// 	],
+		// },
+		// {
+		// 	type: 'editable',
+		// 	id: '5df7aa1f-cf60-460a-b0fe-968bbd1bed75',
+		// 	defaultValue: '',
+		// 	label: 'What is your name?',
+		// 	editable: true,
+		// 	isInvisible: true,
+		// 	children: getEmptyTextNode(),
+		// 	marks: {},
+		// 	dataType: 'options',
+		// 	options: [],
+		// },
 		{
 			type: 'paragraph',
 			children: getEmptyTextNode(),
@@ -143,6 +143,7 @@ export const Editor: FC<EditorProps> = () => {
 		<div className='bg-gray-200 min-h-screen'>
 			<Slate editor={editor} value={editorState} onChange={setEditorState}>
 				<div className='sticky top-0 w-full z-1 shadow-1'>
+					{/* Put header component here */}
 					<Toolbar />
 				</div>
 				<div ref={bodyRef} className={classNames(css.body, 'flex justify-center')}>
