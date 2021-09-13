@@ -46,6 +46,12 @@ const BaseEditableTypePopup: FC<EditableTypePopupProps> = ({
 			<div className='h-36 flex items-center transition-colors duration-250 hover:text-gray-900 cursor-pointer'>
 				<div>Time</div>
 			</div>
+			<div className='h-36 flex items-center transition-colors duration-250 hover:text-gray-900 cursor-pointer'>
+				<div>Question only</div>
+			</div>
+			<div className='h-36 flex items-center transition-colors duration-250 hover:text-gray-900 cursor-pointer'>
+				<div>From existing...</div>
+			</div>
 		</Popup>
 	);
 };
