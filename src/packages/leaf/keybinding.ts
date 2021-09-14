@@ -1,10 +1,23 @@
+import {
+	toggleBoldMark,
+	toggleItalicMark,
+	toggleStrikethroughMark,
+	toggleUnderlineMark,
+} from './commands';
+
 import {KeyBindingFn} from '../keybindings';
 
 export const leafKeyBindings: KeyBindingFn = () => ({
-	'mod+b': () => {
-		console.log('BOLD');
+	'mod+b': (editor) => {
+		toggleBoldMark(editor);
 	},
-	'mod+i': () => {
-		console.log('ITALIC');
+	'mod+i': (editor) => {
+		toggleItalicMark(editor);
+	},
+	'mod+u': (editor) => {
+		toggleUnderlineMark(editor);
+	},
+	'mod+shift+x': (editor) => {
+		toggleStrikethroughMark(editor);
 	},
 });

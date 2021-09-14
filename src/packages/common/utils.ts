@@ -1,4 +1,17 @@
 import {
+	AlignableElement,
+	EditableElement,
+	HeadingOneElement,
+	HeadingThreeElement,
+	HeadingTwoElement,
+	IndentableElement,
+	StencylAlignment,
+	StencylDisplayTextSize,
+	StencylEditor,
+	StencylElementTypes,
+	StencylMarks,
+} from '../../types';
+import {
 	Descendant,
 	Editor,
 	Element,
@@ -11,16 +24,6 @@ import {
 	Text,
 	Transforms,
 } from 'slate';
-import {
-	EditableElement,
-	HeadingOneElement,
-	HeadingThreeElement,
-	HeadingTwoElement,
-	StencylDisplayTextSize,
-	StencylEditor,
-	StencylElementTypes,
-	StencylMarks,
-} from '../../types';
 
 export const EMPTY_TEXT_NODE = [{text: ''}];
 
@@ -192,6 +195,23 @@ export function getCurrentDisplayTextSize(
 	return node.type;
 }
 
+export function getCurrentBlockAlignment(editor: StencylEditor): StencylAlignment {
+	const [match] = Editor.nodes(editor, {
+		match: isAlignableElement,
+		mode: 'lowest',
+	});
+
+	if (match) {
+		const [node] = match;
+
+		if (isAlignableElement(node)) {
+			return node.alignment ?? 'left';
+		}
+	}
+
+	return 'left';
+}
+
 export function isBlockActive(editor: StencylEditor, type: StencylElementTypes) {
 	const matches = getMatchingNodes(
 		editor,
@@ -214,7 +234,7 @@ export function isMarkActive(
 		match: (node) => isEditableElement(editor, node) && !!node.marks[mark],
 	});
 
-	return editorMarks[mark] || !!Array.from(matches).length;
+	return !!editorMarks[mark] || !!Array.from(matches).length;
 }
 
 export function getMarkValue<T extends keyof StencylMarks>(
@@ -250,6 +270,40 @@ export function forEachMatchingNode<T extends Node>(
 
 export function isEditableElement(editor: StencylEditor, value: any): value is EditableElement {
 	return editor.isVoid(value) && Element.isElement(value) && value.type === 'editable';
+}
+
+export function isAlignableElement(value: any): value is AlignableElement {
+	const validElementTypes: Array<StencylElementTypes> = [
+		'block-quote',
+		'code-block',
+		'heading-one',
+		'heading-two',
+		'heading-three',
+		'heading-four',
+		'heading-five',
+		'heading-six',
+		'paragraph',
+	];
+
+	return Element.isElement(value) && validElementTypes.includes(value.type);
+}
+
+export function isIndentableElement(value: any): value is IndentableElement {
+	const validElementTypes: Array<StencylElementTypes> = [
+		'block-quote',
+		'bulleted-list',
+		'code-block',
+		'heading-one',
+		'heading-two',
+		'heading-three',
+		'heading-four',
+		'heading-five',
+		'heading-six',
+		'numbered-list',
+		'paragraph',
+	];
+
+	return Element.isElement(value) && validElementTypes.includes(value.type);
 }
 
 export function insertFragment(

@@ -31,67 +31,66 @@ export type StencylMarks = {
 	condition?: StencylDisplayCondition | Array<StencylDisplayCondition>;
 };
 
+export type AlignableElement = {
+	alignment?: StencylAlignment;
+};
+
+export type IndentableElement = {
+	indentation?: number;
+};
+
 export type BlockQuoteElement = {
 	type: 'block-quote';
-	alignment?: StencylAlignment;
-	indentation?: number;
 	children: Descendant[];
-};
+} & AlignableElement &
+	IndentableElement;
 
 export type BulletedListElement = {
 	type: 'bulleted-list';
-	indentation?: number;
 	children: Descendant[];
-};
+} & IndentableElement;
 
 export type CodeBlockElement = {
 	type: 'code-block';
-	alignment?: StencylAlignment;
-	indentation?: number;
 	children: Descendant[];
-};
+} & AlignableElement &
+	IndentableElement;
 
 export type HeadingOneElement = {
 	type: 'heading-one';
-	alignment?: StencylAlignment;
-	indentation?: number;
 	children: Descendant[];
-};
+} & AlignableElement &
+	IndentableElement;
 
 export type HeadingTwoElement = {
 	type: 'heading-two';
-	alignment?: StencylAlignment;
-	indentation?: number;
 	children: Descendant[];
-};
+} & AlignableElement &
+	IndentableElement;
 
 export type HeadingThreeElement = {
 	type: 'heading-three';
-	alignment?: StencylAlignment;
-	indentation?: number;
 	children: Descendant[];
-};
+} & AlignableElement &
+	IndentableElement;
 
 export type HeadingFourElement = {
 	type: 'heading-four';
-	alignment?: StencylAlignment;
-	indentation?: number;
 	children: Descendant[];
-};
+} & AlignableElement &
+	IndentableElement;
 
 export type HeadingFiveElement = {
 	type: 'heading-five';
-	alignment?: StencylAlignment;
-	indentation?: number;
 	children: Descendant[];
-};
+} & AlignableElement &
+	IndentableElement;
 
 export type HeadingSixElement = {
 	type: 'heading-six';
-	alignment?: StencylAlignment;
-	indentation?: number;
 	children: Descendant[];
-};
+} & AlignableElement &
+	IndentableElement;
 
 export type ImageElement = {
 	type: 'image';
@@ -119,16 +118,14 @@ export type ListItemContainerElement = {
 
 export type NumberedListElement = {
 	type: 'numbered-list';
-	indentation?: number;
 	children: Descendant[];
-};
+} & IndentableElement;
 
 export type ParagraphElement = {
 	type: 'paragraph';
-	alignment?: StencylAlignment;
-	indentation?: number;
 	children: Descendant[];
-};
+} & AlignableElement &
+	IndentableElement;
 
 export type TableElement = {
 	type: 'table';
