@@ -1,5 +1,11 @@
 import {Editor, Element, Path, Range, Transforms} from 'slate';
-import {getLastChildEntry, getNextPath, getNodeAt, getPreviousPath} from '../common/utils';
+import {
+	getLastChildEntry,
+	getNextPath,
+	getNodeAt,
+	getPreviousPath,
+	isBlockActive,
+} from '../common/utils';
 
 import {StencylEditor} from '../../types';
 import {clamp} from '../../utils';
@@ -7,7 +13,15 @@ import {getListEntries} from './utils';
 import {preBlockOps} from '../common/commands';
 
 export function insertBulletedListBlock(editor: StencylEditor) {
-	preBlockOps(editor);
+	if (!editor.selection) {
+		return;
+	}
+
+	if (isBlockActive(editor, 'list-item')) {
+		removeListItemBlock(editor);
+	} else {
+		preBlockOps(editor);
+	}
 
 	Editor.withoutNormalizing(editor, () => {
 		// Transforms.setNodes(editor, {
@@ -48,7 +62,15 @@ export function insertBulletedListBlock(editor: StencylEditor) {
 }
 
 export function insertNumberedListBlock(editor: StencylEditor) {
-	preBlockOps(editor);
+	if (!editor.selection) {
+		return;
+	}
+
+	if (isBlockActive(editor, 'list-item')) {
+		removeListItemBlock(editor);
+	} else {
+		preBlockOps(editor);
+	}
 
 	Editor.withoutNormalizing(editor, () => {
 		Transforms.setNodes(editor, {
@@ -63,6 +85,10 @@ export function insertNumberedListBlock(editor: StencylEditor) {
 }
 
 export function removeListItemBlock(editor: StencylEditor) {
+	if (!editor.selection) {
+		return;
+	}
+
 	const {listEntry, listItemEntry} = getListEntries(editor);
 
 	if (!listEntry) {

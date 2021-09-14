@@ -2,6 +2,7 @@ import {IS_MAC} from '../../utils';
 import {KeyboardEvent} from 'react';
 import {StencylEditor} from '../../types';
 import {leafKeyBindings} from '../leaf/keybinding';
+import {listsKeyBindings} from '../lists/keybinding';
 
 export type KeyBinding = (editor: StencylEditor, e: KeyboardEvent) => void;
 
@@ -60,7 +61,7 @@ export function toHotkey(e: KeyboardEvent) {
 // Operations
 // ------------------------------------------------
 
-const generators: Array<KeyBindingFn> = [leafKeyBindings];
+const generators: Array<KeyBindingFn> = [leafKeyBindings, listsKeyBindings];
 
 const KEYBINDINGS = mergeKeyBindings(generators);
 

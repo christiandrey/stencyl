@@ -212,10 +212,15 @@ export function getCurrentBlockAlignment(editor: StencylEditor): StencylAlignmen
 	return 'left';
 }
 
-export function isBlockActive(editor: StencylEditor, type: StencylElementTypes) {
+export function isBlockActive(
+	editor: StencylEditor,
+	type: StencylElementTypes,
+	mode?: 'highest' | 'lowest',
+) {
 	const matches = getMatchingNodes(
 		editor,
 		(node) => Element.isElement(node) && !editor.isInline(node) && node.type === type,
+		mode,
 	);
 
 	return !!Array.from(matches).length;
@@ -250,9 +255,14 @@ export function getMarkValue<T extends keyof StencylMarks>(
 	return editorMarks[mark] ?? match?.[0].marks[mark];
 }
 
-export function getMatchingNodes<T extends Node>(editor: StencylEditor, query: NodeMatch<T>) {
+export function getMatchingNodes<T extends Node>(
+	editor: StencylEditor,
+	query: NodeMatch<T>,
+	mode?: 'all' | 'highest' | 'lowest',
+) {
 	return Editor.nodes(editor, {
 		match: query,
+		mode,
 	});
 }
 
