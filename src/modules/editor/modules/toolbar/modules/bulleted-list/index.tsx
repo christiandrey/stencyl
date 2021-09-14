@@ -6,12 +6,13 @@ import {
 import {IconButton} from '../../../icon-button';
 import {ReactComponent as List} from '../../../../../../assets/images/icon-list.svg';
 import React from 'react';
-import {isBlockActive} from '../../../../../../packages/common/utils';
+import {getCurrentListBlock} from '../../../../../../packages/lists/utils';
 import {useSlate} from 'slate-react';
 
 export const BulletedListButton = () => {
 	const editor = useSlate();
-	const isActive = isBlockActive(editor, 'bulleted-list', 'lowest');
+	const listBlock = getCurrentListBlock(editor);
+	const isActive = listBlock && listBlock[0].type === 'bulleted-list';
 
 	const handlePress = () => {
 		isActive ? removeListItemBlock(editor) : insertBulletedListBlock(editor);

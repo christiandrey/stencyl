@@ -1,6 +1,5 @@
+import {BulletedListElement, NumberedListElement, StencylEditor} from '../../types';
 import {Editor, Element} from 'slate';
-
-import {StencylEditor} from '../../types';
 
 export function getListEntries(editor: StencylEditor) {
 	const [listItemEntry] = Editor.nodes(editor, {
@@ -18,4 +17,18 @@ export function getListEntries(editor: StencylEditor) {
 		listEntry,
 		listItemEntry,
 	};
+}
+
+export function getCurrentListBlock(editor: StencylEditor) {
+	const [match] = Editor.nodes<NumberedListElement | BulletedListElement>(editor, {
+		match: (node) =>
+			Element.isElement(node) && ['bulleted-list', 'numbered-list'].includes(node.type),
+		mode: 'lowest',
+	});
+
+	if (!match) {
+		return undefined;
+	}
+
+	return match;
 }
