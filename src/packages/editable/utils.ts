@@ -8,8 +8,9 @@ import {
 	EditableTextElement,
 	EditableTimeElement,
 	StencylEditor,
+	StencylElement,
 } from '../../types';
-import {Editor, Element, Node, NodeEntry} from 'slate';
+import {Editor, Element, NodeEntry} from 'slate';
 import {getEmptyTextNode, isEditableElement} from '../common/utils';
 
 import {generateUUID} from '../../utils';
@@ -27,7 +28,7 @@ type EditableElementOptions = Omit<
 		| EditableImageElement
 	);
 
-let EDITABLE_ELEMENTS_CACHE: Array<NodeEntry<Node>> = [];
+let EDITABLE_ELEMENTS_CACHE: Array<NodeEntry<EditableElement>> = [];
 let EDITABLE_ELEMENTS_CACHED: boolean = false;
 
 export function createEditableElement(editor: StencylEditor, attributes: EditableElementOptions) {
@@ -61,9 +62,9 @@ export function getAllEditableElements(editor: StencylEditor) {
 		return EDITABLE_ELEMENTS_CACHE;
 	}
 
-	const matches = Editor.nodes(editor, {
+	const matches = Editor.nodes<EditableElement>(editor, {
 		at: [],
-		match: (node) => isEditableElement(editor, node),
+		match: (node) => isEditableElement(editor, node) && !node.linkId && !node.isInvisible,
 		mode: 'all',
 	});
 
@@ -74,11 +75,26 @@ export function getAllEditableElements(editor: StencylEditor) {
 	return editableElements;
 }
 
-function cacheEditableElements(editableElements: Array<NodeEntry<Node>>) {
+function cacheEditableElements(editableElements: Array<NodeEntry<EditableElement>>) {
 	EDITABLE_ELEMENTS_CACHE = editableElements;
 	EDITABLE_ELEMENTS_CACHED = true;
 }
 
 export function invalidateEditableElementsCache() {
 	EDITABLE_ELEMENTS_CACHED = false;
+}
+
+export function getEditableElementAttributes(element: StencylElement) {
+	if (element.type !== 'editable' || !element.linkId) {
+		return element;
+	}
+
+	const editableElements = EDITABLE_ELEMENTS_CACHE.map((o) => o[0] as EditableElement);
+	const parent = editableElements.find((o) => o.id === element.linkId);
+
+	if (!parent) {
+		return element;
+	}
+
+	return {...parent, id: element.id, marks: element.marks};
 }

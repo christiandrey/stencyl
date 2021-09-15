@@ -13,6 +13,11 @@ export type StencylOption = {
 	label: string;
 };
 
+export type StencylPopupCoordinates = {
+	x: number;
+	y: number;
+};
+
 export type StencylAlignment = 'left' | 'center' | 'right' | 'justify';
 
 export type StencylMarks = {
@@ -235,6 +240,8 @@ export type EmptyText = {
 };
 
 export type StencylElementTypes = StencylElement['type'];
+
+export type StencylEditableElementTypes = EditableElement['dataType'];
 
 export type StencylEditor = BaseEditor & ReactEditor & HistoryEditor;
 

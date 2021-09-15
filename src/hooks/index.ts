@@ -1,6 +1,7 @@
-import {MouseEvent, useCallback, useMemo, useState} from 'react';
+import {DependencyList, MouseEvent, useCallback, useMemo, useState} from 'react';
 
 import {sleep} from '../utils';
+import useDebouncedEffectLib from 'use-debounced-effect';
 
 export type ModalActions = {
 	visible: boolean;
@@ -55,4 +56,8 @@ export function useBooleanState(initialState: boolean) {
 		setState((o) => !o);
 	}, []);
 	return [state, toggleState, setState] as const;
+}
+
+export function useDebounceEffect(callback: Fn, deps: DependencyList, delay = 500) {
+	return useDebouncedEffectLib(callback, delay, deps);
 }

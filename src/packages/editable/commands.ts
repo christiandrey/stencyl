@@ -11,7 +11,6 @@ import {getCurrentEditableElement, invalidateEditableElementsCache} from './util
 
 export function insertInlineEditable(editor: StencylEditor, element: EditableElement) {
 	Transforms.insertNodes(editor, element, {voids: false});
-	Transforms.move(editor);
 	invalidateEditableElementsCache();
 }
 

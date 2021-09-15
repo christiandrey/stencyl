@@ -1,4 +1,4 @@
-import {Editor, Element, Transforms} from 'slate';
+import {Editor, Element, Range, Transforms} from 'slate';
 import {ImageElement, StencylEditor} from '../../types';
 
 import {getEmptyTextNode} from '../common/utils';
@@ -30,6 +30,14 @@ export function getCurrentInlineImage(editor: StencylEditor) {
 }
 
 export function insertInlineImage(editor: StencylEditor, options: ImageInsertOptions) {
+	if (!editor.selection) {
+		return;
+	}
+
+	if (!Range.isCollapsed(editor.selection)) {
+		Transforms.delete(editor);
+	}
+
 	Transforms.insertNodes(editor, {
 		type: 'image',
 		url: options.url,
@@ -37,8 +45,6 @@ export function insertInlineImage(editor: StencylEditor, options: ImageInsertOpt
 		height: options.height,
 		children: getEmptyTextNode(),
 	});
-
-	Transforms.move(editor);
 }
 
 export function resizeInlineImage(editor: StencylEditor, options: ImageResizeOptions = {}) {

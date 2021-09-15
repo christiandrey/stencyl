@@ -2,14 +2,16 @@ import React, {FC} from 'react';
 import {RenderElementProps, useFocused, useSelected} from 'slate-react';
 
 import classNames from 'classnames';
+import {getEditableElementAttributes} from './utils';
 import {getPlaceholderImage} from '../../utils';
 
 export const Editable: FC<RenderElementProps> = ({element, children, attributes}) => {
 	const selected = useSelected();
 	const focused = useFocused();
+	const editable = getEditableElementAttributes(element);
 
-	if (element.type === 'editable') {
-		if (element.dataType === 'image') {
+	if (editable.type === 'editable') {
+		if (editable.dataType === 'image') {
 			return (
 				<span {...attributes}>
 					{children}
@@ -17,19 +19,19 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 						className={classNames('inline-block max-w-full rounded-default align-bottom', {
 							'shadow-outline': selected && focused,
 						})}
-						src={getPlaceholderImage(element.width, element.height)}
+						src={getPlaceholderImage(editable.width, editable.height)}
 						style={{
-							width: element.width,
-							height: element.height,
+							width: editable.width,
+							height: editable.height,
 						}}
 					/>
 				</span>
 			);
 		}
 
-		if (element.isInvisible) {
+		if (editable.isInvisible) {
 			return (
-				<div {...attributes}>
+				<div {...attributes} className='py-6'>
 					<div contentEditable={false}>
 						<span
 							className={classNames('inline-block font-medium px-4 rounded-default bg-gray-300', {
@@ -37,7 +39,7 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 							})}
 							style={{fontSize: '0.82em'}}
 						>
-							{element.label}
+							{editable.label}
 						</span>
 					</div>
 					{children}
@@ -51,12 +53,12 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 				contentEditable={false}
 				className={classNames('inline-block text-white font-medium px-4 rounded-default mx-1', {
 					'shadow-outline': selected && focused,
-					'bg-blue-500': !element.marks.condition,
-					'bg-green-500': element.marks.condition,
+					'bg-blue-500': !editable.marks.condition,
+					'bg-green-500': editable.marks.condition,
 				})}
 				style={{fontSize: '0.82em'}}
 			>
-				{element.defaultValue}
+				{editable.defaultValue}
 				{children}
 			</span>
 		);

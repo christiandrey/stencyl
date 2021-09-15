@@ -6,9 +6,11 @@ import {
 	StencylElementTypes,
 	StencylMarks,
 } from '../../types';
-import {Editor, Element, Transforms} from 'slate';
+import {Editor, Element, Location, Transforms} from 'slate';
 import {clamp, unsetProperty} from '../../utils';
 import {forEachMatchingNode, isEditableElement} from './utils';
+
+import {ReactEditor} from 'slate-react';
 
 export const WRAPPED_BLOCKS: Array<StencylElementTypes> = [
 	'numbered-list',
@@ -199,4 +201,12 @@ export function changeBlockIndentation(editor: StencylEditor, mode: 'increment' 
 			);
 		},
 	);
+}
+
+export function focusEditor(editor: StencylEditor, at?: Location) {
+	ReactEditor.focus(editor);
+
+	if (at) {
+		Transforms.select(editor, at);
+	}
 }

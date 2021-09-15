@@ -10,6 +10,7 @@ import {
 	StencylEditor,
 	StencylElementTypes,
 	StencylMarks,
+	StencylPopupCoordinates,
 } from '../../types';
 import {
 	Descendant,
@@ -558,4 +559,24 @@ export function moveCaretTo(editor: StencylEditor, path: Path, offset: number = 
 			offset,
 		},
 	});
+}
+
+export function getSelectionCoordinates(editor: StencylEditor): StencylPopupCoordinates {
+	const {selection} = editor;
+	let x = 0;
+	let y = 0;
+
+	if (selection) {
+		const domSelection = window.getSelection();
+		const domRange = domSelection?.getRangeAt(0);
+		const rect = domRange?.getBoundingClientRect();
+
+		x = rect?.x ?? 0;
+		y = rect?.y ?? 0;
+	}
+
+	return {
+		x,
+		y,
+	};
 }

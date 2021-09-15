@@ -85,6 +85,7 @@
 		"slate-history": "0.65.3",
 		"slate-hyperscript": "0.62.0",
 		"slate-react": "0.65.3",
+		"use-debounced-effect": "1.2.0",
 		"uuid": "8.3.2"
 	}
 }
