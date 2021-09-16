@@ -1,15 +1,16 @@
-import {Editor, Element, Range, Transforms} from 'slate';
+import {Editor, Element, NodeEntry, Range, Transforms} from 'slate';
 import {ImageElement, StencylEditor} from '../../types';
 
 import {getEmptyTextNode} from '../common/utils';
 
 export type ImageInsertOptions = {
-	width?: number;
-	height?: number;
+	width: number;
+	height: number;
 	url: string;
 };
 
 export type ImageResizeOptions = {
+	entry?: NodeEntry<ImageElement>;
 	width?: number;
 	height?: number;
 };
@@ -48,7 +49,7 @@ export function insertInlineImage(editor: StencylEditor, options: ImageInsertOpt
 }
 
 export function resizeInlineImage(editor: StencylEditor, options: ImageResizeOptions = {}) {
-	const currentImage = getCurrentInlineImage(editor);
+	const currentImage = options.entry ?? getCurrentInlineImage(editor);
 
 	if (!currentImage || (!options.width && !options.height)) {
 		return;

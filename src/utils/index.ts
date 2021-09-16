@@ -1,3 +1,4 @@
+import {KeyboardEvent} from 'react';
 import format from 'date-fns/format';
 import hexAlpha from 'hex-alpha';
 import isUrl from 'is-url';
@@ -121,4 +122,8 @@ export function isEqualColor(left?: string, right?: string) {
 	left = left.startsWith('#') ? left : `#${left}`;
 	right = right.startsWith('#') ? right : `#${right}`;
 	return left.toLowerCase() === right.toLowerCase();
+}
+
+export function isEnterKey(e: KeyboardEvent) {
+	return e.key?.toLowerCase() === 'enter';
 }

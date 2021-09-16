@@ -3,7 +3,7 @@ import React, {FC, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import {Slate, withReact} from 'slate-react';
 
 import {Canvas} from './modules/canvas';
-import {EditEditable} from './modules/sidebar/edit-editable';
+import {Sidebar} from './modules/sidebar';
 import {Toolbar} from './modules/toolbar';
 import classNames from 'classnames';
 import css from './style.module.css';
@@ -150,11 +150,8 @@ export const Editor: FC<EditorProps> = () => {
 					<div className='flex-1' />
 					<Canvas />
 					<div className='flex-1 px-20'>
-						<div
-							className={classNames(css.sidebar, 'sticky shadow-1 rounded-lg w-full bg-white p-16')}
-							style={{top: sidebarTop}}
-						>
-							<EditEditable />
+						<div className={classNames(css.sidebar, 'sticky')} style={{top: sidebarTop}}>
+							<Sidebar />
 						</div>
 					</div>
 				</div>

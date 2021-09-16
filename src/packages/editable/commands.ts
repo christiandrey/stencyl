@@ -6,7 +6,7 @@ import {
 	EditableTextElement,
 	StencylEditor,
 } from '../../types';
-import {Element, Transforms} from 'slate';
+import {Element, Node, NodeEntry, Transforms} from 'slate';
 import {getCurrentEditableElement, invalidateEditableElementsCache} from './utils';
 
 export function insertInlineEditable(editor: StencylEditor, element: EditableElement) {
@@ -22,8 +22,9 @@ export function insertInvisibleEditable(editor: StencylEditor, element: Editable
 export function updateInlineEditable(
 	editor: StencylEditor,
 	attributes: Partial<EditableElement> = {},
+	editableEntry?: NodeEntry<Node>,
 ) {
-	const editableEntry = getCurrentEditableElement(editor);
+	editableEntry = editableEntry ?? getCurrentEditableElement(editor) ?? undefined;
 
 	if (!editableEntry) {
 		return;
@@ -40,7 +41,7 @@ export function updateInlineEditable(
 		{
 			defaultValue: attributes.defaultValue ?? editableNode.defaultValue,
 			label: attributes.label ?? editableNode.label,
-			tip: attributes.tip ?? editableNode.tip,
+			tip: attributes.tip,
 			linkId: attributes.linkId ?? editableNode.linkId,
 			multiline:
 				editableNode.dataType === 'text'
@@ -65,4 +66,6 @@ export function updateInlineEditable(
 		},
 		{at: editablePath, hanging: true, voids: true},
 	);
+
+	invalidateEditableElementsCache();
 }

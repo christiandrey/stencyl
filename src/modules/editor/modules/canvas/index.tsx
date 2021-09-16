@@ -22,8 +22,6 @@ const BaseCanvas: FC<CanvasProps> = () => {
 		runKeyBindings(editor, e);
 	}, []);
 
-	console.log('RENDER CANVAS');
-
 	return (
 		<div className={css.container} style={canvasWidthStyle}>
 			<Editable

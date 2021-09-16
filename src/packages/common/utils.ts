@@ -4,6 +4,7 @@ import {
 	HeadingOneElement,
 	HeadingThreeElement,
 	HeadingTwoElement,
+	ImageElement,
 	IndentableElement,
 	StencylAlignment,
 	StencylDisplayTextSize,
@@ -11,6 +12,7 @@ import {
 	StencylElementTypes,
 	StencylMarks,
 	StencylPopupCoordinates,
+	TableElement,
 } from '../../types';
 import {
 	Descendant,
@@ -579,4 +581,22 @@ export function getSelectionCoordinates(editor: StencylEditor): StencylPopupCoor
 		x,
 		y,
 	};
+}
+
+export function getConfigurableBlockInSelection(editor: StencylEditor) {
+	if (editor.selection && !Range.isCollapsed(editor.selection)) {
+		return undefined;
+	}
+
+	const [match] = Editor.nodes<TableElement | ImageElement | EditableElement>(editor, {
+		match: (node) =>
+			Element.isElement(node) &&
+			(node.type === 'table' ||
+				node.type === 'image' ||
+				(node.type === 'editable' && !node.linkId)),
+		mode: 'lowest',
+		voids: true,
+	});
+
+	return match;
 }

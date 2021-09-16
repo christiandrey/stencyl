@@ -190,6 +190,8 @@ export function showTableBorders(editor: StencylEditor) {
 		{
 			at: tablePath,
 			match: (node) => Element.isElement(node) && node.type === 'table-cell',
+			hanging: true,
+			split: true,
 			mode: 'all',
 		},
 	);
@@ -207,6 +209,8 @@ export function hideTableBorders(editor: StencylEditor) {
 		{
 			at: tablePath,
 			match: (node) => Element.isElement(node) && node.type === 'table-cell',
+			hanging: true,
+			split: true,
 			mode: 'all',
 		},
 	);

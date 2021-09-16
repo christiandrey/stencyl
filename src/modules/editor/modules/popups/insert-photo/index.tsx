@@ -53,8 +53,8 @@ const BaseInsertPhotoPopup: FC<InsertPhotoPopupProps> = ({
 
 		onSubmit({
 			url,
-			width: dimensions.width * parsedScale,
-			height: dimensions.height * parsedScale,
+			width: Math.round(dimensions.width * parsedScale),
+			height: Math.round(dimensions.height * parsedScale),
 		});
 		onRequestClose();
 		resetFields();

@@ -31,7 +31,7 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 
 		if (editable.isInvisible) {
 			return (
-				<div {...attributes} className='py-6'>
+				<div {...attributes}>
 					<div contentEditable={false}>
 						<span
 							className={classNames('inline-block font-medium px-4 rounded-default bg-gray-300', {

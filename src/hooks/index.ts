@@ -1,5 +1,9 @@
-import {DependencyList, MouseEvent, useCallback, useMemo, useState} from 'react';
+import {DependencyList, MouseEvent, useCallback, useEffect, useMemo, useState} from 'react';
+import {EditableElement, ImageElement, TableElement} from '../types';
+import {useFocused, useSlate} from 'slate-react';
 
+import {NodeEntry} from 'slate';
+import {getConfigurableBlockInSelection} from '../packages/common/utils';
 import {sleep} from '../utils';
 import useDebouncedEffectLib from 'use-debounced-effect';
 
@@ -60,4 +64,25 @@ export function useBooleanState(initialState: boolean) {
 
 export function useDebounceEffect(callback: Fn, deps: DependencyList, delay = 500) {
 	return useDebouncedEffectLib(callback, delay, deps);
+}
+
+export function useEditingBlock() {
+	const editor = useSlate();
+	const focused = useFocused();
+	const [entry, setEntry] = useState<NodeEntry<ImageElement | TableElement | EditableElement>>();
+
+	useEffect(() => {
+		const block = getConfigurableBlockInSelection(editor);
+		setEntry((o) => (focused ? block : o));
+	}, [editor.selection, focused]);
+
+	return entry;
+}
+
+export function withMouseDown(fn?: Fn): (e: MouseEvent) => void {
+	const wrapped = (e: MouseEvent) => {
+		e?.preventDefault();
+		fn?.();
+	};
+	return wrapped;
 }

@@ -33,13 +33,8 @@ export const withHTMLDeserializer = (editor: StencylEditor) => {
 		const html = data.getData('text/html');
 
 		if (html) {
-			// console.log(html);
 			const fragment = deserializeHTML(html, editor);
-			// console.log('FRAGMENT', fragment);
-			// console.time('PASTEOPERATION');
 			editor.insertFragment(fragment);
-			// console.log('AFTER', editor.children);
-			// console.timeEnd('PASTEOPERATION');
 			return;
 		}
 
@@ -67,7 +62,6 @@ const rules: Array<DeserializeFn> = [
 
 function deserializeHTML(html: string, editor: StencylEditor) {
 	const parsed = new DOMParser().parseFromString(html, 'text/html');
-	// console.log(parsed.body);
 	const children = deserializeHTMLElements(Array.from(parsed.body.childNodes));
 	return deserializeToFragment(
 		normalizeFirstNode(wrapInlineTopLevelNodesInParagraph(editor, children)),
