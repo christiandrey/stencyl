@@ -1,5 +1,14 @@
 import {Descendant, createEditor} from 'slate';
-import React, {FC, useLayoutEffect, useMemo, useRef, useState} from 'react';
+import React, {
+	PropsWithChildren,
+	Ref,
+	forwardRef,
+	useImperativeHandle,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import {Slate, withReact} from 'slate-react';
 
 import {Canvas} from './modules/canvas';
@@ -18,103 +27,15 @@ import {withLists} from '../../packages/lists/plugin';
 import {withTable} from '../../packages/table/plugin';
 import {withTrailingBlock} from '../../packages/common/plugin';
 
-type EditorProps = {};
+type EditorProps = PropsWithChildren<{
+	initialData?: Array<Descendant>;
+}>;
 
-export const Editor: FC<EditorProps> = () => {
-	const initialData = useRef<Descendant[]>([
-		// {
-		// 	type: 'paragraph',
-		// 	children: [
-		// 		{text: 'A line of text in a paragraph.'},
-		// 		// {
-		// 		// 	type: 'image',
-		// 		// 	url: 'https://4.img-dpreview.com/files/p/E~TS590x0~articles/3925134721/0266554465.jpeg',
-		// 		// 	width: 100,
-		// 		// 	height: 100,
-		// 		// 	children: getEmptyTextNode(),
-		// 		// },
-		// 	],
-		// },
-		// {
-		// 	type: 'bulleted-list',
-		// 	children: [
-		// 		// {
-		// 		// 	type: 'list-item',
-		// 		// 	children: [
-		// 		// 		{
-		// 		// 			type: 'list-item-container',
-		// 		// 			children: [
-		// 		// 				{
-		// 		// 					text: 'A beginning line of text in a paragraph',
-		// 		// 				},
-		// 		// 			],
-		// 		// 		},
-		// 		// 	],
-		// 		// },
-		// 		{
-		// 			type: 'list-item',
-		// 			children: [
-		// 				{
-		// 					type: 'list-item-container',
-		// 					children: [
-		// 						{
-		// 							text: 'A line of text in a paragraph',
-		// 						},
-		// 					],
-		// 				},
-		// 				{
-		// 					type: 'numbered-list',
-		// 					children: [
-		// 						{
-		// 							type: 'list-item',
-		// 							children: [
-		// 								{
-		// 									type: 'list-item-container',
-		// 									children: [{text: 'A line of text is nested'}],
-		// 								},
-		// 							],
-		// 						},
-		// 						// {
-		// 						// 	type: 'list-item',
-		// 						// 	children: [
-		// 						// 		{
-		// 						// 			type: 'list-item-container',
-		// 						// 			children: [{text: 'Another line of text is nested'}],
-		// 						// 		},
-		// 						// 	],
-		// 						// },
-		// 						// {
-		// 						// 	type: 'list-item',
-		// 						// 	children: [
-		// 						// 		{
-		// 						// 			type: 'list-item-container',
-		// 						// 			children: [{text: 'A third line of text is nested'}],
-		// 						// 		},
-		// 						// 	],
-		// 						// },
-		// 					],
-		// 				},
-		// 			],
-		// 		},
-		// 	],
-		// },
-		// {
-		// 	type: 'editable',
-		// 	id: '5df7aa1f-cf60-460a-b0fe-968bbd1bed75',
-		// 	defaultValue: '',
-		// 	label: 'What is your name?',
-		// 	editable: true,
-		// 	isInvisible: true,
-		// 	children: getEmptyTextNode(),
-		// 	marks: {},
-		// 	dataType: 'options',
-		// 	options: [],
-		// },
-		{
-			type: 'paragraph',
-			children: getEmptyTextNode(),
-		},
-	]);
+export type EditorRef = {
+	getNodes: () => Descendant[];
+};
+
+const BaseEditor = ({children, initialData}: EditorProps, ref: Ref<EditorRef>) => {
 	const bodyRef = useRef<HTMLDivElement>(null);
 	const editor = useMemo(
 		() =>
@@ -132,18 +53,29 @@ export const Editor: FC<EditorProps> = () => {
 			])(),
 		[],
 	);
-	const [editorState, setEditorState] = useState<Descendant[]>(initialData.current);
+	const [editorState, setEditorState] = useState<Descendant[]>(
+		initialData ?? [
+			{
+				type: 'paragraph',
+				children: getEmptyTextNode(),
+			},
+		],
+	);
 	const [sidebarTop, setSidebarTop] = useState<string>();
 
 	useLayoutEffect(() => {
 		setSidebarTop(`calc(20px + ${bodyRef.current?.getBoundingClientRect().top ?? 0}px)`);
 	}, []);
 
+	useImperativeHandle(ref, () => ({
+		getNodes: () => editor.children,
+	}));
+
 	return (
 		<div className='bg-gray-200 min-h-screen'>
 			<Slate editor={editor} value={editorState} onChange={setEditorState}>
 				<div className='sticky top-0 w-full z-1 shadow-1'>
-					{/* Put header component here */}
+					{children}
 					<Toolbar />
 				</div>
 				<div ref={bodyRef} className={classNames(css.body, 'flex justify-center')}>
@@ -160,3 +92,7 @@ export const Editor: FC<EditorProps> = () => {
 		</div>
 	);
 };
+
+export type Editor = EditorRef;
+
+export const Editor = forwardRef(BaseEditor);
