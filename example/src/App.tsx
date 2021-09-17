@@ -12,7 +12,6 @@ export const EditorApp = () => {
 			author: 'Christian Drey',
 			title: 'Sample Stencyl Document',
 		});
-		// console.log('nodes', JSON.stringify(ref.current?.getNodes()));
 	};
 	return (
 		<Editor ref={ref}>
