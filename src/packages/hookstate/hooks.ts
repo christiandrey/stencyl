@@ -15,3 +15,7 @@ export function useHookState<S>(hookState: HookState<S>) {
 
 	return useMemo(() => [state, hookState.set] as const, [state]);
 }
+
+export function useHookStateStatic<S>(hookState: HookState<S>) {
+	return [hookState.get(), hookState.set] as const;
+}

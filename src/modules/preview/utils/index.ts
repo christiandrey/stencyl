@@ -3,10 +3,12 @@ import {
 	StencylDataset,
 	StencylDisplayCondition,
 	StencylElement,
+	StencylElementTypes,
 } from '../../../types';
+import {formatDate, lastItem, toAlphabetNumeral, toRomanNumeral} from '../../../utils';
 
 import {Descendant} from 'slate';
-import {formatDate} from '../../../utils';
+import {Font} from '@react-pdf/renderer';
 
 export function getValueFromDataset(dataset: StencylDataset, element: EditableElement) {
 	const data = dataset[element.id];
@@ -83,3 +85,48 @@ export function* getEditableElements(
 		yield* getEditableElements(children);
 	}
 }
+
+export function getLevelByElementType(element: Descendant, level?: number) {
+	if (
+		isStencylElement(element) &&
+		(element.type === 'bulleted-list' || element.type === 'numbered-list')
+	) {
+		return (level ?? -1) + 1;
+	}
+
+	return level;
+}
+
+export const BULLETS = ['•', '◦', '▪'];
+
+function getOrderedListSymbol(level: number, index: number) {
+	switch (level) {
+		case 0:
+			return `${index + 1}.`;
+		case 1:
+			return `${toRomanNumeral(index + 1).toLowerCase()}.`;
+		default:
+			return `${toAlphabetNumeral(index + 1)}.`;
+	}
+}
+
+export function getListItemSymbol(
+	path: Array<number>,
+	parentType?: StencylElementTypes,
+	level?: number,
+) {
+	if (!parentType || (parentType !== 'bulleted-list' && parentType !== 'numbered-list')) {
+		return '';
+	}
+
+	level = level ?? 0;
+	const index = lastItem(path);
+
+	if (parentType === 'bulleted-list') {
+		return BULLETS[level] ?? lastItem(BULLETS);
+	}
+
+	return getOrderedListSymbol(level, index);
+}
+
+export const registerPdfFonts = Font.register;

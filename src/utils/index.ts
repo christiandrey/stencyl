@@ -1,7 +1,9 @@
 import {KeyboardEvent} from 'react';
+import alphanumerize from 'alphanumerize';
 import format from 'date-fns/format';
 import hexAlpha from 'hex-alpha';
 import isUrl from 'is-url';
+import romanize from 'romanize';
 import {v4 as uuidv4} from 'uuid';
 
 export const IS_MAC =
@@ -75,8 +77,8 @@ export function isValidUrl(text?: string | null) {
 	return isUrl(text);
 }
 
-export function lastItem<T>(list: Array<T>): T {
-	return list[list.length - 1];
+export function lastItem<T>(list: Array<T>, steps = 0): T {
+	return list[list.length - 1 - steps];
 }
 
 export function array(size = 3): Array<number> {
@@ -126,4 +128,24 @@ export function isEqualColor(left?: string, right?: string) {
 
 export function isEnterKey(e: KeyboardEvent) {
 	return e.key?.toLowerCase() === 'enter';
+}
+
+export function toRomanNumeral(value: number): string {
+	return romanize(value ?? 1);
+}
+
+export function toAlphabetNumeral(value: number): string {
+	return alphanumerize(value ?? 1);
+}
+
+export function isObjectEqual<T extends object>(left?: T, right?: T) {
+	if (left === right) {
+		return true;
+	}
+
+	if (!left || !right || Object.keys(left).length !== Object.keys(right).length) {
+		return false;
+	}
+
+	return !Object.keys(left).some((key) => left[key] !== right[key]);
 }

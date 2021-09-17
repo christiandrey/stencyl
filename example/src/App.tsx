@@ -1,51 +1,274 @@
 import 'stencyl/dist/index.css';
 
-import {DomPreview} from 'stencyl';
-import React from 'react';
+import {Editor, PdfPreview, generatePDFAsync} from 'stencyl';
+import React, {useRef} from 'react';
 
-// import React, {useRef} from 'react';
-
-// import {Editor} from 'stencyl';
-
-// const App = () => {
-// 	const ref = useRef<Editor>(null);
-// 	const handleClick = () => {
-// 		console.log('nodes', JSON.stringify(ref.current?.getNodes()));
-// 	};
-// 	return <Editor headerComponent={<button onClick={handleClick}>Get nodes</button>} ref={ref} />;
-// };
-
-const App = () => {
+export const EditorApp = () => {
+	const ref = useRef<Editor>(null);
+	const handleClick = () => {
+		generatePDFAsync({
+			nodes: ref.current?.getNodes() ?? [],
+			dataset: {},
+			author: 'Christian Drey',
+			title: 'Sample Stencyl Document',
+		});
+		// console.log('nodes', JSON.stringify(ref.current?.getNodes()));
+	};
 	return (
-		<DomPreview
+		<Editor ref={ref}>
+			<div
+				style={{
+					backgroundColor: '#dbdfe2',
+					padding: '12px 24px',
+					textAlign: 'right',
+				}}
+			>
+				<button
+					style={{
+						padding: '8px 8px',
+						backgroundColor: '#326FF3',
+						color: 'white',
+						borderRadius: 5,
+					}}
+					onClick={handleClick}
+				>
+					Get PDF
+				</button>
+			</div>
+		</Editor>
+	);
+};
+
+export const PreviewApp = () => {
+	return (
+		<PdfPreview
 			nodes={[
+				{type: 'paragraph', children: [{text: 'hELLO WORLD'}]},
+				{type: 'paragraph', children: [{text: ''}]},
 				{
-					type: 'paragraph',
+					type: 'table',
 					children: [
-						{text: ''},
 						{
-							dataType: 'image',
-							defaultValue: 'djjfk',
-							label: 'dddd',
-							type: 'editable',
-							id: 'd69f0fc0-abf2-4659-9412-60b4949298f1',
-							children: [{text: ''}],
-							editable: true,
-							marks: {},
-							width: 100,
-							height: 100,
+							type: 'table-row',
+							children: [
+								{
+									type: 'table-cell',
+									children: [{type: 'paragraph', children: [{text: 'aaa'}]}],
+									width: 48,
+									height: 48,
+								},
+								{
+									type: 'table-cell',
+									children: [{type: 'paragraph', children: [{text: 'bbb'}]}],
+									width: 48,
+									height: 48,
+								},
+							],
 						},
-						{text: ',d,d,dd'},
+						{
+							type: 'table-row',
+							children: [
+								{
+									type: 'table-cell',
+									children: [{type: 'paragraph', children: [{text: 'ccc'}]}],
+									width: 48,
+									height: 48,
+								},
+								{
+									type: 'table-cell',
+									children: [{type: 'paragraph', children: [{text: 'ddd'}]}],
+									width: 48,
+									height: 48,
+								},
+							],
+						},
 					],
 				},
 				{type: 'paragraph', children: [{text: ''}]},
-				{type: 'paragraph', children: [{text: 'DATED', bold: true}]},
-				{type: 'paragraph', children: [{text: '------------'}]},
-				{type: 'paragraph', children: [{text: 'LOAN AGREEMENT ', bold: true}]},
-				{type: 'paragraph', children: [{text: 'Between'}]},
-				{type: 'paragraph', children: [{text: 'Borrower', bold: true}]},
-				{type: 'paragraph', children: [{text: 'and'}]},
-				{type: 'paragraph', children: [{text: 'Lender', bold: true}]},
+				{type: 'paragraph', children: [{text: ''}]},
+				{type: 'paragraph', children: [{text: 'Borderless'}]},
+				{
+					type: 'table',
+					children: [
+						{
+							type: 'table-row',
+							children: [
+								{
+									type: 'table-cell',
+									children: [{type: 'paragraph', children: [{text: 'border'}]}],
+									width: 48,
+									height: 48,
+									borderColor: 'rgba(0,0,0,0)',
+								},
+								{
+									type: 'table-cell',
+									children: [{type: 'paragraph', children: [{text: 'less'}]}],
+									width: 48,
+									height: 48,
+									borderColor: 'rgba(0,0,0,0)',
+								},
+							],
+						},
+						{
+							type: 'table-row',
+							children: [
+								{
+									type: 'table-cell',
+									children: [{type: 'paragraph', children: [{text: 'doc'}]}],
+									width: 48,
+									height: 48,
+									borderColor: 'rgba(0,0,0,0)',
+								},
+								{
+									type: 'table-cell',
+									children: [{type: 'paragraph', children: [{text: 'ument'}]}],
+									width: 48,
+									height: 48,
+									borderColor: 'rgba(0,0,0,0)',
+								},
+							],
+						},
+					],
+				},
+				{type: 'paragraph', children: [{text: ''}]},
+				{
+					type: 'bulleted-list',
+					children: [
+						{
+							type: 'list-item',
+							children: [
+								{type: 'list-item-container', children: [{text: 'Uni ner'}]},
+								{
+									type: 'bulleted-list',
+									children: [
+										{
+											type: 'list-item',
+											children: [{type: 'list-item-container', children: [{text: 'dkkfk'}]}],
+										},
+										{
+											type: 'list-item',
+											children: [
+												{type: 'list-item-container', children: [{text: 'kfkf'}]},
+												{
+													type: 'bulleted-list',
+													children: [
+														{
+															type: 'list-item',
+															children: [
+																{type: 'list-item-container', children: [{text: 'kfkfkf'}]},
+															],
+														},
+														{
+															type: 'list-item',
+															children: [
+																{type: 'list-item-container', children: [{text: 'kfkfkf'}]},
+																{
+																	type: 'bulleted-list',
+																	children: [
+																		{
+																			type: 'list-item',
+																			children: [
+																				{type: 'list-item-container', children: [{text: 'kkfkf'}]},
+																			],
+																		},
+																	],
+																},
+															],
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{type: 'paragraph', children: [{text: ''}]},
+				{type: 'paragraph', children: [{text: ''}]},
+				{
+					type: 'numbered-list',
+					children: [
+						{
+							type: 'list-item',
+							children: [
+								{type: 'list-item-container', children: [{text: 'jdjd'}]},
+								{
+									type: 'numbered-list',
+									children: [
+										{
+											type: 'list-item',
+											children: [{type: 'list-item-container', children: [{text: 'kfkfk'}]}],
+										},
+										{
+											type: 'list-item',
+											children: [
+												{type: 'list-item-container', children: [{text: 'kfkfk'}]},
+												{
+													type: 'numbered-list',
+													children: [
+														{
+															type: 'list-item',
+															children: [
+																{type: 'list-item-container', children: [{text: 'kfkfkf'}]},
+															],
+														},
+														{
+															type: 'list-item',
+															children: [
+																{type: 'list-item-container', children: [{text: 'jfjfj'}]},
+																{
+																	type: 'numbered-list',
+																	children: [
+																		{
+																			type: 'list-item',
+																			children: [
+																				{type: 'list-item-container', children: [{text: 'kfkfkf'}]},
+																			],
+																		},
+																	],
+																},
+															],
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+						{
+							type: 'list-item',
+							children: [{type: 'list-item-container', children: [{text: 'kkkd'}]}],
+						},
+						{
+							type: 'list-item',
+							children: [{type: 'list-item-container', children: [{text: 'dkdkd'}]}],
+						},
+					],
+				},
+				{type: 'paragraph', children: [{text: ''}]},
+				{type: 'paragraph', children: [{text: ''}]},
+				{type: 'paragraph', children: [{text: 'Indenterd text'}], indentation: 9},
+				{type: 'paragraph', indentation: 9, children: [{text: ''}]},
+				{
+					type: 'paragraph',
+					indentation: 3,
+					children: [{text: 'Right aigned txt'}],
+					alignment: 'right',
+				},
+				{type: 'paragraph', indentation: 3, alignment: 'center', children: [{text: 'Centere'}]},
+				{type: 'paragraph', indentation: 3, alignment: 'justify', children: [{text: 'Justified'}]},
+				{type: 'paragraph', indentation: 3, children: [{text: 'kdkdk'}]},
+				{type: 'paragraph', indentation: 3, children: [{text: ''}]},
+				{type: 'paragraph', indentation: 3, children: [{text: ''}]},
+				{
+					type: 'paragraph',
+					indentation: 3,
+					children: [{text: 'cO'}, {text: 'LORED T', color: '#00D084'}, {text: 'ET'}],
+				},
 			]}
 			dataset={{
 				'd69f0fc0-abf2-4659-9412-60b4949298f1':
@@ -55,4 +278,4 @@ const App = () => {
 	);
 };
 
-export default App;
+export default EditorApp;

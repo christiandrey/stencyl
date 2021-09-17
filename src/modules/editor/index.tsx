@@ -1,6 +1,6 @@
 import {Descendant, createEditor} from 'slate';
 import React, {
-	PropsWithChildren,
+	ReactNode,
 	Ref,
 	forwardRef,
 	useImperativeHandle,
@@ -27,9 +27,10 @@ import {withLists} from '../../packages/lists/plugin';
 import {withTable} from '../../packages/table/plugin';
 import {withTrailingBlock} from '../../packages/common/plugin';
 
-type EditorProps = PropsWithChildren<{
+type EditorProps = {
+	children?: ReactNode;
 	initialData?: Array<Descendant>;
-}>;
+};
 
 export type EditorRef = {
 	getNodes: () => Descendant[];

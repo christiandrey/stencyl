@@ -1,5 +1,7 @@
+import themeColors from '../theme/data/colors.json';
+
 const colors = {
-	transparent: 'transparent',
+	transparent: 'rgba(0,0,0,0)',
 	black: '#000',
 };
 
@@ -15,5 +17,7 @@ export const PRESET_COLORS = [
 	'#F78DA7',
 	'#9900EF',
 ];
+
+export const THEME_COLORS = themeColors;
 
 export default colors;

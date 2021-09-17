@@ -19,7 +19,10 @@ export const deserializeTable: DeserializeFn = (element, children) => {
 				width: runIfDefined(getNodeStyle(element, 'width'), (o) => parseFloat(o)),
 				height: runIfDefined(getNodeStyle(element, 'height'), (o) => parseFloat(o)),
 				borderColor: getNodeStyle(element, 'borderColor'),
-				borderWidth: runIfDefined(getNodeStyle(element, 'borderWidth'), (o) => parseFloat(o)),
+				borderWidth: runIfDefined(getNodeStyle(element, 'borderWidth'), (o) => {
+					const parsed = parseFloat(o);
+					return !parsed || isNaN(parsed) ? 1 : parsed;
+				}),
 			},
 			children,
 		);

@@ -4,6 +4,7 @@
 		"target": "esnext",
 		"module": "esnext",
 		"lib": ["dom", "esnext"],
+		"resolveJsonModule": true,
 		"moduleResolution": "node",
 		"jsx": "react",
 		"sourceMap": true,
