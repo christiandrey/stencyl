@@ -1,8 +1,10 @@
 {
 	"compilerOptions": {
 		"outDir": "dist",
+		"target": "esnext",
 		"module": "esnext",
 		"lib": ["dom", "esnext"],
+		"resolveJsonModule": true,
 		"moduleResolution": "node",
 		"jsx": "react",
 		"sourceMap": true,
@@ -19,6 +21,6 @@
 		"allowSyntheticDefaultImports": true,
 		"downlevelIteration": true
 	},
-	"include": ["src"],
+	"include": ["src", "node_modules/microbundle/index.d.ts"],
 	"exclude": ["node_modules", "dist", "example"]
 }

@@ -1,12 +1,8 @@
-import './theme/application.scss';
+import 'tailwindcss/tailwind.css';
 
-import React from 'react';
-import styles from './styles.module.scss';
-
-interface Props {
-	text: string;
-}
-
-export const ExampleComponent = ({text}: Props) => {
-	return <div className={styles.test}>Example Component: {text}</div>;
-};
+export {Editor, EditorRef} from './modules/editor';
+export {DomPreview} from './modules/preview/dom';
+export {PdfPreview} from './modules/preview/pdf';
+export {getEditableElements, registerPdfFonts} from './modules/preview/utils';
+export {generatePDFAsync} from './modules/download/pdf';
+export * from './types';

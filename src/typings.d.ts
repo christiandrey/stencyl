@@ -20,3 +20,5 @@ declare module '*.svg' {
 	export default svgUrl;
 	export {svgComponent as ReactComponent};
 }
+
+type Fn<T = any> = (...args: any[]) => T;
