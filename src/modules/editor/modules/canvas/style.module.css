@@ -2,30 +2,30 @@
 	@apply bg-white rounded-lg shadow-1 text-subhead;
 	padding: 35px 35px 65px;
 
-	& ol {
+	ol {
 		@apply list-decimal;
 	}
 
-	& ul {
+	ul {
 		@apply list-disc;
 	}
 
-	& ul,
-	& ol {
+	ul,
+	ol {
 		@apply pl-24;
 
-		& ol {
+		ol {
 			list-style-type: lower-roman;
 
-			& ol {
+			ol {
 				list-style-type: lower-alpha;
 			}
 		}
 
-		& ul {
+		ul {
 			list-style-type: circle;
 
-			& ul {
+			ul {
 				list-style-type: square;
 			}
 		}

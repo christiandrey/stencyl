@@ -1,6 +1,6 @@
-import 'stencyl/dist/index.css';
+import 'stencyl-beta/dist/index.css';
 
-import {Editor, PdfPreview, generatePDFAsync} from 'stencyl';
+import {Editor, PdfPreview, generatePDFAsync} from 'stencyl-beta';
 import React, {useRef} from 'react';
 
 export const EditorApp = () => {

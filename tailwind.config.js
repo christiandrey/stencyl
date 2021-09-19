@@ -1,4 +1,4 @@
-const docmakerPlugin = require('./src/theme/plugins/docmaker');
+const stencylPlugin = require('./src/theme/plugins/stencyl');
 const colors = require('./src/theme/data/colors');
 const {getDynamicColors} = require('./src/theme/plugins/color-variants');
 
@@ -111,7 +111,7 @@ module.exports = {
 		lineHeight: false,
 		letterSpacing: false,
 	},
-	plugins: [docmakerPlugin],
+	plugins: [stencylPlugin],
 	variants: {
 		// ...colorVariants,
 		textColor: ({after}) => after(['focus-within']),
