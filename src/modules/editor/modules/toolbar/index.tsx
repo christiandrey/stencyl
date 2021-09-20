@@ -24,8 +24,8 @@ import {UndoButton} from './modules/undo';
 
 const BaseToolbar = () => {
 	return (
-		<div className='flex items-center justify-between px-60 py-16 bg-white'>
-			<div className='flex items-center divide-x divide-gray-100'>
+		<div className='st-flex st-items-center st-justify-between st-px-60 st-py-16 st-bg-white'>
+			<div className='st-flex st-items-center st-divide-x st-divide-gray-100'>
 				<IconGroup>
 					<UndoButton />
 					<RedoButton />

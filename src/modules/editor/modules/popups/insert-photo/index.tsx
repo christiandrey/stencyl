@@ -85,18 +85,18 @@ const BaseInsertPhotoPopup: FC<InsertPhotoPopupProps> = ({
 			transparent
 			hideArrow
 			overlayCloseOnClick
-			contentClassName='bg-white rounded-lg border-gray-50 border-solid border flex items-center py-8 px-8 space-x-8 text-gray-500'
+			contentClassName='st-bg-white st-rounded-lg st-border-gray-50 st-border-solid st-border st-flex st-items-center st-py-8 st-px-8 st-space-x-8 st-text-gray-500'
 			distance={4}
 			offsets={{
 				y: y + 16,
 				x: x,
 			}}
 		>
-			<Icon className='s-20'>
+			<Icon className='st-s-20'>
 				<Photo />
 			</Icon>
-			<div className='flex items-center space-x-4'>
-				<Field className='w-180'>
+			<div className='st-flex st-items-center st-space-x-4'>
+				<Field className='st-w-180'>
 					<input
 						autoFocus
 						type='text'
@@ -106,7 +106,7 @@ const BaseInsertPhotoPopup: FC<InsertPhotoPopupProps> = ({
 						onKeyDown={handleKeyDown}
 					/>
 				</Field>
-				<div className='flex items-center justify-between px-8 h-36 border border-gray-200 rounded-lg transition:colors transition:shadow duration-250 focus-within:shadow-outline focus-within:border-blue-500'>
+				<div className='st-flex st-items-center st-justify-between st-px-8 st-h-36 st-border st-border-gray-200 st-rounded-lg st-transition-all st-duration-250 focus-within:st-shadow-outline focus-within:st-border-blue-500'>
 					<input
 						value={scale}
 						onChange={handleChangeScale}
@@ -114,13 +114,13 @@ const BaseInsertPhotoPopup: FC<InsertPhotoPopupProps> = ({
 						min={0}
 						maxLength={3}
 						onKeyDown={handleKeyDown}
-						className='border-none h-full w-48 bg-transparent m-0'
+						className='st-border-none st-h-full st-w-48 st-bg-transparent st-m-0'
 						placeholder='100'
 					/>
 					<div>%</div>
 				</div>
 			</div>
-			<Button disabled={!dimensions} className='h-36' onPress={handleSubmit}>
+			<Button disabled={!dimensions} className='st-h-36' onPress={handleSubmit}>
 				Insert
 			</Button>
 		</Popup>

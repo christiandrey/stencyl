@@ -20,7 +20,7 @@ export const Blockquote: FC<RenderElementProps> = ({element, children, attribute
 	}, [element]);
 
 	return (
-		<blockquote className='ml-40' style={style} {...attributes}>
+		<blockquote className='st-ml-40' style={style} {...attributes}>
 			{children}
 		</blockquote>
 	);

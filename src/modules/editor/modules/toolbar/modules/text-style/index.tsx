@@ -25,7 +25,7 @@ export const TextStyleButton = () => {
 				onPress={modalUtils.open}
 				ref={ref}
 				tip='Text style'
-				className='transition-shadow hover:shadow-outline'
+				className='st-transition-shadow hover:st-shadow-outline'
 				style={{
 					backgroundColor: getRgbaColor(colorMark ?? colors.black, 0.15),
 					color: colorMark ?? colors.black,

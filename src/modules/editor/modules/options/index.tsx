@@ -20,11 +20,11 @@ type OptionsProps = {
 
 const OptionItem: FC<OptionItemProps> = ({option, onClickDelete}) => {
 	return (
-		<div className='flex items-center justify-between px-8 h-36 w-full border border-gray-200 bg-gray-100 rounded-lg'>
-			<span className='text-gray-500'>{option.label}</span>
+		<div className='st-flex st-items-center st-justify-between st-px-8 st-h-36 st-w-full st-border st-border-gray-200 st-bg-gray-100 st-rounded-lg'>
+			<span className='st-text-gray-500'>{option.label}</span>
 			<Icon
 				onPress={() => onClickDelete?.(option.id)}
-				className='cursor-pointer text-gray-500 transition-colors duration-250 hover:text-red-300'
+				className='st-cursor-pointer st-text-gray-500 st-transition-colors st-duration-250 hover:st-text-red-300'
 			>
 				<Trash />
 			</Icon>
@@ -64,23 +64,25 @@ export const Options: FC<OptionsProps> = ({
 	return (
 		<div className={className}>
 			{!!label?.length && (
-				<label className='text-blue-500 block mb-4 text-subhead font-medium'>{label}</label>
+				<label className='st-text-blue-500 st-block st-mb-4 st-text-subhead st-font-medium'>
+					{label}
+				</label>
 			)}
-			<div className='space-y-8'>
+			<div className='st-space-y-8'>
 				{options.map((o) => (
 					<OptionItem option={o} key={o.id} onClickDelete={onDeleteOption} />
 				))}
-				<div className='flex items-center justify-between px-8 h-36 w-full border border-gray-200 rounded-lg transition:colors transition:shadow duration-250 focus-within:shadow-outline focus-within:border-blue-500'>
+				<div className='st-flex st-items-center st-justify-between st-px-8 st-h-36 st-w-full st-border st-border-gray-200 st-rounded-lg st-transition-all st-duration-250 focus-within:st-shadow-outline focus-within:st-border-blue-500'>
 					<input
 						value={editingOption}
-						className='border-none h-full w-full bg-transparent m-0'
+						className='st-border-none st-h-full st-w-full st-bg-transparent st-m-0'
 						placeholder='+ Add an option'
 						onChange={handleChangeEditingOption}
 						onKeyDown={handleEditingOptionKeydown}
 					/>
 					<Icon
 						onPress={handleSubmitEditingOption}
-						className='cursor-pointer text-blue-500 transition-colors duration-250 hover:text-blue-600'
+						className='st-cursor-pointer st-text-blue-500 st-transition-colors st-duration-250 hover:st-text-blue-600'
 					>
 						<CirclePlus />
 					</Icon>

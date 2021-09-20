@@ -85,84 +85,84 @@ const BaseTableTools: FC<TableToolsProps> = ({entry: [node]}) => {
 
 	return (
 		<div>
-			<div className='text-headline text-blue-500 mb-8'>Table tools</div>
-			<div className='text-gray-500 mb-8 text-subhead'>
+			<div className='st-text-headline st-text-blue-500 st-mb-8'>Table tools</div>
+			<div className='st-text-gray-500 st-mb-8 st-text-subhead'>
 				Use these tools to add or modify features on the table.
 			</div>
-			<div className='space-y-8'>
-				<div className='flex space-x-8'>
-					<div className='flex-1 space-y-8'>
+			<div className='st-space-y-8'>
+				<div className='st-flex st-space-x-8'>
+					<div className='st-flex-1 st-space-y-8'>
 						<div
 							onMouseDown={handleInsertRowAbove}
-							className='h-36 px-6 flex items-center space-x-4 w-full bg-gray-100 text-gray-500 rounded-default cursor-pointer transition-colors duration-125 hover:bg-gray-200'
+							className='st-h-36 st-px-6 st-flex st-items-center st-space-x-4 st-w-full st-bg-gray-100 st-text-gray-500 st-rounded-default st-cursor-pointer st-transition-colors st-duration-125 hover:st-bg-gray-200'
 						>
-							<Icon className='s-16'>
+							<Icon className='st-s-16'>
 								<RowInsertTop />
 							</Icon>
-							<div className='font-medium text-subhead'>Add row above</div>
+							<div className='st-font-medium st-text-subhead'>Add row above</div>
 						</div>
 						<div
 							onMouseDown={handleInsertColLeft}
-							className='h-36 px-6 flex items-center space-x-4 w-full bg-gray-100 text-gray-500 rounded-default cursor-pointer transition-colors duration-125 hover:bg-gray-200'
+							className='st-h-36 st-px-6 st-flex st-items-center st-space-x-4 st-w-full st-bg-gray-100 st-text-gray-500 st-rounded-default st-cursor-pointer st-transition-colors st-duration-125 hover:st-bg-gray-200'
 						>
-							<Icon className='s-16'>
+							<Icon className='st-s-16'>
 								<ColumnInsertLeft />
 							</Icon>
-							<div className='font-medium text-subhead'>Add column left</div>
+							<div className='st-font-medium st-text-subhead'>Add column left</div>
 						</div>
 						<div
 							onMouseDown={handleRemoveRow}
-							className='h-36 px-6 flex items-center space-x-4 w-full bg-gray-100 text-gray-500 rounded-default cursor-pointer transition-colors duration-125 hover:bg-gray-200'
+							className='st-h-36 st-px-6 st-flex st-items-center st-space-x-4 st-w-full st-bg-gray-100 st-text-gray-500 st-rounded-default st-cursor-pointer st-transition-colors st-duration-125 hover:st-bg-gray-200'
 						>
-							<Icon className='s-16'>
+							<Icon className='st-s-16'>
 								<LayoutList />
 							</Icon>
-							<div className='font-medium text-subhead'>Delete row</div>
+							<div className='st-font-medium st-text-subhead'>Delete row</div>
 						</div>
 						<div
 							onMouseDown={handleToggleBorders}
-							className='h-36 px-6 flex items-center space-x-4 w-full bg-gray-100 text-gray-500 rounded-default cursor-pointer transition-colors duration-125 hover:bg-gray-200'
+							className='st-h-36 st-px-6 st-flex st-items-center st-space-x-4 st-w-full st-bg-gray-100 st-text-gray-500 st-rounded-default st-cursor-pointer st-transition-colors st-duration-125 hover:st-bg-gray-200'
 						>
-							<Icon className='s-16'>{hasBorders ? <BorderAll /> : <BorderNone />}</Icon>
-							<div className='font-medium text-subhead'>Toggle borders</div>
+							<Icon className='st-s-16'>{hasBorders ? <BorderAll /> : <BorderNone />}</Icon>
+							<div className='st-font-medium st-text-subhead'>Toggle borders</div>
 						</div>
 					</div>
-					<div className='flex-1 space-y-8'>
+					<div className='st-flex-1 st-space-y-8'>
 						<div
 							onMouseDown={handleInsertRowBelow}
-							className='h-36 px-6 flex items-center space-x-4 w-full bg-gray-100 text-gray-500 rounded-default cursor-pointer transition-colors duration-125 hover:bg-gray-200'
+							className='st-h-36 st-px-6 st-flex st-items-center st-space-x-4 st-w-full st-bg-gray-100 st-text-gray-500 st-rounded-default st-cursor-pointer st-transition-colors st-duration-125 hover:st-bg-gray-200'
 						>
-							<Icon className='s-16'>
+							<Icon className='st-s-16'>
 								<RowInsertBottom />
 							</Icon>
-							<div className='font-medium text-subhead'>Add row below</div>
+							<div className='st-font-medium st-text-subhead'>Add row below</div>
 						</div>
 						<div
 							onMouseDown={handleInsertColRight}
-							className='h-36 pl-6 flex items-center space-x-4 w-full bg-gray-100 text-gray-500 rounded-default cursor-pointer transition-colors duration-125 hover:bg-gray-200'
+							className='st-h-36 st-pl-6 st-flex st-items-center st-space-x-4 st-w-full st-bg-gray-100 st-text-gray-500 st-rounded-default st-cursor-pointer st-transition-colors st-duration-125 hover:st-bg-gray-200'
 						>
-							<Icon className='s-16'>
+							<Icon className='st-s-16'>
 								<ColumnInsertRight />
 							</Icon>
-							<div className='font-medium text-subhead'>Add column right</div>
+							<div className='st-font-medium st-text-subhead'>Add column right</div>
 						</div>
 						<div
 							onMouseDown={handleRemoveColumn}
-							className='h-36 px-6 flex items-center space-x-4 w-full bg-gray-100 text-gray-500 rounded-default cursor-pointer transition-colors duration-125 hover:bg-gray-200'
+							className='st-h-36 st-px-6 st-flex st-items-center st-space-x-4 st-w-full st-bg-gray-100 st-text-gray-500 st-rounded-default st-cursor-pointer st-transition-colors st-duration-125 hover:st-bg-gray-200'
 						>
-							<Icon className='s-16 transform rotate-90'>
+							<Icon className='st-s-16 st-transform st-rotate-90'>
 								<LayoutList />
 							</Icon>
-							<div className='font-medium text-subhead'>Delete column</div>
+							<div className='st-font-medium st-text-subhead'>Delete column</div>
 						</div>
 						<div
 							onMouseDown={handleRemoveTable}
-							className='h-36 px-6 flex items-center space-x-4 w-full bg-red-300 text-white rounded-default cursor-pointer transition-colors duration-125 hover:bg-red-400'
+							className='st-h-36 st-px-6 st-flex st-items-center st-space-x-4 st-w-full st-bg-red-300 st-text-white st-rounded-default st-cursor-pointer st-transition-colors st-duration-125 hover:st-bg-red-400'
 						>
-							<Icon className='s-16'>
+							<Icon className='st-s-16'>
 								<Trash />
 							</Icon>
-							<div className='font-medium text-subhead'>Delete table</div>
+							<div className='st-font-medium st-text-subhead'>Delete table</div>
 						</div>
 					</div>
 				</div>

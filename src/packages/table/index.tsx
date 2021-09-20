@@ -35,7 +35,7 @@ export const TableRow: FC<RenderElementProps> = ({element, attributes, children}
 export const Table: FC<RenderElementProps> = ({element, attributes, children}) => {
 	if (element.type === 'table') {
 		return (
-			<table className='border-collapse'>
+			<table className='st-border-collapse'>
 				<tbody {...attributes}>{children}</tbody>
 			</table>
 		);

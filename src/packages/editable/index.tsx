@@ -16,9 +16,12 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 				<span {...attributes}>
 					{children}
 					<img
-						className={classNames('inline-block max-w-full rounded-default align-bottom', {
-							'shadow-outline': selected && focused,
-						})}
+						className={classNames(
+							'st-inline-block st-max-w-full st-rounded-default st-align-bottom',
+							{
+								'st-shadow-outline': selected && focused,
+							},
+						)}
 						src={getPlaceholderImage(editable.width, editable.height)}
 						style={{
 							width: editable.width,
@@ -34,9 +37,12 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 				<div {...attributes}>
 					<div contentEditable={false}>
 						<span
-							className={classNames('inline-block font-medium px-4 rounded-default bg-gray-300', {
-								'shadow-outline': selected && focused,
-							})}
+							className={classNames(
+								'st-inline-block st-font-medium st-px-4 st-rounded-default st-bg-gray-300',
+								{
+									'st-shadow-outline': selected && focused,
+								},
+							)}
 							style={{fontSize: '0.82em'}}
 						>
 							{editable.label}
@@ -51,11 +57,14 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 			<span
 				{...attributes}
 				contentEditable={false}
-				className={classNames('inline-block text-white font-medium px-4 rounded-default mx-1', {
-					'shadow-outline': selected && focused,
-					'bg-blue-500': !editable.marks.condition,
-					'bg-green-500': editable.marks.condition,
-				})}
+				className={classNames(
+					'st-inline-block st-text-white st-font-medium st-px-4 st-rounded-default st-mx-1',
+					{
+						'st-shadow-outline': selected && focused,
+						'st-bg-blue-500': !editable.marks.condition,
+						'st-bg-green-500': editable.marks.condition,
+					},
+				)}
 				style={{fontSize: '0.82em'}}
 			>
 				{editable.defaultValue}

@@ -30,17 +30,17 @@ const BaseIconButton = (
 			data-tip={tip}
 			onMouseDown={handleMouseDown}
 			className={classNames(
-				's-32 rounded-lg bg-transparent cursor-pointer flex items-center justify-center transition-colors duration-250 hover:bg-blue-100 hover:text-blue-500',
+				'st-s-32 st-rounded-lg st-bg-transparent st-cursor-pointer st-flex st-items-center st-justify-center st-transition-colors st-duration-250 hover:st-bg-blue-100 hover:st-text-blue-500',
 				{
-					'text-gray-500': !active,
-					'text-blue-500 bg-blue-highlight': active,
-					'pointer-events-none opacity-50': disabled,
+					'st-text-gray-500': !active,
+					'st-text-blue-500 st-bg-blue-highlight': active,
+					'st-pointer-events-none st-opacity-50': disabled,
 					[css.tooltip]: !!tip?.length,
 				},
 				className,
 			)}
 		>
-			<Icon className='s-20'>{children}</Icon>
+			<Icon className='st-s-20'>{children}</Icon>
 		</div>
 	);
 };

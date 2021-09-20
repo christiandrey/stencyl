@@ -74,17 +74,17 @@ const BaseEditor = ({children, initialData}: EditorProps, ref: Ref<EditorRef>) =
 	}));
 
 	return (
-		<div className='bg-gray-200 min-h-screen'>
+		<div className='st-bg-gray-200 st-min-h-screen'>
 			<Slate editor={editor} value={editorState} onChange={setEditorState}>
-				<div className='sticky top-0 w-full z-1 shadow-1'>
+				<div className='st-sticky st-top-0 st-w-full st-z-1 st-shadow-1'>
 					{children}
 					<Toolbar />
 				</div>
-				<div ref={bodyRef} className={classNames(css.body, 'flex justify-center')}>
-					<div className='flex-1' />
+				<div ref={bodyRef} className={classNames(css.body, 'st-flex st-justify-center')}>
+					<div className='st-flex-1' />
 					<Canvas />
-					<div className='flex-1 px-20'>
-						<div className={classNames(css.sidebar, 'sticky')} style={{top: sidebarTop}}>
+					<div className='st-flex-1 st-px-20'>
+						<div className={classNames(css.sidebar, 'st-sticky')} style={{top: sidebarTop}}>
 							<Sidebar />
 						</div>
 					</div>
