@@ -5,7 +5,7 @@ import {RenderElementProps} from 'slate-react';
 export const Link: FC<RenderElementProps> = ({element, children, attributes}) => {
 	return (
 		<a
-			className='st-underline'
+			// className='st-underline'
 			href={element.type === 'link' ? element.url : undefined}
 			{...attributes}
 		>

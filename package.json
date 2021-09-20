@@ -1,6 +1,6 @@
 {
 	"name": "stencyl-beta",
-	"version": "1.4.2",
+	"version": "1.4.3",
 	"description": "A SlateJS based document template RTE",
 	"main": "dist/index.js",
 	"module": "dist/index.esm.js",

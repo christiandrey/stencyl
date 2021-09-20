@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
 		alignSelf: 'baseline',
 	},
 	link: {
-		textDecoration: 'underline',
+		// textDecoration: 'underline',
 	},
 	tableRow: {
 		flexDirection: 'row',
