@@ -49,7 +49,10 @@ export const Content: React.FC<ContentProps> = ({
 	if (!hideArrow) composedClassName += arrowClassName;
 
 	return (
-		<div className={classnames(composedClassName, 'shadow-6', className)} style={{top: y, left: x}}>
+		<div
+			className={classnames(composedClassName, 'st-shadow-6', className)}
+			style={{top: y, left: x}}
+		>
 			{children}
 		</div>
 	);

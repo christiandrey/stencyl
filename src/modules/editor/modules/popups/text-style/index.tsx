@@ -47,7 +47,7 @@ const ColorItem: FC<ColorItemProps> = ({color, selected, onPress}) => {
 			onMouseDown={handleMouseDown}
 			style={{backgroundColor: color ?? colors.black}}
 			className={classNames(
-				'w-20 h-20 rounded-full cursor-pointer duration-250 transition-shadow hover:shadow-outline',
+				'st-w-20 st-h-20 st-rounded-full st-cursor-pointer st-duration-250 st-transition-shadow hover:st-shadow-outline',
 				{
 					'shadow-outline': selected,
 				},
@@ -64,13 +64,13 @@ const TextSizeItem: FC<TextSizeItemProps> = ({textSize, label, onPress}) => {
 	return (
 		<div
 			onMouseDown={handleMouseDown}
-			className='h-36 flex items-center transition-colors duration-250 hover:text-gray-900 cursor-pointer'
+			className='st-h-36 st-flex st-items-center st-transition-colors st-duration-250 hover:st-text-gray-900 st-cursor-pointer'
 		>
 			<div
 				className={classNames({
-					'text-headline': textSize === 'heading-three',
-					'text-heading-3': textSize === 'heading-two',
-					'text-heading-2': textSize === 'heading-one',
+					'st-text-headline': textSize === 'heading-three',
+					'st-text-heading-3': textSize === 'heading-two',
+					'st-text-heading-2': textSize === 'heading-one',
 				})}
 			>
 				{label}
@@ -128,14 +128,14 @@ const BaseTextStylePopup: FC<TextStylePopupProps> = ({anchorRef, isVisible, onRe
 			transparent
 			hideArrow
 			overlayCloseOnClick
-			contentClassName='bg-white rounded-lg py-16 text-gray-500 divide-y divide-y-gray-100'
+			contentClassName='st-bg-white st-rounded-lg st-py-16 st-text-gray-500 st-divide-y st-divide-y-gray-100'
 			distance={4}
 			offsets={{
 				y: 16,
 			}}
 		>
-			<div className='pb-8 px-16'>
-				<div className='text-blue-500 font-medium'>Style</div>
+			<div className='st-pb-8 st-px-16'>
+				<div className='st-text-blue-500 st-font-medium'>Style</div>
 				<div
 					className={classNames(css.selector, {
 						[css.open]: selectorOpen,
@@ -143,7 +143,7 @@ const BaseTextStylePopup: FC<TextStylePopupProps> = ({anchorRef, isVisible, onRe
 				>
 					<div
 						onMouseDown={handleClickSelector}
-						className='h-36 flex items-center space-x-6 transition-colors duration-250 hover:text-gray-900 cursor-pointer'
+						className='st-h-36 st-flex st-items-center st-space-x-6 st-transition-colors st-duration-250 hover:st-text-gray-900 st-cursor-pointer'
 					>
 						<div>
 							{!textSize && 'Base Paragraph'}
@@ -151,7 +151,7 @@ const BaseTextStylePopup: FC<TextStylePopupProps> = ({anchorRef, isVisible, onRe
 							{textSize === 'heading-two' && 'Heading 2'}
 							{textSize === 'heading-three' && 'Heading 3'}
 						</div>
-						<Icon className='s-18'>
+						<Icon className='st-s-18'>
 							<ChevronDown />
 						</Icon>
 					</div>
@@ -181,9 +181,9 @@ const BaseTextStylePopup: FC<TextStylePopupProps> = ({anchorRef, isVisible, onRe
 					)}
 				</div>
 			</div>
-			<div className='pt-16 px-16'>
-				<div className='text-blue-500 font-medium mb-8'>Color</div>
-				<div className='flex items-center space-x-6'>
+			<div className='st-pt-16 st-px-16'>
+				<div className='st-text-blue-500 st-font-medium st-mb-8'>Color</div>
+				<div className='st-flex st-items-center st-space-x-6'>
 					{PRESET_COLORS.map((o) => (
 						<ColorItem
 							color={o}

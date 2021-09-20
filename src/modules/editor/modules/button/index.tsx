@@ -14,11 +14,11 @@ const BaseButton: FC<ButtonProps> = ({children, className, disabled, onPress}) =
 			role='button'
 			onClick={onPress}
 			className={classnames(
-				'border-transparent rounded-lg font-medium cursor-pointer text-white px-18 flex items-center justify-center transition-colors duration-250 hover:bg-blue-600',
+				'st-border-transparent st-rounded-lg st-font-medium st-cursor-pointer st-text-white st-px-18 st-flex st-items-center st-justify-center st-transition-colors st-duration-250 hover:st-bg-blue-600',
 				{
-					'bg-blue-500': !disabled,
-					'pointer-events-none bg-blue-300': disabled,
-					'h-36': !/\bh-[0-9]/gi.test(className ?? ''),
+					'st-bg-blue-500': !disabled,
+					'st-pointer-events-none st-bg-blue-300': disabled,
+					'st-h-36': !/\bst-h-[0-9]/gi.test(className ?? ''),
 				},
 				className,
 			)}

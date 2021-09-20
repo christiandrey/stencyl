@@ -26,7 +26,7 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 			<span {...attributes}>
 				{children}
 				<img
-					className={classNames('inline-block max-w-full rounded-default align-bottom')}
+					className={classNames('st-inline-block st-max-w-full st-rounded-default st-align-bottom')}
 					src={value}
 					style={{
 						width: element.width,
@@ -53,7 +53,7 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 			<span {...attributes}>
 				{children}
 				<img
-					className={classNames('inline-block max-w-full rounded-default align-bottom')}
+					className={classNames('st-inline-block st-max-w-full st-rounded-default st-align-bottom')}
 					src={getPlaceholderImage(element.width, element.height)}
 					style={{
 						width: element.width,
@@ -68,7 +68,7 @@ export const Editable: FC<RenderElementProps> = ({element, children, attributes}
 		<span
 			{...attributes}
 			className={classNames(
-				'inline-block text-white font-medium px-4 rounded-default mx-1 bg-blue-500',
+				'st-inline-block st-text-white st-font-medium st-px-4 st-rounded-default st-mx-1 st-bg-blue-500',
 			)}
 			style={{fontSize: '0.82em'}}
 		>

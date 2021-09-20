@@ -3,7 +3,7 @@
 }
 
 .tooltip:before {
-	@apply bg-gray-900;
+	@apply st-bg-gray-900;
 	content: attr(data-tip);
 	border-radius: 4px;
 	padding: 4px 6px;
@@ -25,7 +25,7 @@
 }
 
 .tooltip:after {
-	@apply text-gray-900;
+	@apply st-text-gray-900;
 	position: absolute;
 	z-index: 1000001;
 	opacity: 0;

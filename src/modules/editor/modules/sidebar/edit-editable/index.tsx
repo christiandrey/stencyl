@@ -132,11 +132,13 @@ const BaseEditEditable: FC<EditEditableProps> = ({entry}) => {
 
 	return (
 		<div>
-			<div className='text-headline text-blue-500 mb-8'>Editable {attributes.dataType}</div>
-			<div className='text-gray-500 mb-24 text-subhead'>
+			<div className='st-text-headline st-text-blue-500 st-mb-8'>
+				Editable {attributes.dataType}
+			</div>
+			<div className='st-text-gray-500 st-mb-24 st-text-subhead'>
 				Configure properties of editable elements, which show up as form elements to users.
 			</div>
-			<div className='space-y-16'>
+			<div className='st-space-y-16'>
 				<Field label='Question'>
 					<input
 						type='text'
@@ -150,18 +152,18 @@ const BaseEditEditable: FC<EditEditableProps> = ({entry}) => {
 				{attributes.linkId || (
 					<Fragment>
 						{attributes.dataType === 'text' && (
-							<div className='flex items-center justify-between'>
+							<div className='st-flex st-items-center st-justify-between'>
 								<div>Multiline text</div>
 								<Switch value={!!attributes.multiline} onChangeValue={handleChangeMultiline} />
 							</div>
 						)}
 						{attributes.dataType === 'image' && (
 							<Fragment>
-								<div className='flex items-center justify-between'>
-									<div className='bg-gray-500 text-footnote font-medium rounded-default px-8 py-4 text-white uppercase'>
+								<div className='st-flex st-items-center st-justify-between'>
+									<div className='st-bg-gray-500 st-text-footnote st-font-medium st-rounded-default st-px-8 st-py-4 st-text-white st-uppercase'>
 										Width
 									</div>
-									<Field className='w-120'>
+									<Field className='st-w-120'>
 										<input
 											type='number'
 											placeholder='0'
@@ -173,11 +175,11 @@ const BaseEditEditable: FC<EditEditableProps> = ({entry}) => {
 										/>
 									</Field>
 								</div>
-								<div className='flex items-center justify-between'>
-									<div className='bg-gray-500 text-footnote font-medium rounded-default px-8 py-4 text-white uppercase'>
+								<div className='st-flex st-items-center st-justify-between'>
+									<div className='st-bg-gray-500 st-text-footnote st-font-medium st-rounded-default st-px-8 st-py-4 st-text-white st-uppercase'>
 										Height
 									</div>
-									<Field className='w-120'>
+									<Field className='st-w-120'>
 										<input
 											type='number'
 											placeholder='0'

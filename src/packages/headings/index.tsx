@@ -29,37 +29,37 @@ export const Headings: FC<RenderElementProps> = ({element, children, attributes}
 	switch (element.type) {
 		case 'heading-one':
 			return (
-				<h1 className='text-semi-title' style={style} {...attributes}>
+				<h1 className='st-text-semi-title' style={style} {...attributes}>
 					{children}
 				</h1>
 			);
 		case 'heading-two':
 			return (
-				<h2 className='text-heading-1' style={style} {...attributes}>
+				<h2 className='st-text-heading-1' style={style} {...attributes}>
 					{children}
 				</h2>
 			);
 		case 'heading-three':
 			return (
-				<h3 className='text-heading-2' style={style} {...attributes}>
+				<h3 className='st-text-heading-2' style={style} {...attributes}>
 					{children}
 				</h3>
 			);
 		case 'heading-four':
 			return (
-				<h4 className='text-heading-3' style={style} {...attributes}>
+				<h4 className='st-text-heading-3' style={style} {...attributes}>
 					{children}
 				</h4>
 			);
 		case 'heading-five':
 			return (
-				<h5 className='text-headline' style={style} {...attributes}>
+				<h5 className='st-text-headline' style={style} {...attributes}>
 					{children}
 				</h5>
 			);
 		case 'heading-six':
 			return (
-				<h6 className='text-body' style={style} {...attributes}>
+				<h6 className='st-text-body' style={style} {...attributes}>
 					{children}
 				</h6>
 			);

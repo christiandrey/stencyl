@@ -27,7 +27,7 @@ export const Leaf: FC<RenderLeafProps> = ({attributes, children, leaf}) => {
 		<span
 			{...attributes}
 			style={{color: leaf.color}}
-			className={leaf.condition ? 'bg-green-highlight' : undefined}
+			className={leaf.condition ? 'st-bg-green-highlight' : undefined}
 		>
 			{children}
 		</span>

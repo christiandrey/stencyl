@@ -63,13 +63,13 @@ const BaseEditImage: FC<EditImageProps> = ({entry}) => {
 
 	return (
 		<div>
-			<div className='text-headline text-blue-500 mb-16'>Edit an image</div>
-			<div className='space-y-8'>
-				<div className='space-x-16 flex items-center'>
-					<Icon className='s-20 text-gray-500'>
+			<div className='st-text-headline st-text-blue-500 st-mb-16'>Edit an image</div>
+			<div className='st-space-y-8'>
+				<div className='st-space-x-16 st-flex st-items-center'>
+					<Icon className='st-s-20 st-text-gray-500'>
 						<Photo />
 					</Icon>
-					<Field className='w-full'>
+					<Field className='st-w-full'>
 						<input
 							title={node.url}
 							disabled
@@ -79,11 +79,11 @@ const BaseEditImage: FC<EditImageProps> = ({entry}) => {
 						/>
 					</Field>
 				</div>
-				<div className='flex items-center justify-between'>
-					<div className='bg-gray-500 text-footnote font-medium rounded-default px-8 py-4 text-white uppercase'>
+				<div className='st-flex st-items-center st-justify-between'>
+					<div className='st-bg-gray-500 st-text-footnote st-font-medium st-rounded-default st-px-8 st-py-4 st-text-white st-uppercase'>
 						Width
 					</div>
-					<Field className='w-120'>
+					<Field className='st-w-120'>
 						<input
 							type='number'
 							placeholder='0'
@@ -95,11 +95,11 @@ const BaseEditImage: FC<EditImageProps> = ({entry}) => {
 						/>
 					</Field>
 				</div>
-				<div className='flex items-center justify-between'>
-					<div className='bg-gray-500 text-footnote font-medium rounded-default px-8 py-4 text-white uppercase'>
+				<div className='st-flex st-items-center st-justify-between'>
+					<div className='st-bg-gray-500 st-text-footnote st-font-medium st-rounded-default st-px-8 st-py-4 st-text-white st-uppercase'>
 						Height
 					</div>
-					<Field className='w-120'>
+					<Field className='st-w-120'>
 						<input
 							type='number'
 							placeholder='0'

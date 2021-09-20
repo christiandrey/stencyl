@@ -63,18 +63,18 @@ const BaseDisplayFlagPopup: FC<DisplayFlagPopupProps> = ({
 			transparent
 			hideArrow
 			overlayCloseOnClick
-			contentClassName='border-gray-50 border-solid border bg-white rounded-lg flex items-center py-8 px-8 space-x-8 text-gray-500'
+			contentClassName='st-border-gray-50 st-border-solid st-border st-bg-white st-rounded-lg st-flex st-items-center st-py-8 st-px-8 st-space-x-8 st-text-gray-500'
 			distance={4}
 			offsets={{
 				y: y + 16,
 				x: x,
 			}}
 		>
-			<div className='flex items-center space-x-4'>
-				<div className='bg-gray-500 text-footnote font-medium rounded-default px-8 py-4 text-white uppercase'>
+			<div className='st-flex st-items-center st-space-x-4'>
+				<div className='st-bg-gray-500 st-text-footnote st-font-medium st-rounded-default st-px-8 st-py-4 st-text-white st-uppercase'>
 					When
 				</div>
-				<Field className='w-180'>
+				<Field className='st-w-180'>
 					<select value={parent} onChange={handleSelectParent}>
 						<option hidden value=''>
 							Choose one
@@ -87,11 +87,11 @@ const BaseDisplayFlagPopup: FC<DisplayFlagPopupProps> = ({
 					</select>
 				</Field>
 			</div>
-			<div className='flex items-center space-x-4'>
-				<div className='bg-gray-500 text-footnote font-medium rounded-default px-8 py-4 text-white uppercase'>
+			<div className='st-flex st-items-center st-space-x-4'>
+				<div className='st-bg-gray-500 st-text-footnote st-font-medium st-rounded-default st-px-8 st-py-4 st-text-white st-uppercase'>
 					Equals
 				</div>
-				<Field className='w-144'>
+				<Field className='st-w-144'>
 					<select value={equals} onChange={handleSelectEquals}>
 						<option hidden value=''>
 							Choose one
@@ -107,7 +107,11 @@ const BaseDisplayFlagPopup: FC<DisplayFlagPopupProps> = ({
 					</select>
 				</Field>
 			</div>
-			<Button onPress={handleSubmit} disabled={!parent?.length || !equals?.length} className='h-36'>
+			<Button
+				onPress={handleSubmit}
+				disabled={!parent?.length || !equals?.length}
+				className='st-h-36'
+			>
 				Done
 			</Button>
 		</Popup>

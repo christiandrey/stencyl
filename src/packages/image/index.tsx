@@ -12,9 +12,12 @@ export const Image: FC<RenderElementProps> = ({element, attributes, children}) =
 			<span {...attributes}>
 				{children}
 				<img
-					className={classNames('inline-block max-w-full rounded-default align-bottom', {
-						'shadow-outline': selected && focused,
-					})}
+					className={classNames(
+						'st-inline-block st-max-w-full st-rounded-default st-align-bottom',
+						{
+							'st-shadow-outline': selected && focused,
+						},
+					)}
 					src={element.url}
 					style={{
 						width: element.width,

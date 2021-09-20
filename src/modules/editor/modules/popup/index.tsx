@@ -298,12 +298,12 @@ export const Popup: FC<PopupProps> = ({
 	}, [isVisible, portalRef]);
 
 	const render = () => (
-		<div className='fixed top-0 left-0 w-full h-full z-2'>
+		<div className='st-fixed st-top-0 st-left-0 st-w-full st-h-full st-z-2'>
 			<div
 				className={
 					transparent
-						? 'w-full h-full absolute top-0 left-0 z-0'
-						: 'w-full h-full absolute top-0 left-0 z-0 bg-blue-800 opacity-50'
+						? 'st-w-full st-h-full st-absolute st-top-0 st-left-0 st-z-0'
+						: 'st-w-full st-h-full st-absolute st-top-0 st-left-0 st-z-0 st-bg-blue-800 st-opacity-50'
 				}
 				onMouseDown={handleClickOverlay}
 			/>

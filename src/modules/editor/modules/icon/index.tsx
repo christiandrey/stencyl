@@ -13,8 +13,8 @@ const BaseIcon: FC<IconProps> = ({children, className, onPress}) => {
 	return (
 		<figure
 			onMouseDown={handlePress}
-			className={classNames('flex-shrink-0', className, {
-				's-16': !/\bs-[0-9]/gi.test(className ?? ''),
+			className={classNames('st-flex-shrink-0', className, {
+				'st-s-16': !/\bst-s-[0-9]/gi.test(className ?? ''),
 			})}
 		>
 			{Children.map(children, (child: ReactElement) =>
@@ -22,7 +22,7 @@ const BaseIcon: FC<IconProps> = ({children, className, onPress}) => {
 					? cloneElement(child, {
 							className: classNames(
 								child.props.className,
-								'h-full w-full object-contain  object-center m-auto pointer-events-none',
+								'st-h-full st-w-full st-object-contain st-object-center st-m-auto st-pointer-events-none',
 							),
 					  })
 					: child,

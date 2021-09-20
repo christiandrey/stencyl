@@ -27,9 +27,9 @@ const OptionItem: FC<OptionItemProps> = ({disabled, id, label, onPress}) => {
 		<div
 			onClick={() => onPress(id)}
 			className={classNames(
-				'h-36 flex items-center transition-colors duration-250 hover:text-gray-900 cursor-pointer',
+				'st-h-36 st-flex st-items-center st-transition-colors st-duration-250 hover:st-text-gray-900 st-cursor-pointer',
 				{
-					'pointer-events-none opacity-50': disabled,
+					'st-pointer-events-none st-opacity-50': disabled,
 				},
 			)}
 		>
@@ -62,7 +62,7 @@ const BaseEditableTypePopup: FC<EditableTypePopupProps> = ({
 			transparent
 			hideArrow
 			overlayCloseOnClick
-			contentClassName='bg-white rounded-lg py-8 px-16 w-144 text-gray-500'
+			contentClassName='st-bg-white st-rounded-lg st-py-8 st-px-16 st-w-144 st-text-gray-500'
 			distance={4}
 			offsets={{
 				y: 16,

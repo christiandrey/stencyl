@@ -1,18 +1,18 @@
 .container {
-	@apply bg-white rounded-lg shadow-1 text-subhead;
+	@apply st-bg-white st-rounded-lg st-shadow-1 st-text-subhead;
 	padding: 35px 35px 65px;
 
 	& ol {
-		@apply list-decimal;
+		@apply st-list-decimal;
 	}
 
 	& ul {
-		@apply list-disc;
+		@apply st-list-disc;
 	}
 
 	& ul,
 	& ol {
-		@apply pl-24;
+		@apply st-pl-24;
 
 		& ol {
 			list-style-type: lower-roman;

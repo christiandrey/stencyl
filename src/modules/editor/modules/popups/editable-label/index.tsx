@@ -49,14 +49,14 @@ const BaseEditableLabelPopup: FC<EditableLabelPopupProps> = ({
 			transparent
 			hideArrow
 			overlayCloseOnClick
-			contentClassName='border-gray-50 border-solid border bg-white rounded-lg flex items-center py-8 px-8 space-x-8 text-gray-500'
+			contentClassName='st-border-gray-50 st-border-solid st-border st-bg-white st-rounded-lg st-flex st-items-center st-py-8 st-px-8 st-space-x-8 st-text-gray-500'
 			distance={4}
 			offsets={{
 				y: y + 16,
 				x: x,
 			}}
 		>
-			<Field className='w-320'>
+			<Field className='st-w-320'>
 				<input
 					autoFocus
 					type='text'
@@ -66,7 +66,7 @@ const BaseEditableLabelPopup: FC<EditableLabelPopupProps> = ({
 					onKeyDown={handleKeyDown}
 				/>
 			</Field>
-			<Button className='h-36' onPress={handleSubmit} disabled={!label.length}>
+			<Button className='st-h-36' onPress={handleSubmit} disabled={!label.length}>
 				Done
 			</Button>
 		</Popup>

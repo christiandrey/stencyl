@@ -55,42 +55,42 @@ const BaseExistingEditablePopup: FC<ExistingEditablePopupProps> = ({
 			transparent
 			hideArrow
 			overlayCloseOnClick
-			contentClassName='border-gray-50 border-solid border bg-white rounded-lg w-200 text-gray-500'
+			contentClassName='st-border-gray-50 st-border-solid st-border st-bg-white st-rounded-lg st-w-200 st-text-gray-500'
 			distance={4}
 			offsets={{
 				y: y + 16,
 				x: x,
 			}}
 		>
-			<div className='p-8'>
-				<div className='flex items-center justify-between px-8 h-36 w-full border border-gray-200 rounded-lg transition:colors transition:shadow duration-250 focus-within:shadow-outline focus-within:border-blue-500'>
+			<div className='st-p-8'>
+				<div className='st-flex st-items-center st-justify-between st-px-8 st-h-36 st-w-full st-border st-border-gray-200 st-rounded-lg st-transition-all st-duration-250 focus-within:st-shadow-outline focus-within:st-border-blue-500'>
 					<input
 						autoFocus
 						type='text'
-						className='border-none h-full w-full bg-transparent m-0'
+						className='st-border-none st-h-full st-w-full st-bg-transparent m-0'
 						placeholder='Search...'
 						value={keyword}
 						onChange={handleChangeKeyword}
 					/>
-					<Icon className='text-gray-500'>
+					<Icon className='st-text-gray-500'>
 						<ListSearch />
 					</Icon>
 				</div>
 			</div>
 			<div
 				className={classNames({
-					'pb-8': matchingElements.length,
+					'st-pb-8': matchingElements.length,
 				})}
 			>
 				{matchingElements.map(([node]) => (
 					<div
 						key={node.id}
 						onClick={() => handleSelectOption(node)}
-						className='px-8 h-28 flex items-center cursor-pointer bg-transparent transition-colors duration-250 hover:bg-gray-100'
+						className='st-px-8 st-h-28 st-flex st-items-center st-cursor-pointer st-bg-transparent st-transition-colors st-duration-250 hover:st-bg-gray-100'
 					>
 						<span
 							style={{fontSize: '0.82em'}}
-							className='inline-block text-white font-medium px-4 rounded-default mx-1 bg-blue-500'
+							className='st-inline-block st-text-white st-font-medium st-px-4 st-rounded-default st-mx-1 st-bg-blue-500'
 						>
 							{node.defaultValue}
 						</span>

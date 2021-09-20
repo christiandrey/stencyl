@@ -15,7 +15,7 @@ const BaseSidebar = () => {
 	const [node, path] = editingBlock;
 
 	return (
-		<div className='shadow-1 rounded-lg w-full bg-white p-16'>
+		<div className='st-shadow-1 st-rounded-lg st-w-full st-bg-white st-p-16'>
 			{node.type === 'table' && <TableTools entry={[node, path]} />}
 			{node.type === 'image' && <EditImage entry={editingBlock} />}
 			{node.type === 'editable' && <EditEditable entry={editingBlock} />}
