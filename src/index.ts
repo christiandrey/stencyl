@@ -13,3 +13,6 @@ export {PdfPreview};
 export {getEditableElements, registerPdfFonts};
 export {generatePDFAsync};
 export * from './types';
+export {createHookState} from './packages/hookstate';
+export * from './packages/hookstate/types';
+export {useHookState, useHookStateStatic} from './packages/hookstate/hooks';

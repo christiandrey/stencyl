@@ -13,6 +13,7 @@ import {Slate, withReact} from 'slate-react';
 
 import {Canvas} from './modules/canvas';
 import {Sidebar} from './modules/sidebar';
+import {StencylNode} from '../..';
 import {Toolbar} from './modules/toolbar';
 import classNames from 'classnames';
 import css from './style.module.css';
@@ -29,11 +30,11 @@ import {withTrailingBlock} from '../../packages/common/plugin';
 
 type EditorProps = {
 	children?: ReactNode;
-	initialData?: Array<Descendant>;
+	initialData?: Array<StencylNode>;
 };
 
 export type EditorRef = {
-	getNodes: () => Descendant[];
+	getNodes: () => StencylNode[];
 };
 
 const BaseEditor = ({children, initialData}: EditorProps, ref: Ref<EditorRef>) => {

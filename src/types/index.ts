@@ -249,6 +249,8 @@ export type StencylDisplayTextSize = 'heading-one' | 'heading-two' | 'heading-th
 
 export type StencylDataset = Record<string, string>;
 
+export type StencylNode = Descendant;
+
 declare module 'slate' {
 	interface CustomTypes {
 		Editor: StencylEditor;
