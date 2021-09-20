@@ -31,10 +31,10 @@ type TableToolsProps = {
 const BaseTableTools: FC<TableToolsProps> = ({entry: [node]}) => {
 	const editor = useSlateStatic();
 
-	const [hasBorders, setHasBorders] = useState(!node.children[0].children[0].borderColor);
+	const [hasBorders, setHasBorders] = useState(!node.children[0]?.children[0]?.borderColor);
 
 	useEffect(() => {
-		setHasBorders(!node.children[0].children[0].borderColor);
+		setHasBorders(!node.children[0]?.children[0]?.borderColor);
 	}, [node]);
 
 	const handleInsertRowAbove = (e: MouseEvent) => {
