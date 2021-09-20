@@ -1,6 +1,6 @@
 import React, {FC, memo} from 'react';
 
-import ReactSwitch from 'react-switch';
+import {ToggleSlider} from 'react-toggle-slider';
 
 type SwitchProps = {
 	className?: string;
@@ -10,18 +10,13 @@ type SwitchProps = {
 
 const BaseSwitch: FC<SwitchProps> = ({className, value, onChangeValue}) => {
 	return (
-		<ReactSwitch
-			checked={value}
-			className={className}
-			onChange={onChangeValue}
-			offColor='#ADC5FA'
-			onColor='#326FF3'
-			checkedIcon={false}
-			uncheckedIcon={false}
-			handleDiameter={18}
-			height={22}
-			width={44}
-			activeBoxShadow='0 0 0 4px rgba(103, 126, 138, 0.125)'
+		<ToggleSlider
+			active={value}
+			onToggle={onChangeValue}
+			barBackgroundColor='#ADC5FA'
+			barBackgroundColorActive='#326FF3'
+			barHeight={26}
+			barWidth={44}
 		/>
 	);
 };
