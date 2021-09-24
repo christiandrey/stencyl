@@ -8,11 +8,12 @@ import {
 	matchHTMLElementNode,
 } from './utils';
 
+import {Descendant} from 'slate';
 import htmlNodeNames from '../../constants/html-node-names';
 
-export const deserializeBody: DeserializeFn = (element, children) => {
+export const deserializeBody = (element: Node, children: Descendant[]) => {
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.BODY})) {
-		return deserializeToFragment(children) as any;
+		return deserializeToFragment(children);
 	}
 
 	return null;

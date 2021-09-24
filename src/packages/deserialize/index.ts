@@ -9,7 +9,7 @@ import {
 	wrapInlineTopLevelNodesInParagraph,
 } from './utils';
 import {StencylCssRule, parseCssFromDocument} from '../css-parser';
-import {deserializeBody, deserializeLineBreak, deserializeMark} from './rules';
+import {deserializeLineBreak, deserializeMark} from './rules';
 
 import {Descendant} from 'slate';
 import {StencylEditor} from '../..';
@@ -25,7 +25,6 @@ import htmlNodeNames from '../../constants/html-node-names';
 import htmlNodeTypes from '../../constants/html-node-types';
 
 const ELEMENT_RULES: Array<DeserializeFn> = [
-	deserializeBody,
 	deserializeLineBreak,
 	deserializeBlockquote,
 	deserializeCodeblock,
@@ -66,8 +65,8 @@ export const withHTMLDeserializer = (editor: StencylEditor) => {
 	return editor;
 };
 
-function isElementMark(element: HTMLElement) {
-	if (element.nodeName === htmlNodeNames.B) {
+function isElementMark(element: Node) {
+	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.B})) {
 		return !element.id?.startsWith('docs-internal-guid-');
 	}
 
@@ -79,11 +78,11 @@ function deserializeHTML(html: string, editor: StencylEditor) {
 	const styles = parseCssFromDocument(parsed);
 	const deserialized = deserialize(parsed.body, styles);
 	return deserializeToFragment(
-		normalizeFirstNode(wrapInlineTopLevelNodesInParagraph(editor, deserialized[0] as any)),
+		normalizeFirstNode(wrapInlineTopLevelNodesInParagraph(editor, deserialized)),
 	);
 }
 
-function deserialize(element: HTMLElement, styles: StencylCssRule[]): Descendant[] {
+function deserialize(element: Node, styles: StencylCssRule[]): Descendant[] {
 	// -----------------------------------------------
 	// Deserialize Text Nodes
 	// -----------------------------------------------
@@ -109,7 +108,7 @@ function deserialize(element: HTMLElement, styles: StencylCssRule[]): Descendant
 		.filter(cruftFilterFn)
 		.filter(invalidNodesFilterFn);
 	const deserializedChildNodes = childNodes
-		.map((o) => deserialize(o as HTMLElement, styles))
+		.map((o) => deserialize(o, styles))
 		.flat()
 		.filter(Boolean);
 	const deserializedElement = deserializeElement(element, deserializedChildNodes, styles);
@@ -121,11 +120,7 @@ function deserialize(element: HTMLElement, styles: StencylCssRule[]): Descendant
 	return [deserializedElement];
 }
 
-function deserializeElement(
-	element: HTMLElement,
-	children: Descendant[],
-	styles: Array<StencylCssRule>,
-) {
+function deserializeElement(element: Node, children: Descendant[], styles: Array<StencylCssRule>) {
 	for (const rule of ELEMENT_RULES) {
 		const result = rule(element, children, styles);
 

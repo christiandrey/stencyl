@@ -38,6 +38,8 @@ const BaseInsertPhotoPopup: FC<InsertPhotoPopupProps> = ({
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key?.toLowerCase() === 'enter') {
+			e.preventDefault();
+			e.stopPropagation();
 			handleSubmit();
 		}
 	};

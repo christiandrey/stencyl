@@ -12,6 +12,7 @@ import IconGroup from '../icon-group';
 import {IndentDecreaseButton} from './modules/indent-decrease';
 import {IndentIncreaseButton} from './modules/indent-increase';
 import {InsertEditableButton} from './modules/insert-editable';
+import {InsertLinkButton} from './modules/insert-link';
 import {InsertPhotoButton} from './modules/insert-photo';
 import {InsertTableButton} from './modules/insert-table';
 import {ItalicButton} from './modules/italic';
@@ -56,6 +57,7 @@ const BaseToolbar = () => {
 				<IconGroup>
 					<InsertTableButton />
 					<InsertPhotoButton />
+					<InsertLinkButton />
 					<InsertEditableButton />
 					<DisplayFlagButton />
 				</IconGroup>
