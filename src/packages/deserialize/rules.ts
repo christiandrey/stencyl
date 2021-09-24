@@ -2,18 +2,20 @@ import {
 	DeserializeFn,
 	deserializeToFragment,
 	deserializeToLeaf,
+	getMarksFromStyleDeclaration,
+	getNodeTextContent,
+	getStyleDeclaration,
 	matchHTMLElementNode,
 } from './utils';
 
 import htmlNodeNames from '../../constants/html-node-names';
-import htmlNodeTypes from '../../constants/html-node-types';
 
 export const deserializeBody: DeserializeFn = (element, children) => {
-	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.BLOCKQUOTE})) {
-		return deserializeToFragment(children);
+	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.BODY})) {
+		return deserializeToFragment(children) as any;
 	}
 
-	return undefined;
+	return null;
 };
 
 export const deserializeLineBreak: DeserializeFn = (element, children) => {
@@ -21,57 +23,29 @@ export const deserializeLineBreak: DeserializeFn = (element, children) => {
 		return deserializeToLeaf({text: '\n'}, children);
 	}
 
-	return undefined;
+	return null;
 };
 
-export const deserializeMarks: DeserializeFn = (element, children) => {
-	if (
-		![
-			htmlNodeNames.SPAN,
-			htmlNodeNames.STRONG,
-			htmlNodeNames.I,
-			htmlNodeNames.B,
-			htmlNodeNames.U,
-			htmlNodeNames.S,
-			htmlNodeNames.CODE,
-			htmlNodeNames.FONT,
-		].includes(element.nodeName) &&
-		element.nodeType !== htmlNodeTypes.TEXT_NODE
-	) {
-		return undefined;
+export const deserializeMark: DeserializeFn = (element, _children, styles) => {
+	if (!(element instanceof HTMLElement)) {
+		return null;
 	}
 
-	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.SPAN})) {
-		return children;
-	}
+	const marks = getMarksFromStyleDeclaration(getStyleDeclaration(element, styles));
 
-	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.FONT})) {
-		return children;
-	}
+	marks.bold =
+		marks.bold ||
+		matchHTMLElementNode(element, {nodeName: htmlNodeNames.STRONG}) ||
+		matchHTMLElementNode(element, {nodeName: htmlNodeNames.B});
+	marks.italic = marks.italic || matchHTMLElementNode(element, {nodeName: htmlNodeNames.I});
+	marks.underline = marks.underline || matchHTMLElementNode(element, {nodeName: htmlNodeNames.U});
+	marks.strikethrough =
+		marks.strikethrough || matchHTMLElementNode(element, {nodeName: htmlNodeNames.S});
+	marks.code = matchHTMLElementNode(element, {nodeName: htmlNodeNames.CODE});
+	marks.color = marks.color?.length ? marks.color : undefined;
 
-	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.STRONG})) {
-		return children.map((child) => ({...child, bold: true}));
-	}
-
-	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.B})) {
-		return children.map((child) => ({...child, bold: true}));
-	}
-
-	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.I})) {
-		return children.map((child) => ({...child, italic: true}));
-	}
-
-	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.U})) {
-		return children.map((child) => ({...child, underline: true}));
-	}
-
-	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.S})) {
-		return children.map((child) => ({...child, strikethrough: true}));
-	}
-
-	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.CODE})) {
-		return children.map((child) => ({...child, code: true}));
-	}
-
-	return undefined;
+	return deserializeToLeaf({
+		text: getNodeTextContent(element),
+		...marks,
+	});
 };

@@ -2,31 +2,30 @@ import {
 	DeserializeFn,
 	deserializeToElement,
 	getNodeAttribute,
-	getNodeStyle,
+	getStyleDeclaration,
 	matchHTMLElementNode,
 } from '../deserialize/utils';
 
 import htmlNodeNames from '../../constants/html-node-names';
 import {runIfDefined} from '../../utils';
 
-export const deserializeImage: DeserializeFn = (element, children) => {
+export const deserializeImage: DeserializeFn = (element, children, styles) => {
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.IMG})) {
+		const declaration = getStyleDeclaration(element, styles);
 		return deserializeToElement(
 			{
 				type: 'image',
 				url: getNodeAttribute(element, 'src'),
-				width: runIfDefined(
-					getNodeAttribute(element, 'width') ?? getNodeStyle(element, 'width'),
-					(o) => parseFloat(o),
+				width: runIfDefined(getNodeAttribute(element, 'width') ?? declaration.width, (o) =>
+					parseFloat(o),
 				),
-				height: runIfDefined(
-					getNodeAttribute(element, 'height') ?? getNodeStyle(element, 'height'),
-					(o) => parseFloat(o),
+				height: runIfDefined(getNodeAttribute(element, 'height') ?? declaration.height, (o) =>
+					parseFloat(o),
 				),
 			},
 			children,
 		);
 	}
 
-	return undefined;
+	return null;
 };

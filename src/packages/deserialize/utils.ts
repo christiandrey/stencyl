@@ -1,14 +1,24 @@
 import {Descendant, Element, Text} from 'slate';
-import {StencylAlignment, StencylEditor, StencylElement, StencylText} from '../../types';
+import {
+	StencylAlignment,
+	StencylEditor,
+	StencylElement,
+	StencylMarks,
+	StencylText,
+} from '../../types';
+import {isBlackColor, isEqualColor} from '../../utils';
 
+import {StencylCssRule} from '../css-parser';
 import constants from '../../constants';
 import {getEmptyTextNode} from '../common/utils';
 import htmlNodeTypes from '../../constants/html-node-types';
 import {jsx} from 'slate-hyperscript';
 
-export type DeserializedChildren = Descendant | Descendant[] | undefined | null;
-
-export type DeserializeFn = (element: Node, children: Descendant[]) => DeserializedChildren;
+export type DeserializeFn = (
+	element: Node,
+	children: Descendant[],
+	styles: Array<StencylCssRule>,
+) => Descendant | null;
 
 export function cruftFilterFn(element: HTMLElement) {
 	return !(element.nodeName === '#text' && /^[\n]{1,}$/.test(element.nodeValue ?? ''));
@@ -40,7 +50,7 @@ export function matchHTMLNode(
 export function matchHTMLElementNode(
 	element: Node,
 	rules: {nodeName?: string; nodeType?: number; nodeValue?: string | null} = {},
-) {
+): element is HTMLElement {
 	return matchHTMLNode(element, {nodeType: htmlNodeTypes.ELEMENT_NODE, ...rules});
 }
 
@@ -110,6 +120,13 @@ export function getNodeStyle<T extends keyof CSSStyleDeclaration>(
 	return undefined;
 }
 
+export function getNodeStyleFromDeclaration<T extends keyof CSSStyleDeclaration>(
+	declaration: CSSStyleDeclaration,
+	key: T,
+) {
+	return declaration[key];
+}
+
 export function getNodeAttribute(node: Node, key: string): string | undefined {
 	if (node instanceof HTMLElement) {
 		return node.getAttribute(key) ?? undefined;
@@ -160,8 +177,69 @@ export function getNodeIndentation(node: Node): number | undefined {
 	return undefined;
 }
 
+export function getNodeIndentationFromDeclaration(declaration: CSSStyleDeclaration) {
+	const marginLeft = getNodeStyleFromDeclaration(declaration, 'marginLeft');
+
+	if (marginLeft?.length) {
+		const parsed = parseFloat(marginLeft);
+
+		if (parsed) {
+			return Math.round((parsed * 100) / constants.paperSizes.a4.width);
+		}
+	}
+
+	return undefined;
+}
+
 export function getNodeTextContent(node: Node): string {
 	const text = node.textContent ?? '';
 
 	return text === '\n' ? text : text.replace(/[\n]/gi, ' ');
+}
+
+export function getStyleDeclaration(
+	element: HTMLElement,
+	styles: Array<StencylCssRule>,
+): CSSStyleDeclaration {
+	const style = element.style;
+
+	if (!element.className) {
+		return style;
+	}
+
+	styles
+		.filter((o) => o.selectors.some((selector) => element.matches(selector)))
+		.forEach((rule) => {
+			rule.declarations.forEach((declaration) =>
+				style.setProperty(declaration.property, declaration.value, declaration.priority),
+			);
+		});
+
+	return style;
+}
+
+export function getMarksFromStyleDeclaration(styles: CSSStyleDeclaration): StencylMarks {
+	const marks: StencylMarks = {};
+
+	if (['bold', '700'].includes(styles.fontWeight)) {
+		marks.bold = true;
+	}
+
+	if (styles.fontStyle === 'italic') {
+		marks.italic = true;
+	}
+
+	if (styles.textDecoration === 'underline') {
+		marks.underline = true;
+	}
+
+	if (styles.textDecoration === 'line-through') {
+		marks.strikethrough = true;
+	}
+
+	if (!isBlackColor(styles.color)) {
+		marks.color = styles.color;
+	}
+
+	return marks;
 }

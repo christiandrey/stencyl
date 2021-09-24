@@ -23,6 +23,7 @@ const htmlNodeNames = {
 	S: 'S',
 	SPAN: 'SPAN',
 	STRONG: 'STRONG',
+	STYLE: 'STYLE',
 	TABLE: 'TABLE',
 	TD: 'TD',
 	TH: 'TH',

@@ -1,25 +1,26 @@
 import {
 	DeserializeFn,
 	deserializeToElement,
-	getNodeIndentation,
-	getNodeStyle,
+	getNodeIndentationFromDeclaration,
 	getStencylAlignmentAttribute,
+	getStyleDeclaration,
 	matchHTMLElementNode,
 } from '../deserialize/utils';
 
 import htmlNodeNames from '../../constants/html-node-names';
 
-export const deserializeBlockquote: DeserializeFn = (element, children) => {
+export const deserializeBlockquote: DeserializeFn = (element, children, styles) => {
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.BLOCKQUOTE})) {
+		const declaration = getStyleDeclaration(element, styles);
 		return deserializeToElement(
 			{
 				type: 'block-quote',
-				alignment: getStencylAlignmentAttribute(getNodeStyle(element, 'textAlign')),
-				indentation: getNodeIndentation(element),
+				alignment: getStencylAlignmentAttribute(declaration.textAlign),
+				indentation: getNodeIndentationFromDeclaration(declaration),
 			},
 			children,
 		);
 	}
 
-	return undefined;
+	return null;
 };

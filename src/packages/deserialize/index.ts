@@ -3,16 +3,16 @@ import {
 	cruftFilterFn,
 	deserializeToFragment,
 	deserializeToLeaf,
-	getNodeTextContent,
 	invalidNodesFilterFn,
 	matchHTMLElementNode,
 	normalizeFirstNode,
 	wrapInlineTopLevelNodesInParagraph,
 } from './utils';
-import {deserializeBody, deserializeLineBreak, deserializeMarks} from './rules';
+import {StencylCssRule, parseCssFromDocument} from '../css-parser';
+import {deserializeBody, deserializeLineBreak, deserializeMark} from './rules';
 
 import {Descendant} from 'slate';
-import {StencylEditor} from '../../types';
+import {StencylEditor} from '../..';
 import {deserializeBlockquote} from '../blockquote/deserialize';
 import {deserializeCodeblock} from '../codeblock/deserialize';
 import {deserializeHeadings} from '../headings/deserialize';
@@ -21,10 +21,32 @@ import {deserializeLink} from '../link/deserialize';
 import {deserializeLists} from '../lists/deserialize';
 import {deserializeParagraph} from '../paragraph/deserialize';
 import {deserializeTable} from '../table/deserialize';
-import {getEmptyTextNode} from '../common/utils';
 import htmlNodeNames from '../../constants/html-node-names';
 import htmlNodeTypes from '../../constants/html-node-types';
-import {notNil} from '../../utils';
+
+const ELEMENT_RULES: Array<DeserializeFn> = [
+	deserializeBody,
+	deserializeLineBreak,
+	deserializeBlockquote,
+	deserializeCodeblock,
+	deserializeHeadings,
+	deserializeImage,
+	deserializeLink,
+	deserializeLists,
+	deserializeParagraph,
+	deserializeTable,
+];
+
+const ELEMENT_MARKS = [
+	htmlNodeNames.SPAN,
+	htmlNodeNames.STRONG,
+	htmlNodeNames.I,
+	htmlNodeNames.B,
+	htmlNodeNames.U,
+	htmlNodeNames.S,
+	htmlNodeNames.CODE,
+	htmlNodeNames.FONT,
+];
 
 export const withHTMLDeserializer = (editor: StencylEditor) => {
 	const {insertData} = editor;
@@ -44,72 +66,74 @@ export const withHTMLDeserializer = (editor: StencylEditor) => {
 	return editor;
 };
 
-const VOID_NODES = [htmlNodeNames.IMG];
+function isElementMark(element: HTMLElement) {
+	if (element.nodeName === htmlNodeNames.B) {
+		return !element.id?.startsWith('docs-internal-guid-');
+	}
 
-const rules: Array<DeserializeFn> = [
-	deserializeBody,
-	deserializeLineBreak,
-	deserializeBlockquote,
-	deserializeCodeblock,
-	deserializeHeadings,
-	deserializeImage,
-	deserializeLink,
-	deserializeLists,
-	deserializeParagraph,
-	deserializeTable,
-	deserializeMarks,
-];
+	return ELEMENT_MARKS.includes(element.nodeName);
+}
 
 function deserializeHTML(html: string, editor: StencylEditor) {
 	const parsed = new DOMParser().parseFromString(html, 'text/html');
-	const children = deserializeHTMLElements(Array.from(parsed.body.childNodes));
+	const styles = parseCssFromDocument(parsed);
+	const deserialized = deserialize(parsed.body, styles);
 	return deserializeToFragment(
-		normalizeFirstNode(wrapInlineTopLevelNodesInParagraph(editor, children)),
+		normalizeFirstNode(wrapInlineTopLevelNodesInParagraph(editor, deserialized[0] as any)),
 	);
 }
 
-function deserializeHTMLElements(elements: Array<Node>) {
-	let nodes: Descendant[] = [];
-
-	elements
-		.filter(cruftFilterFn)
-		.filter(invalidNodesFilterFn)
-		.forEach((o) => {
-			const result = deserializeHTMLElement(o);
-
-			if (Array.isArray(result)) {
-				nodes = nodes.concat(result);
-			} else {
-				if (notNil(result)) {
-					nodes.push(result);
-				}
-			}
+function deserialize(element: HTMLElement, styles: StencylCssRule[]): Descendant[] {
+	// -----------------------------------------------
+	// Deserialize Text Nodes
+	// -----------------------------------------------
+	if (element.nodeType === htmlNodeTypes.TEXT_NODE) {
+		const deserialized = deserializeToLeaf({
+			text: element.textContent ?? '',
 		});
-
-	return nodes;
-}
-
-function deserializeHTMLElement(element: Node) {
-	let children = deserializeHTMLElements(normalizeChildNodes(element.childNodes, element));
-
-	if (!children?.length && !VOID_NODES.includes(element.nodeName)) {
-		return deserializeToLeaf({text: getNodeTextContent(element)});
+		return deserialized ? [deserialized] : [];
 	}
 
-	children = children.length ? children : getEmptyTextNode();
+	// -----------------------------------------------
+	// Deserialize Marks
+	// -----------------------------------------------
+	if (isElementMark(element)) {
+		const deserialized = deserializeMark(element, [], styles);
+		return deserialized ? [deserialized] : [];
+	}
 
-	for (const rule of rules) {
-		const result = rule(element, children);
+	// -----------------------------------------------
+	// Deserialize Element Nodes
+	// -----------------------------------------------
+	const childNodes = normalizeChildNodes(element.childNodes, element)
+		.filter(cruftFilterFn)
+		.filter(invalidNodesFilterFn);
+	const deserializedChildNodes = childNodes
+		.map((o) => deserialize(o as HTMLElement, styles))
+		.flat()
+		.filter(Boolean);
+	const deserializedElement = deserializeElement(element, deserializedChildNodes, styles);
 
-		if (typeof result === 'undefined') {
+	if (!deserializedElement) {
+		return deserializedChildNodes;
+	}
+
+	return [deserializedElement];
+}
+
+function deserializeElement(
+	element: HTMLElement,
+	children: Descendant[],
+	styles: Array<StencylCssRule>,
+) {
+	for (const rule of ELEMENT_RULES) {
+		const result = rule(element, children, styles);
+
+		if (!result) {
 			continue;
 		}
 
 		return result;
-	}
-
-	if (children?.length) {
-		return children;
 	}
 
 	return null;

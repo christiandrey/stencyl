@@ -1,36 +1,43 @@
 import {
 	DeserializeFn,
 	deserializeToElement,
-	getNodeIndentation,
-	getNodeStyle,
+	getNodeIndentationFromDeclaration,
 	getStencylAlignmentAttribute,
+	getStyleDeclaration,
 	matchHTMLElementNode,
 } from '../deserialize/utils';
 
 import htmlNodeNames from '../../constants/html-node-names';
+import htmlNodeTypes from '../../constants/html-node-types';
 
-export const deserializeParagraph: DeserializeFn = (element, children) => {
+export const deserializeParagraph: DeserializeFn = (element, children, styles) => {
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.P})) {
+		const declaration = getStyleDeclaration(element, styles);
 		return deserializeToElement(
 			{
 				type: 'paragraph',
-				alignment: getStencylAlignmentAttribute(getNodeStyle(element, 'textAlign')),
-				indentation: getNodeIndentation(element),
+				alignment: getStencylAlignmentAttribute(declaration.textAlign),
+				indentation: getNodeIndentationFromDeclaration(declaration),
 			},
 			children,
 		);
 	}
 
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.DIV})) {
+		if (element.firstChild?.nodeType !== htmlNodeTypes.TEXT_NODE) {
+			return null;
+		}
+
+		const declaration = getStyleDeclaration(element, styles);
 		return deserializeToElement(
 			{
 				type: 'paragraph',
-				alignment: getStencylAlignmentAttribute(getNodeStyle(element, 'textAlign')),
-				indentation: getNodeIndentation(element),
+				alignment: getStencylAlignmentAttribute(declaration.textAlign),
+				indentation: getNodeIndentationFromDeclaration(declaration),
 			},
 			children,
 		);
 	}
 
-	return undefined;
+	return null;
 };
