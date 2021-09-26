@@ -39,5 +39,5 @@ export const deserializeLists: DeserializeFn = (element, children) => {
 		);
 	}
 
-	return undefined;
+	return null;
 };

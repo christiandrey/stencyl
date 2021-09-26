@@ -126,6 +126,16 @@ export function isEqualColor(left?: string, right?: string) {
 	return left.toLowerCase() === right.toLowerCase();
 }
 
+export function isBlackColor(color?: string) {
+	if (!color?.length) {
+		return false;
+	}
+
+	return ['black', 'rgb(0,0,0)', '000', '000000'].includes(
+		color.toLowerCase().replace('#', '').replace(/\s+/gi, ''),
+	);
+}
+
 export function isEnterKey(e: KeyboardEvent) {
 	return e.key?.toLowerCase() === 'enter';
 }
@@ -148,4 +158,10 @@ export function isObjectEqual<T extends object>(left?: T, right?: T) {
 	}
 
 	return !Object.keys(left).some((key) => left[key] !== right[key]);
+}
+
+export function parseNumber(value: any, fallback?: number) {
+	const parsed = parseFloat(value);
+
+	return isNaN(parsed) ? fallback : parsed;
 }

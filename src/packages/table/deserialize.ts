@@ -2,26 +2,27 @@ import {
 	DeserializeFn,
 	deserializeToElement,
 	getNodeAttribute,
-	getNodeStyle,
+	getStyleDeclaration,
 	matchHTMLElementNode,
 } from '../deserialize/utils';
+import {parseNumber, runIfDefined} from '../../utils';
 
 import htmlNodeNames from '../../constants/html-node-names';
-import {runIfDefined} from '../../utils';
 
-export const deserializeTable: DeserializeFn = (element, children) => {
+export const deserializeTable: DeserializeFn = (element, children, styles) => {
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.TD})) {
+		const declaration = getStyleDeclaration(element, styles);
 		return deserializeToElement(
 			{
 				type: 'table-cell',
 				colspan: runIfDefined(getNodeAttribute(element, 'colspan'), (o) => parseInt(o)),
 				rowspan: runIfDefined(getNodeAttribute(element, 'rowspan'), (o) => parseInt(o)),
-				width: runIfDefined(getNodeStyle(element, 'width'), (o) => parseFloat(o)),
-				height: runIfDefined(getNodeStyle(element, 'height'), (o) => parseFloat(o)),
-				borderColor: getNodeStyle(element, 'borderColor'),
-				borderWidth: runIfDefined(getNodeStyle(element, 'borderWidth'), (o) => {
-					const parsed = parseFloat(o);
-					return !parsed || isNaN(parsed) ? 1 : parsed;
+				width: runIfDefined(declaration.width, (o) => parseNumber(o)),
+				height: runIfDefined(declaration.height, (o) => parseNumber(o)),
+				borderColor: declaration.borderColor,
+				borderWidth: runIfDefined(declaration.borderWidth, (o) => {
+					const parsed = parseNumber(o, 1);
+					return !parsed ? 1 : parsed;
 				}),
 			},
 			children,
@@ -55,5 +56,5 @@ export const deserializeTable: DeserializeFn = (element, children) => {
 		);
 	}
 
-	return undefined;
+	return null;
 };

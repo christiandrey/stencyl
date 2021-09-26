@@ -18,5 +18,5 @@ export const deserializeLink: DeserializeFn = (element, children) => {
 		);
 	}
 
-	return undefined;
+	return null;
 };

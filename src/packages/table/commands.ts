@@ -180,40 +180,52 @@ export function removeTableColumn(editor: StencylEditor) {
 
 export function showTableBorders(editor: StencylEditor) {
 	const {tableEntry} = getTableEntries(editor);
-	const [, tablePath] = tableEntry;
+	const [tableNode, tablePath] = tableEntry;
 
-	Transforms.setNodes(
-		editor,
-		{
-			borderColor: undefined,
-		},
-		{
-			at: tablePath,
-			match: (node) => Element.isElement(node) && node.type === 'table-cell',
-			hanging: true,
-			split: true,
-			mode: 'all',
-		},
-	);
+	if (!Element.isElement(tableNode)) {
+		return;
+	}
+
+	Editor.withoutNormalizing(editor, () => {
+		for (let i = 0; i < tableNode.children.length; i++) {
+			Transforms.setNodes(
+				editor,
+				{
+					borderColor: undefined,
+				},
+				{
+					at: [...tablePath, i],
+					match: (node) => Element.isElement(node) && node.type === 'table-cell',
+					mode: 'all',
+				},
+			);
+		}
+	});
 }
 
 export function hideTableBorders(editor: StencylEditor) {
 	const {tableEntry} = getTableEntries(editor);
-	const [, tablePath] = tableEntry;
+	const [tableNode, tablePath] = tableEntry;
 
-	Transforms.setNodes(
-		editor,
-		{
-			borderColor: colors.transparent,
-		},
-		{
-			at: tablePath,
-			match: (node) => Element.isElement(node) && node.type === 'table-cell',
-			hanging: true,
-			split: true,
-			mode: 'all',
-		},
-	);
+	if (!Element.isElement(tableNode)) {
+		return;
+	}
+
+	Editor.withoutNormalizing(editor, () => {
+		for (let i = 0; i < tableNode.children.length; i++) {
+			Transforms.setNodes(
+				editor,
+				{
+					borderColor: colors.transparent,
+				},
+				{
+					at: [...tablePath, i],
+					match: (node) => Element.isElement(node) && node.type === 'table-cell',
+					mode: 'all',
+				},
+			);
+		}
+	});
 }
 
 export function tabToNextCell(editor: StencylEditor) {

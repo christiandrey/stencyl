@@ -49,7 +49,7 @@ const ColorItem: FC<ColorItemProps> = ({color, selected, onPress}) => {
 			className={classNames(
 				'st-w-20 st-h-20 st-rounded-full st-cursor-pointer st-duration-250 st-transition-shadow hover:st-shadow-outline',
 				{
-					'shadow-outline': selected,
+					'st-shadow-outline': selected,
 				},
 			)}
 		/>

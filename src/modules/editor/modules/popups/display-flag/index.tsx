@@ -63,7 +63,7 @@ const BaseDisplayFlagPopup: FC<DisplayFlagPopupProps> = ({
 			transparent
 			hideArrow
 			overlayCloseOnClick
-			contentClassName='st-border-gray-50 st-border-solid st-border st-bg-white st-rounded-lg st-flex st-items-center st-py-8 st-px-8 st-space-x-8 st-text-gray-500'
+			contentClassName='st-border-gray-50 st-border-solid st-border st-bg-white st-rounded-lg st-flex st-items-center st-py-8 st-px-8 st-space-x-8 st-text-gray-500 st-whitespace-nowrap'
 			distance={4}
 			offsets={{
 				y: y + 16,
