@@ -1,9 +1,0 @@
-.selector {
-	height: 36px;
-	overflow: hidden;
-	transition: height 0.18s linear;
-
-	&.open {
-		height: 144px;
-	}
-}
