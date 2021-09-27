@@ -25,6 +25,7 @@ const htmlNodeNames = {
 	STRONG: 'STRONG',
 	STYLE: 'STYLE',
 	TABLE: 'TABLE',
+	TBODY: 'TBODY',
 	TD: 'TD',
 	TH: 'TH',
 	TR: 'TR',

@@ -18,7 +18,7 @@ export function parseCssFromDocument(dom: Document): Array<StencylCssRule> {
 	const head = dom.head;
 	const styles = Array.from(head.childNodes)
 		.filter((o) => o.nodeType === htmlNodeTypes.ELEMENT_NODE && o.nodeName === htmlNodeNames.STYLE)
-		.map((o) => o.textContent ?? '');
+		.map((o) => o.textContent?.replace('<!--', '').replace('-->', '') ?? '');
 	const rules: Array<Rule> = styles
 		.map((o) => css.parse(o))
 		.flat()
