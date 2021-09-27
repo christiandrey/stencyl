@@ -1,9 +1,11 @@
 import {
 	DeserializeFn,
+	cruftFilterFn,
 	deserializeToElement,
 	getNodeIndentationFromDeclaration,
 	getStencylAlignmentAttribute,
 	getStyleDeclaration,
+	invalidNodesFilterFn,
 	matchHTMLElementNode,
 } from '../deserialize/utils';
 
@@ -24,7 +26,10 @@ export const deserializeParagraph: DeserializeFn = (element, children, styles) =
 	}
 
 	if (matchHTMLElementNode(element, {nodeName: htmlNodeNames.DIV})) {
-		if (element.firstChild?.nodeType !== htmlNodeTypes.TEXT_NODE) {
+		const firstChild = Array.from(element.childNodes)
+			.filter(cruftFilterFn)
+			.filter(invalidNodesFilterFn)[0];
+		if (firstChild?.nodeType !== htmlNodeTypes.TEXT_NODE) {
 			return null;
 		}
 

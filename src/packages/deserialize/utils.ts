@@ -6,12 +6,12 @@ import {
 	StencylMarks,
 	StencylText,
 } from '../../types';
-import {isBlackColor, isEqualColor} from '../../utils';
 
 import {StencylCssRule} from '../css-parser';
 import constants from '../../constants';
 import {getEmptyTextNode} from '../common/utils';
 import htmlNodeTypes from '../../constants/html-node-types';
+import {isBlackColor} from '../../utils';
 import {jsx} from 'slate-hyperscript';
 
 export type DeserializeFn = (
@@ -21,7 +21,7 @@ export type DeserializeFn = (
 ) => Descendant | null;
 
 export function cruftFilterFn(element: HTMLElement) {
-	return !(element.nodeName === '#text' && /^[\n]{1,}$/.test(element.nodeValue ?? ''));
+	return !(element.nodeName === '#text' && /^[\n]{1,}\s*$/.test(element.nodeValue ?? ''));
 }
 
 export function invalidNodesFilterFn(element: HTMLElement) {
@@ -207,8 +207,20 @@ export function getStyleDeclaration(
 		return style;
 	}
 
+	const useQuickCheck = styles.flatMap((o) => o.selectors).length >= 20;
+
 	styles
-		.filter((o) => o.selectors.some((selector) => element.matches(selector)))
+		.filter((o) =>
+			o.selectors.some((selector) => {
+				try {
+					return useQuickCheck
+						? selector.includes(`.${element.className}`)
+						: element.matches(selector);
+				} catch (error) {
+					return false;
+				}
+			}),
+		)
 		.forEach((rule) => {
 			rule.declarations.forEach((declaration) =>
 				style.setProperty(declaration.property, declaration.value, declaration.priority),

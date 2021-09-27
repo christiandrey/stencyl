@@ -19,7 +19,7 @@ export const deserializeTable: DeserializeFn = (element, children, styles) => {
 				rowspan: runIfDefined(getNodeAttribute(element, 'rowspan'), (o) => parseInt(o)),
 				width: runIfDefined(declaration.width, (o) => parseNumber(o)),
 				height: runIfDefined(declaration.height, (o) => parseNumber(o)),
-				borderColor: declaration.borderColor,
+				borderColor: declaration.borderColor?.length ? declaration.borderColor : undefined,
 				borderWidth: runIfDefined(declaration.borderWidth, (o) => {
 					const parsed = parseNumber(o, 1);
 					return !parsed ? 1 : parsed;
