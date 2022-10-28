@@ -22,6 +22,18 @@ export const EditorApp = () => {
 					textAlign: 'right',
 				}}
 			>
+				<a href='https://github.com/christiandrey/stencyl' target='_blank' rel='noreferrer'>
+					<button
+						style={{
+							padding: '8px 8px',
+							backgroundColor: '#171515',
+							color: 'white',
+							borderRadius: 5,
+						}}
+					>
+						GitHub
+					</button>
+				</a>
 				<button
 					style={{
 						padding: '8px 8px',
