@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/stencyl/static/css/main.2b506196.chunk.css",
-    "main.js": "/stencyl/static/js/main.5af4913d.chunk.js",
-    "main.js.map": "/stencyl/static/js/main.5af4913d.chunk.js.map",
+    "main.js": "/stencyl/static/js/main.2eabdbe2.chunk.js",
+    "main.js.map": "/stencyl/static/js/main.2eabdbe2.chunk.js.map",
     "runtime-main.js": "/stencyl/static/js/runtime-main.ea0d1e42.js",
     "runtime-main.js.map": "/stencyl/static/js/runtime-main.ea0d1e42.js.map",
     "static/js/2.dd09dc84.chunk.js": "/stencyl/static/js/2.dd09dc84.chunk.js",
@@ -12,12 +12,12 @@
     "index.html": "/stencyl/index.html",
     "static/css/main.2b506196.chunk.css.map": "/stencyl/static/css/main.2b506196.chunk.css.map",
     "static/js/2.dd09dc84.chunk.js.LICENSE.txt": "/stencyl/static/js/2.dd09dc84.chunk.js.LICENSE.txt",
-    "static/js/main.5af4913d.chunk.js.LICENSE.txt": "/stencyl/static/js/main.5af4913d.chunk.js.LICENSE.txt"
+    "static/js/main.2eabdbe2.chunk.js.LICENSE.txt": "/stencyl/static/js/main.2eabdbe2.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.ea0d1e42.js",
     "static/js/2.dd09dc84.chunk.js",
     "static/css/main.2b506196.chunk.css",
-    "static/js/main.5af4913d.chunk.js"
+    "static/js/main.2eabdbe2.chunk.js"
   ]
 }
