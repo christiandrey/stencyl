@@ -7,20 +7,19 @@
 ## Install
 
 ```bash
-npm install --save stencyl
+npm install --save stencyl-beta
 ```
 
-## Usage
+## Basic Usage
 
 ```tsx
+import 'stencyl-beta/dist/index.css';
 import React, {Component} from 'react';
-
-import MyComponent from 'stencyl';
-import 'stencyl/dist/index.css';
+import {Editor} from 'stencyl-beta';
 
 class Example extends Component {
 	render() {
-		return <MyComponent />;
+		return <Editor />;
 	}
 }
 ```
