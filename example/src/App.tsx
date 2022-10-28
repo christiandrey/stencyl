@@ -22,6 +22,18 @@ export const EditorApp = () => {
 					textAlign: 'right',
 				}}
 			>
+				<button
+					style={{
+						padding: '8px 8px',
+						backgroundColor: '#326FF3',
+						color: 'white',
+						borderRadius: 5,
+						marginRight: 8,
+					}}
+					onClick={handleClick}
+				>
+					Get PDF
+				</button>
 				<a href='https://github.com/christiandrey/stencyl' target='_blank' rel='noreferrer'>
 					<button
 						style={{
@@ -31,20 +43,9 @@ export const EditorApp = () => {
 							borderRadius: 5,
 						}}
 					>
-						GitHub
+						View on GitHub
 					</button>
 				</a>
-				<button
-					style={{
-						padding: '8px 8px',
-						backgroundColor: '#326FF3',
-						color: 'white',
-						borderRadius: 5,
-					}}
-					onClick={handleClick}
-				>
-					Get PDF
-				</button>
 			</div>
 		</Editor>
 	);
